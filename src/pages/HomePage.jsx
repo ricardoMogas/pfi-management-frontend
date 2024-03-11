@@ -18,7 +18,8 @@ const HomePage = () => {
             Increment Count
           </Button>
           <p>Count: {count}</p>
-        </section> 
+        </section>
+        {/* This is a comment */}
       </div>
     </>
   );
