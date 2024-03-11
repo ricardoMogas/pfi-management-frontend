@@ -5,34 +5,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import './index.css'
-import Root from "./routes/root.jsx";
-import Contact from './routes/contact.jsx';
-import HomePage from './routes/HomePage.jsx';
-import ErrorPage from "./error-page.jsx";
+import './css/index.css'
+import routes from './routes';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/contacts/:id",
-        element: <Contact />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/home",
-        element: <HomePage />,
-      }
-    ],
-  },
-]);
-
+const PrincipalRouterApp = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={PrincipalRouterApp} />
   </React.StrictMode>
 );
