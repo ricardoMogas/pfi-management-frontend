@@ -6,6 +6,7 @@ import StudentControl from './pages/StudentControl.jsx';
 import VisitRegisterPage from './pages/VisitRegisterPage.jsx';
 import ServicePage from './pages/ServicePage.jsx';
 import ReportPage from './pages/ReportPage.jsx';
+import AlertModal from './pages/AlertModal.jsx';
 
 const routes = [
   {
