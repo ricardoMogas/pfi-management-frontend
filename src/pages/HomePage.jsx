@@ -13,7 +13,7 @@ const HomePage = () => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Pagina de bienvenida</title>
-      <style dangerouslySetInnerHTML={{ __html: "\n button {\n padding: 10px 20px; * ajusta el tamaño del botón \n font-size: 15px; texto font-family: 'gill sans', sans mt', calibri, 'trebuchet ms', sans-serif;\n }\n " }} />
+      <style dangerouslySetInnerHTML={{ __html: "\n button {\n padding: 10px 20px; * ajusta el tamaño del botón \n font-size: 15px; texto font-family: 'gill sans', sans mt', calibri, 'trebuchet ms', sans-serif;\n background-color: lightblue;\n }\n " }} />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <img src="PFILogo.png" alt="Foto" style={{ width: "70%", maxWidth: 80, alignContent: "center" }} />
