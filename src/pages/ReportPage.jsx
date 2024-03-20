@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
+import BarChart from '../components/BarChart';
 const data = [
-    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-    // más datos aquí...
+    { name: 'A', value1: 4000, value2: 2400 },
+    { name: 'B', value1: 3000, value2: 1398 },
+    { name: 'C', value1: 2000, value2: 9800 },
+    { name: 'D', value1: 2780, value2: 3908 },
+    { name: 'E', value1: 1890, value2: 4800 },
+    { name: 'F', value1: 2390, value2: 3800 },
+    { name: 'G', value1: 3490, value2: 4300 },
 ];
 const types = ['Alumnos', 'Visitas', 'Licenciatura', 'Solo genero', 'Etnia'];
 export default function ReportPage() {
@@ -18,24 +19,25 @@ export default function ReportPage() {
                     <div className="card-body">
                         <section className='row'>
                             <div className='col'>
-                                <Dropdown currentType={'alumnos'} types={types}/>
+                                <Dropdown currentType={'alumnos'} types={types} />
+                            </div>
+                            <div className='col'>
+                                <button type="button" class="btn btn-info">Por Genero</button>
+                            </div>
+                            <div className='col'>
+                                
+                                <input type="date" className="form-control" />
+                                Del mes
+                            </div>
+                            <div className='col'>
+                                <input type="date" className="form-control" />
+                                Hasta
                             </div>
                         </section>
                     </div>
-                    <BarChart
-                        width={600}
-                        height={300}
-                        data={data}
-                        style={{ width: '100%' }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="pv" fill="#8884d8" />
-                        <Bar dataKey="uv" fill="#82ca9d" />
-                    </BarChart>
+                    <div className="d-flex justify-content-center">
+                        <BarChart data={data} />
+                    </div>
                     <div className='card-footer text-body-secondary'>
                         <button className='btn btn-success'>Generar Reporte</button>
                     </div>
@@ -45,7 +47,7 @@ export default function ReportPage() {
     );
 };
 
-function Dropdown({currentType, types}) {
+function Dropdown({ currentType, types }) {
     return (
         <div className="dropdown">
             <a
@@ -68,4 +70,4 @@ function Dropdown({currentType, types}) {
             </ul>
         </div>
     );
-  }
+}
