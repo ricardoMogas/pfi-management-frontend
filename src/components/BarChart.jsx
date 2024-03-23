@@ -1,9 +1,9 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const Chart = ({data}) => {
+const Chart = ({data, width, height}) => {
     return (
-        <BarChart width={1000} height={500} data={data}>
+        <BarChart width={width} height={height} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
