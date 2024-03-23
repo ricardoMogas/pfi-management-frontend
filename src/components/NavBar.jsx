@@ -6,8 +6,8 @@ const NavBar = (routes) => {
         console.log(routes);
     }, []);
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid"    >
+        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div className="container-fluid">
                 <ul className="nav nav-underline">
                     <a className="navbar-brand" href="#">
                         <img
