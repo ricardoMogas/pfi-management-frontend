@@ -5,6 +5,18 @@ export default function StudentControl() {
         { nombre: 'Arturo Alberto', matricula: '68627', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
         { nombre: 'Ricardo', matricula: '67514', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
         { nombre: 'Gael', matricula: '62314', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Arturo Alberto', matricula: '68627', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Ricardo', matricula: '67514', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Gael', matricula: '62314', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Arturo Alberto', matricula: '68627', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Ricardo', matricula: '67514', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Gael', matricula: '62314', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Arturo Alberto', matricula: '68627', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Ricardo', matricula: '67514', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Gael', matricula: '62314', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Arturo Alberto', matricula: '68627', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Ricardo', matricula: '67514', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
+        { nombre: 'Gael', matricula: '62314', lic:'ISC', Genero:'M', GroT:'Maya', Estado:'Activo', checked: false },
     ]);
 
     const [mostrarModal, setMostrarModal] = useState(false);
@@ -55,15 +67,23 @@ export default function StudentControl() {
     };
 
     return (
-        <div className="container">
-            <h1 style={{ textAlign: 'center' }}>Administrar Alumnos</h1>
-            <div className="button-container">
-                <button className="btn-primary" onClick={() => alert('Función de registro por Excel en desarrollo...')}>Registrar por Excel</button>
-                <button className="btn-primary" onClick={handleAbrirModal}>Registrar</button>
-                <button className="btn-primary" onClick={() => alert('Función de actualización en desarrollo...')}>Actualizar</button>
-                <button className="btn-primary" onClick={handleEliminarAlumno}>Eliminar</button>
+        <div className="container text-center">
+            <h1>Administrar Alumnos</h1>
+            <div className="row justify-content-center">
+                <div className='col m-2'>
+                    <button className="btn btn-primary" onClick={() => alert('Función de registro por Excel en desarrollo...')}>Registrar por Excel</button>
+                </div>
+                <div className='col m-2'>
+                    <button className="btn btn-primary" onClick={handleAbrirModal}>Registrar</button>
+                </div>
+                <div className='col m-2'>
+                    <button className="btn btn-primary" onClick={() => alert('Función de actualización en desarrollo...')}>Actualizar</button>
+                </div>
+                <div className='col m-2'>
+                    <button className="btn btn-primary" onClick={handleEliminarAlumno}>Eliminar</button>
+                </div>
             </div>
-            <div className="table-container">
+            <div className='row justify-content-center'>
                 <table>
                     <thead>
                         <tr>
@@ -122,7 +142,7 @@ export default function StudentControl() {
                             </td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='tableBody'>
                         {alumnos.map((alumno, index) => (
                             <tr key={index}>
                                 <td><input type="checkbox" checked={alumno.checked} onChange={() => handleCheckboxChange(index)} /></td>
@@ -202,19 +222,6 @@ export default function StudentControl() {
             <style>
                 {`
                     /* Estilos anteriores */
-                    .container {
-                        max-width: 800px;
-                        margin: auto;
-                        padding: 20px;
-                    }
-                    .table-container table {
-                        margin-left: -250px;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 20px;
-                    }
                     th, td {
                         border: 1px solid #ddd;
                         padding: 8px;
@@ -260,15 +267,6 @@ export default function StudentControl() {
                     }
                     .btn-secondary {
                         background-color: #0056b3;
-                        color: #fff;
-                        border: none;
-                        cursor: pointer;
-                        padding: 8px 16px;
-                        font-size: 16px;
-                        border-radius: 4px;
-                    }
-                    .select-primary {
-                        background-color: #007bff;
                         color: #fff;
                         border: none;
                         cursor: pointer;
