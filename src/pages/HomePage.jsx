@@ -34,7 +34,7 @@ const HomePage = () => {
           <div className="col-12 col-md-6"> {/* Añadido 'd-flex' para hacer que el contenido de esta columna se estire para llenar el espacio vertical */}
             <div className="card w-100"> {/* Añadido 'flex-grow-1' para hacer que la tarjeta ocupe todo el espacio vertical y 'w-100' para llenar el espacio horizontal */}
               <div className="card-body" style={{height: '400px', overflow: 'auto'}}>
-                <p className="card-text">
+                <p className="card-text"> 
                   Pepe Pecas pica papas con un pico, con un pico pica papas Pepe Pecas. Si Pepe Pecas pica papas con un pico, ¿dónde está el pico con que Pepe Pecas pica papas?
                   Pepe Pecas pica papas con un pico, con un pico pica papas Pepe Pecas. Si Pepe Pecas pica papas con un pico, ¿dónde está el pico con que Pepe Pecas pica papas?
                   Pepe Pecas pica papas con un pico, con un pico pica papas Pepe Pecas. Si Pepe Pecas pica papas con un pico, ¿dónde está el pico con que Pepe Pecas pica papas?
