@@ -1,0 +1,61 @@
+{
+    "page" : 1,
+    "students": [
+        {
+            "registration": 123456,
+            "name": "John",
+            "p_last_name": "Doe",
+            "m_last_name": "Smith",
+            "gender": "Male",
+            "birthday_date": "1995-08-15",
+            "ethnicity": "Caucasian",
+            "origin_place": "United States",
+            "date_of_registration": "2022-01-01"
+        },
+        {
+            "registration": 789012,
+            "name": "Jane",
+            "p_last_name": "Smith",
+            "m_last_name": "Doe",
+            "gender": "Female",
+            "birthday_date": "1998-03-20",
+            "ethnicity": "Asian",
+            "origin_place": "China",
+            "date_of_registration": "2022-02-15"
+        },
+        {
+            "registration": 123452,
+            "name": "John",
+            "p_last_name": "Doe",
+            "m_last_name": "Smith",
+            "gender": "Male",
+            "birthday_date": "1995-08-15",
+            "ethnicity": "Caucasian",
+            "origin_place": "United States",
+            "date_of_registration": "2022-01-01"
+        },
+        {
+            "registration": 789512,
+            "name": "Jane",
+            "p_last_name": "Smith",
+            "m_last_name": "Doe",
+            "gender": "Female",
+            "birthday_date": "1998-03-20",
+            "ethnicity": "Asian",
+            "origin_place": "China",
+            "date_of_registration": "2022-02-15"
+        },
+        {
+            "registration": 889512,
+            "name": "Jane",
+            "p_last_name": "Smith",
+            "m_last_name": "Doe",
+            "gender": "Female",
+            "birthday_date": "1998-03-20",
+            "ethnicity": "Asian",
+            "origin_place": "China",
+            "date_of_registration": "2022-02-15"
+        }
+        
+    ]
+}
