@@ -16,7 +16,7 @@ export default function ServicePage() {
                     
                     <a data-bs-toggle="modal" data-bs-target="#copiasModal" >
                         <div className="card" style={{ width: "18rem" }}>
-                        <img src="/public/Printer_ServicePage.jpg" className="card-img-top" style={{ width: "100%", height: "200px", objectFit: "cover" }} alt="..." />
+                        <img src="/Printer_ServicePage.jpg" className="card-img-top" style={{ width: "100%", height: "200px", objectFit: "cover" }} alt="..." />
                         <div className="card-body">
                             <p className="card-text"><b>Copias e Impresiones</b></p>
                         </div>
@@ -26,7 +26,7 @@ export default function ServicePage() {
                 <div className="col-md-4 text-center">
                     <a data-bs-toggle="modal" data-bs-target="#prestamosModal" >
                         <div className="card" style={{ width: "18rem" }}>
-                        <img src="/public/loan_ServicePage.png" className="card-img-top" style={{ width: "100%", height: "200px", objectFit: "cover" }} alt="..." />
+                        <img src="/loan_ServicePage.png" className="card-img-top" style={{ width: "100%", height: "200px", objectFit: "cover" }} alt="..." />
                         <div className="card-body">
                             <p className="card-text"><b>Prestamos</b></p>
                         </div>
