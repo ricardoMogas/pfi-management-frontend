@@ -1,11 +1,14 @@
 import axios from "axios";
 
 class StudentsFetcher {
-    constructor() {}
+    
+    constructor(API_BASE_URL) {
+        this.API_BASE_URL = API_BASE_URL;
+    }
 
-    static async GetAllStudents() {
+    async GetAllStudents() {
         try {
-            const response = await axios.get(process.env.VITE_REACT_APP_BASE_API + '/students');
+            const response = await axios.get(this.API_BASE_URL + '/students');
             const students = response.data.result.map(student => ({ ...student, checked: false }));
             return students;
         } catch (error) {
@@ -13,10 +16,10 @@ class StudentsFetcher {
         }
     }
     
-    static async GetAllStudentsPagination(page, perPage, filters) {
+    async GetAllStudentsPagination(page, perPage, filters) {
         try {
-            const response = await axios.get(`http://localhost/PFI-Services-Api/students?page=${page}&perPage=${perPage}`, {
-                params: filters
+            const response = await axios.get(`${this.API_BASE_URL}/students?page=${page}&perPage=${perPage}`, {
+                params: filters,
             });
             const resultResponse = response.data.result;
             const students = resultResponse.data.map(student => ({ ...student, checked: false }));
@@ -26,9 +29,9 @@ class StudentsFetcher {
         }
     }
 
-    static async RegisterStudent(studentData) {
+    async RegisterStudent(studentData) {
         try {
-            const response = await axios.post('http://localhost/PFI-Services-Api/students', studentData, {
+            const response = await axios.post(`${this.API_BASE_URL}/students`, {
                 params: studentData,
             });
             const result = response.data.result;
@@ -43,7 +46,7 @@ export default StudentsFetcher;
 // USO DE LA CLASE GetAllStudentsPagination
 /*
 const filters = {
-    registration: 66208,
+    registration: 66,
     name: null,
     gender: null,
     ethnicity: null,
@@ -51,12 +54,14 @@ const filters = {
     status: null
 };
 
-const students = await StudentsFetcher.GetAllStudentsPagination(1, 2, filters);
+const studentsFetcher = new StudentsFetcher("http://localhost/PFI-Services-Api");
+const students = await studentsFetcher.GetAllStudentsPagination(1, 2, filters);
 console.log(students);
 */
 
 // USO DE LA CLASE GetAllStudents
-
-const students = await StudentsFetcher.GetAllStudents();
+/*
+const studentsFetcher = new StudentsFetcher("http://localhost/PFI-Services-Api");
+const students = await studentsFetcher.GetAllStudents();
 console.log(students);
-
+*/

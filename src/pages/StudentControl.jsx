@@ -3,7 +3,9 @@ import Loader from '../components/Loader';
 import React, { useEffect, useState } from 'react';
 import StudentsFetche from '../store/StudentsFetch';
 
+
 export default function StudentControl() {
+    const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
@@ -36,8 +38,12 @@ export default function StudentControl() {
         setAlumnos(nuevosAlumnos);
     };
 
-    useEffect(() => {
-        StudentsFetche.GetAllStudents(setStudents);
+    useEffect( () => {
+        console.log(import.meta.env.VITE_REACT_APP_BASE_API);
+        StudentsFetcher.GetAllStudents().then((students) => {
+            setStudents(students);
+            setIsLoader(false);
+        });
     }, []);
 
     return (
