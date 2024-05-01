@@ -15,7 +15,7 @@ export default function Root() {
     return (
         <>
             <NavBar routes={routes[0].children} />
-            <div id="Content">
+            <div id="Content" style={{overflow: "auto"}}>
                 <Outlet />
             </div>
         </>

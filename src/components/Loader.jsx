@@ -1,7 +1,18 @@
 import React from 'react';
 import style from '../css/Loader.module.css';
 
-export default function Loader() {
+export default function Loader({ type = 'default' }) {
+    switch (type) {
+        case 'default':
+            return <DefaultLoader />;
+        case 'spiner':
+            return <SpinerLoader />;
+        default:
+            return null;
+    }
+};
+
+function DefaultLoader() {
     return (
         <div className={style.loader}>
             <div>
@@ -40,6 +51,13 @@ export default function Loader() {
             </div>
             <span>Loading</span>
         </div>
-        
     );
-};
+}
+
+function SpinerLoader() {
+    return (
+        <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Cargando...</span>
+        </div>
+    );
+}
