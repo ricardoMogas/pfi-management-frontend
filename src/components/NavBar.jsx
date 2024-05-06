@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo_PFI from '../assets/Logo_PFI.png';
 const NavBar = (routes) => {
-    useEffect(() => {
-        console.log(routes);
-    }, []);
+    const location = useLocation();
+
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid"    >
+        <nav 
+            className="navbar navbar-expand-lg navbar-light fixed-top" 
+            style={{ backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
+        >
+            <div className="container-fluid">
                 <ul className="nav nav-underline">
                     <a className="navbar-brand" href="#">
                         <img
@@ -21,7 +23,13 @@ const NavBar = (routes) => {
                     {routes.routes.map((route, index) => {
                         return (
                             <li className="nav-item" key={index}>
-                                <Link className="nav-link" to={route.path}> {route.title} </Link>
+                                <Link 
+                                    className={`nav-link ${route.path === location.pathname ? 'active' : ''} ms-3`}
+                                    to={route.path} 
+                                    style={{ color: '#fff' }}
+                                >
+                                    {route.title} 
+                                </Link>
                             </li>
                         );
                     })}
