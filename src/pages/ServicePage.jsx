@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+const ColorPrimary = import.meta.env.VITE_REACT_COLOR_PRIMARY;
 
 export default function ServicePage() {
     const [showCopiasForm, setShowCopiasForm] = useState(false);
@@ -35,7 +36,7 @@ export default function ServicePage() {
             </div>
 
             <div className="card-group d-flex justify-content-center">
-                <div className="card m-2" style={{ backgroundColor: "#0d47a1", width: "18rem" }}>
+                <div className="card m-2" style={{ backgroundColor: `${ColorPrimary}`, width: "18rem" }}>
                     <div className="card-body">
                         <h5 className="card-title text-white">Copias e Impresiones</h5>
                         {!showCopiasForm ? (
@@ -64,7 +65,7 @@ export default function ServicePage() {
                         )}
                     </div>
                 </div>
-                <div className="card m-2" style={{ backgroundColor: "#0d47a1", width: "18rem" }}>
+                <div className="card m-2" style={{ backgroundColor: `${ColorPrimary}`, width: "18rem" }}>
                     <div className="card-body">
                         <h5 className="card-title text-white">Préstamos</h5>
                         {!showPrestamosForm ? (
