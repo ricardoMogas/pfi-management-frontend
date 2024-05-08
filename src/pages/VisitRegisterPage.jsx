@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+const visitas = [
+    { registration: 'ABC123', entry_time: '2022-10-01', exit_time: '2022-10-01', visit_date: '2022-10-01' },
+    { registration: 'DEF456', entry_time: '2022-10-02', exit_time: '2022-10-01', visit_date: '2022-10-01' },
+    { registration: 'GHI789', entry_time: '2022-10-03', exit_time: '2022-10-01', visit_date: '2022-10-01' },
+];
+const NoRevisitas = [
+    { registration: 'ABC123', entry_time: '2022-10-01', exit_time: '2022-10-01', visit_date: '2022-10-01', NoVisitas: 1 },
+    { registration: 'DEF456', entry_time: '2022-10-02', exit_time: '2022-10-01', visit_date: '2022-10-01', NoVisitas: 1 },
+    { registration: 'GHI789', entry_time: '2022-10-03', exit_time: '2022-10-01', visit_date: '2022-10-01', NoVisitas: 5 },
+];
 
 export default function VisitRegisterPage() {
-    const [activeTab, setActiveTab] = useState('tab1');
     const [date, setDate] = useState('');
     const [registros, setRegistros] = useState([]);
-
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-    };
 
     const handleDateChange = (event) => {
         setDate(event.target.value);
@@ -38,101 +43,171 @@ export default function VisitRegisterPage() {
     };
 
     return (
-        <div className="card text-center">
-            <div className="card-header">
-                <ul className="nav nav-tabs card-header-tabs">
-                    <li className="nav-item">
-                        <a className={"nav-link" + (activeTab === 'tab1' ? " active" : "")} onClick={() => handleTabClick('tab1')}>Visita de registrados</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className={"nav-link" + (activeTab === 'tab2' ? " active" : "")} onClick={() => handleTabClick('tab2')}>Visita de No registrados</a>
-                    </li>
-                </ul>
-            </div>
-            <div className="card-body">
-                <h5 className="card-title">Registro de entradas y salidas (PFI)</h5>
-                {activeTab === 'tab1' && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label htmlFor="registrados">Matrícula:</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input style={{ marginLeft: '820px' }} type="text" id="registrados" name="registrados" />
-                            <button className="btn btn-primary" style={{ marginLeft: '20px' }} onClick={handleRegistrarVisita}>Registrar visita</button>
-                        </div>
-                        <label htmlFor="date" style={{ marginLeft: '10px' }}>Fecha:</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input style={{ marginLeft: '860px' }} type="date" id="date" name="date" value={date} onChange={handleDateChange} />
-                            <button className="btn btn-primary" style={{ marginLeft: '30px' }} onClick={handleRegistrarSalida}>Registrar salida</button>
+        <div className="container">
+            <div className='card'>
+                <div className='card-header' id="myTab" role="tablist">
+                    <ul className="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                        <li className="nav-item" role="presentation">
+                            <button
+                                className="nav-link active"
+                                id="home-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#Registrados"
+                                type="button"
+                                role="tab"
+                                aria-controls="home"
+                                aria-selected="true"
+                            >
+                                Registrados
+                            </button>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                            <button
+                                className="nav-link"
+                                id="profile-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#NoRegistrados"
+                                type="button"
+                                role="tab"
+                                aria-controls="profile"
+                                aria-selected="false"
+                            >
+                                No Registrados
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div className="tab-content" id="myTabContent">
+                    <div
+                        className="tab-pane fade show active"
+                        id="Registrados"
+                        role="tabpanel"
+                        aria-labelledby="home-tab"
+                    >
+                        {/*********** Registrados **********/}
+                        <div className='container'>
+                            <div className='container'>
+                                <div className='row m-5'>
+                                    <div className='col'>
+                                        <div className="mb-1">
+                                            <label htmlFor="registrados" className="form-label">Matrícula:</label>
+                                            <input type="text" className="form-control" id="registrados" name="registrados" />
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="date" className="form-label">Fecha:</label>
+                                            <input type="date" className="form-control" id="date" name="date" value={date} onChange={handleDateChange} />
+                                        </div>
+                                        <div className="mb-1">
+                                            <label htmlFor="NoVisitas" className="form-label">No. de Visitas:</label>
+                                            <input type="text" className="form-control" id="NoVisitas" name="NoVisitas" />
+                                        </div>
+                                    </div>
+                                    <div className='col d-flex justify-content-center align-items-center'>
+                                        <div className="mb-3">
+                                            <div className='mb-1'>
+                                                <button className="btn btn-primary btn-block mb-2" onClick={handleRegistrarVisita}>Registrar visita</button>
+                                            </div>
+                                            <div className='mb-1'>
+                                                <button className="btn btn-primary mb-2" onClick={handleRegistrarSalida}>Registrar salida</button>
+                                            </div>
+                                            <div className='mb-1'>
+                                                <button className="btn btn-primary mb-2" onClick={handleRegistrarVisita}>Registrar Visitas</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='container'>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Matrícula</th>
+                                            <th>Fecha</th>
+                                            <th>Hora de entrada</th>
+                                            <th>Hora de salida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {visitas.map((registro, index) => (
+                                            <tr key={index}>
+                                                <td>{registro.registration}</td>
+                                                <td>{registro.visit_date}</td>
+                                                <td>{registro.entry_time}</td>
+                                                <td>{registro.exit_time}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                )}
-                {activeTab === 'tab2' && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label htmlFor="registrados">Matrícula:</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input style={{ marginLeft: '850px' }} type="text" id="registrados" name="registrados" />
-                            <button className="btn btn-primary" style={{ marginLeft: '20px' }} onClick={handleRegistrarVisita}>Registrar visita</button>
-                        </div>
-                        <label htmlFor="date" style={{ marginLeft: '20px' }}>Fecha:</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input style={{ marginLeft: '850px' }} type="date" id="date" name="date" value={date} onChange={handleDateChange} />
-                            <button className="btn btn-primary" style={{ marginLeft: '20px' }} onClick={handleRegistrarSalida}>Registrar salida</button>
-                        </div>
-                        <label htmlFor="NoVisitas" style={{ marginLeft: '20px' }}>No. de Visitas:</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input style={{ marginLeft: '850px' }} type="text" id="NoVisitas" name="NoVisitas" />
-                            <button className="btn btn-primary" style={{ marginLeft: '20px' }} onClick={handleRegistrarVisita}>Registrar Visitas</button>
+                    <div
+                        className="tab-pane fade"
+                        id="NoRegistrados"
+                        role="tabpanel"
+                        aria-labelledby="profile-tab"
+                    >
+                        {/* No registrados */}
+                        <div className='container'>
+                            <div className='row m-5'>
+                                <div className='col'>
+                                    <div className="mb-1">
+                                        <label htmlFor="registrados" className="form-label">Matrícula:</label>
+                                        <input type="text" className="form-control" id="registrados" name="registrados" />
+                                    </div>
+                                    <div className="mb-1">
+                                        <label htmlFor="date" className="form-label">Fecha:</label>
+                                        <input type="date" className="form-control" id="date" name="date" value={date} onChange={handleDateChange} />
+                                    </div>
+                                    <div className="mb-1">
+                                        <label htmlFor="NoVisitas" className="form-label">No. de Visitas:</label>
+                                        <input type="text" className="form-control" id="NoVisitas" name="NoVisitas" />
+                                    </div>
+                                </div>
+                                <div className='col d-flex justify-content-center align-items-center'>
+                                    <div className="mb-3">
+                                        <div className='mb-1'>
+                                            <button className="btn btn-primary btn-block mb-2" onClick={handleRegistrarVisita}>Registrar visita</button>
+                                        </div>
+                                        <div className='mb-1'>
+                                            <button className="btn btn-primary mb-2" onClick={handleRegistrarSalida}>Registrar salida</button>
+                                        </div>
+                                        <div className='mb-1'>
+                                            <button className="btn btn-primary mb-2" onClick={handleRegistrarVisita}>Registrar Visitas</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='row m-1'>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Matrícula</th>
+                                            <th>Fecha</th>
+                                            <th>Hora de entrada</th>
+                                            <th>Hora de salida</th>
+                                            <th>No. de Visitas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {NoRevisitas.map((registro, index) => (
+                                            <tr key={index}>
+                                                <td>{registro.registration}</td>
+                                                <td>{registro.visit_date}</td>
+                                                <td>{registro.entry_time}</td>
+                                                <td>{registro.exit_time}</td>
+                                                <td style={{ color: registro.NoVisitas >= 5 ? 'red' : 'inherit' }}>{registro.NoVisitas}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
-            <div className="card-footer text-muted">
-                {activeTab === 'tab1' && (
-                    <table className="table table-dark table-striped" style={{ marginLeft: '50px', marginTop: '20px', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th>Matrícula</th>
-                                <th>Fecha</th>
-                                <th>Hora de entrada</th>
-                                <th>Hora de salida</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {registros.map((registro, index) => (
-                                <tr key={index}>
-                                    <td>{registro.matricula}</td>
-                                    <td>{registro.fecha}</td>
-                                    <td>{registro.horaEntrada}</td>
-                                    <td>{registro.horaSalida}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-                {activeTab === 'tab2' && (
-                    <table className="table table-dark table-striped" style={{ marginLeft: '50px', marginTop: '20px', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th>Matrícula</th>
-                                <th>Fecha</th>
-                                <th>Hora de entrada</th>
-                                <th>Hora de salida</th>
-                                <th>No. de Visitas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {registros.map((registro, index) => (
-                                <tr key={index}>
-                                    <td>{registro.matricula}</td>
-                                    <td>{registro.fecha}</td>
-                                    <td>{registro.horaEntrada}</td>
-                                    <td>{registro.horaSalida}</td>
-                                    <td>{registro.NoVisitas}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+            {/* Aquí va el código de la página */}
         </div>
+
     );
 };
