@@ -11,20 +11,45 @@ const data = [
     { name: 'G', value1: 3490, value2: 4300 },
 ];
 const types = ['Licenciatura', 'Visitas', 'Genero', 'Etnia'];
-const typeFrequency = ['Todos','Etnia', 'Licenciatura', 'Genero'];
+const typeFrequency = ['Todos', 'Etnia', 'Licenciatura', 'Genero'];
 
 export default function ReportPage() {
     /*** USESTATE CONSTS ***/
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [currentType, setCurrentType] = useState(null);
     const [currentTypeFrequency, setcurrentTypeFrequency] = useState(null);
+    const [dataJson, setDataJson] = useState({
+        types: null,
+        typeFrequency: null,
+        startDate: null,
+        endDate: null
+    });
 
     //obtener el tipo actual 
     const gettingTypeReport = (type) => {
         setCurrentType(type);
+        setDataJson({ ...dataJson, types: type });
     };
+
     const gettingTypeFrequency = (type) => {
         setcurrentTypeFrequency(type);
+        setDataJson({ ...dataJson, typeFrequency: type });
+        console.log(type);
     }
+    /*** GENERATE GRAPH OR REPORT ***/
+    const generateGraph = () => {
+        if ( dataJson.types===null||dataJson.startDate===null||dataJson.endDate===null) {
+            alert('Faltan datos para generar la grafica');
+            return; // No se puede generar la grafica
+        }
+        if (currentType !== null && typeFrequency === null) {
+            alert('Faltan datos para generar la grafica: Tipo de Frecuencia');
+            return; // No se puede generar la grafica
+        }
+        console.log('Generar Grafica: ', dataJson);
+    }
+
     /**  CONDICIONALES ***/
     const currentActionForComponent = () => {
         switch (currentType) {
@@ -33,6 +58,46 @@ export default function ReportPage() {
             default:
                 return null;
         }
+    }
+
+    const StartDateChange = (e) => {
+        const selectedStartDate = new Date(e.target.value);
+        const selectedEndDate = new Date(endDate);
+
+        // Validar que la fecha de inicio no sea mayor que la fecha de fin
+        if (selectedEndDate < selectedStartDate) {
+            alert('La fecha de inicio no puede ser mayor que la fecha de fin');
+            return;
+        }
+        // Validar que el rango de fechas no sea mayor a 1 año
+        const oneYearFromStartDate = new Date(selectedStartDate);
+        oneYearFromStartDate.setFullYear(oneYearFromStartDate.getFullYear() + 1);
+        if (oneYearFromStartDate < selectedEndDate) {
+            alert('El rango de fechas no puede ser mayor a 1 año');
+            return;
+        }
+        setStartDate(e.target.value);
+        setDataJson({ ...dataJson, startDate: e.target.value });
+    }
+
+    const EndDateChange = (e) => {
+        const selectedEndDate = new Date(e.target.value);
+        const selectedStartDate = new Date(startDate);
+
+        // Validar que la fecha de fin no sea menor que la fecha de inicio
+        if (selectedEndDate < selectedStartDate) {
+            alert('La fecha de fin no puede ser menor que la fecha de inicio');
+            return;
+        }
+        // Validar que el rango de fechas no sea mayor a 1 año
+        const oneYearFromStartDate = new Date(selectedStartDate);
+        oneYearFromStartDate.setFullYear(oneYearFromStartDate.getFullYear() + 1);
+        if (oneYearFromStartDate < selectedEndDate) {
+            alert('El rango de fechas no puede ser mayor a 1 año');
+            return;
+        }
+        setEndDate(e.target.value);
+        setDataJson({ ...dataJson, endDate: e.target.value });
     }
 
     return (
@@ -48,11 +113,11 @@ export default function ReportPage() {
                             {currentActionForComponent()}
                         </div>
                         <div className='col'>
-                            <input type="date" className="form-control" />
+                            <input className="form-control" type="date" value={startDate} onChange={StartDateChange} />
                             Del mes
                         </div>
                         <div className='col'>
-                            <input type="date" className="form-control" />
+                            <input className="form-control" type="date" value={endDate} onChange={EndDateChange} />
                             Hasta
                         </div>
                     </section>
@@ -61,7 +126,7 @@ export default function ReportPage() {
                     <BarChart data={data} width={800} height={400} />
                 </div>
                 <div className='card-footer text-body-secondary'>
-                    <button type='button' className='btn btn-primary m-1'>Generar Grafica</button>
+                    <button type='button' className='btn btn-primary m-1' onClick={generateGraph}>Generar Grafica</button>
                     <button type='button' className='btn btn-success m-1'>Generar Reporte</button>
                 </div>
             </section>
