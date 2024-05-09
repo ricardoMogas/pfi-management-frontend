@@ -1,15 +1,30 @@
-const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
+import React, { useState, useEffect } from 'react';
 import Loader from '../components/Loader';
-import React, { useEffect, useState } from 'react';
 import StudentsFetche from '../store/StudentsFetch';
-
+import StudentFilter from '../store/DataJson/StudentFilter.json';
+import { event } from 'jquery';
+const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 
 export default function StudentControl() {
     const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
+    const [filter, setFilter] = useState({
+        registration: null,
+        name: null,
+        gender: null,
+        ethnicity: null,
+        status: null,
+        career: null
+    });
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
-    const perPage = useState(5);
+    const [perPage, setPerPage] = useState(5);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const handleChangeName =(name)  => {
+        setFilter({...filter, name : name})
+        fetchStudents();
+    }
 
     const handleEliminarAlumno = () => {
         const nuevosAlumnos = alumnos.filter(alumno => !alumno.checked);
@@ -17,40 +32,69 @@ export default function StudentControl() {
     };
 
     const buscarPorLicenciatura = (licenciatura) => {
+        setFilter({ ...filter, career: licenciatura });
         console.log(`Buscando por licenciatura: ${licenciatura}`);
     };
 
     const buscarPorGenero = (genero) => {
+        setFilter({ ...filter, career: genero })
         console.log(`Buscando por genero: ${genero}`);
     };
 
     const buscarPorEtnia = (etnia) => {
+        setFilter({ ...filter, career: etnia })
         console.log(`Buscando por etnia: ${etnia}`);
     };
 
     const buscarPorEstado = (estado) => {
+        setFilter({ ...filter, career: estado })
         console.log(`Buscando por estado: ${estado}`);
     };
-
     const handleCheckboxChange = (index) => {
-        const nuevosAlumnos = [...alumnos];
+        const nuevosAlumnos = [...students];
         nuevosAlumnos[index].checked = !nuevosAlumnos[index].checked;
-        setAlumnos(nuevosAlumnos);
+        setStudents(nuevosAlumnos);
+    };
+    const SelectAllStudents = (checked) => {
+        const CheckedStudents = students.map(student => ({
+            ...student,
+            checked: checked
+        }))
+        setStudents(CheckedStudents);
+    }
+
+    const NextPage = () => {
+        console.log(totalPages)
+        if (page !== totalPages) {
+            setPage(page + 1);
+            fetchStudents();
+        }
     };
 
-    useEffect( () => {
+    const PreviousPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+            fetchStudents();
+        }
+    };
+
+    const fetchStudents = async () => {
+        setIsLoader(true);
+        const result = await StudentsFetcher.GetAllStudentsPagination(page, perPage, filter);
+        setStudents(result.students)
+        setTotalPages(Math.ceil(result.total / perPage)); // Calculate the total number of pages
+        console.log(totalPages)
+        setIsLoader(false);
+    }
+
+    useEffect(() => {
         console.log(import.meta.env.VITE_REACT_APP_BASE_API);
-        StudentsFetcher.GetAllStudents().then((students) => {
-            setStudents(students);
-            setIsLoader(false);
-        });
-    }, []);
+        fetchStudents();
+    }, [page, totalPages, filter]);
 
     return (
         <div className="container">
-
             <div className='card'>
-                {/* BOTONES SUPERIORES DEL CRUD */}
                 <div className='card-header'>
                     <div className='row text-center'>
                         <div className='col-5'>
@@ -87,10 +131,8 @@ export default function StudentControl() {
                         </div>
                     </div>
                 </div>
-
-                {/* TABLA */}
                 <div className='table-responsive-lg m-4' style={{ maxHeight: '650px', overflow: 'auto' }}>
-                    { students.length === 0 ? (
+                    {students.length === 0 ? (
                         <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Loader type='spiner' />
                         </div>
@@ -111,102 +153,111 @@ export default function StudentControl() {
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
-                                            defaultValue=""
+                                            checked={students.every(student => student.checked)}
+                                            onChange={(e) => SelectAllStudents(e.target.checked)}
                                         />
                                     </td>
                                     <td scope='col' className="align-middle">
-                                        <div className="input-group">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Buscar"
-                                            />
-                                            <button
-                                                className="btn btn-outline-secondary"
-                                                type="button"
-                                                style={{ padding: '.25rem', fontSize: '.75rem' }}
-                                            > 🔎 </button>
-                                        </div>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Buscar Matricula"
+                                        />
                                     </td>
                                     <td scope='col' className="align-middle">
-                                        <div className="input-group">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Buscar"
-                                            />
-                                            <button
-                                                className="btn btn-outline-secondary"
-                                                type="button"
-                                                style={{ padding: '.25rem', fontSize: '.75rem' }}
-                                            > 🔎 </button>
-                                        </div>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Buscar Nombre🔎"
+                                            onChange={(e) => handleChangeName(e.target.value)}
+                                        />
                                     </td>
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
-                                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownLicenciatura" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button
+                                                className="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
                                                 Buscar Licenciatura
                                             </button>
-                                            <div className="dropdown-menu" aria-labelledby="dropdownLicenciatura">
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('')}>Buscar Licenciatura</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('ISC')}>ISC</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('ICA')}>ICA</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('IE')}>IE</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('IM')}>IM</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('ITS')}>ITS</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura('IME')}>IME</a>
-                                            </div>
+                                            <ul className="dropdown-menu">
+                                                {StudentFilter.licenciatura.map((item, index) => (
+                                                    <li key={index}>
+                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura(item.value)}>{item.label}</a>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     </td>
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
-                                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownGenero" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button
+                                                className="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                id="dropdownGenero"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
                                                 Buscar Género
                                             </button>
-                                            <div className="dropdown-menu" aria-labelledby="dropdownGenero">
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorGenero('')}>Buscar Género</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorGenero('M')}>Masculino</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorGenero('F')}>Femenino</a>
-                                            </div>
+                                            <ul className="dropdown-menu" aria-labelledby="dropdownGenero">
+                                                {StudentFilter.genero.map((item, index) => (
+                                                    <li key={index}>
+                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorGenero(item.value)}>{item.label}</a>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     </td>
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
-                                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownEtnia" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button
+                                                className="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                id="dropdownEtnia"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
                                                 Buscar Grupo étnico
                                             </button>
-                                            <div className="dropdown-menu" aria-labelledby="dropdownEtnia">
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('')}>Buscar Grupo étnico</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('Maya')}>Maya</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('Otomi')}>Otomi</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('Azteca')}>Azteca</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('Zapoteca')}>Zapoteca</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia('Olmeca')}>Olmeca</a>
-                                            </div>
+                                            <ul className="dropdown-menu" aria-labelledby="dropdownEtnia">
+                                                {StudentFilter.etnia.map((item, index) => (
+                                                    <li key={index}>
+                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia(item.value)}>{item.label}</a>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     </td>
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
-                                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownEstado" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button
+                                                className="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                id="dropdownEstado"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
                                                 Buscar Status
                                             </button>
-                                            <div className="dropdown-menu" aria-labelledby="dropdownEstado">
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEstado('')}>Buscar Status</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEstado('Activo')}>Activo</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEstado('Egresado')}>Egresado</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEstado('Baja temporal')}>Baja temporal</a>
-                                                <a className="dropdown-item" href="#" onClick={() => buscarPorEstado('Baja definitiva')}>Baja definitiva</a>
-                                            </div>
+                                            <ul className="dropdown-menu" aria-labelledby="dropdownEstado">
+                                                {StudentFilter.estado.map((item, index) => (
+                                                    <li key={index}>
+                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorEstado(item.value)}>{item.label}</a>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     </td>
-
                                 </tr>
                             </thead>
                             <tbody>
                                 {students.map((student, index) => (
                                     <tr key={index}>
                                         <td><input type="checkbox" className='form-check-input' checked={student.checked} onChange={() => handleCheckboxChange(index)} /></td>
-                                        <td >{student.registration}</td>
+                                        <td>{student.registration}</td>
                                         <td>{student.name}</td>
                                         <td>{student.career}</td>
                                         <td>{student.gender}</td>
@@ -215,27 +266,21 @@ export default function StudentControl() {
                                     </tr>
                                 ))}
                             </tbody>
-                            <caption>
-
-                            </caption>
+                            <caption></caption>
                         </table>
                     )}
                 </div>
-                {/* PAGINACIÓN */}
                 <div>
                     <ul className="pagination justify-content-center">
-                        <li className="page-item disabled">
-                            <a className="page-link">Previous</a>
+                        <li className={`page-item ${page === 1 ? `disabled` : ''}`}>
+                            <button className="page-link" onClick={PreviousPage}>Previous</button>
                         </li>
-                        <li className="page-item"><a className="page-link active" href="#">1</a></li>
-                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                        <li className="page-item">
-                            <a className="page-link" href="#">Next</a>
+                        <li className="page-item"><a className="page-link active" >{page}</a></li>
+                        <li className={`page-item ${page === totalPages ? `disabled` : ''}`}>
+                            <button className="page-link" onClick={NextPage}>Next</button>
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
     );
@@ -254,7 +299,6 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', dat
         >
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div className="modal-content">
-
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">
                             {Title}
@@ -266,7 +310,6 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', dat
                             aria-label="Close"
                         ></button>
                     </div>
-
                     <div className="modal-body">
                         <form className="modal-form">
                             <div className="mb-3">
@@ -320,7 +363,6 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', dat
                             </div>
                         </form>
                     </div>
-
                     <div className="modal-footer">
                         <button
                             type="button"
@@ -333,7 +375,6 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', dat
                             Registrar
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>

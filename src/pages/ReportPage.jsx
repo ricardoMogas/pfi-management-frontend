@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BarChart from '../components/BarChart';
+import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
 
 const data = [
     { name: 'A', value1: 4000, value2: 2400 },
@@ -39,15 +40,23 @@ export default function ReportPage() {
     }
     /*** GENERATE GRAPH OR REPORT ***/
     const generateGraph = () => {
-        if ( dataJson.types===null||dataJson.startDate===null||dataJson.endDate===null) {
-            alert('Faltan datos para generar la grafica');
-            return; // No se puede generar la grafica
+        if (dataJson.types===null) {
+            alert('Elige un tipo de reporte');
+            return; // No se puede generar la gráfica
         }
-        if (currentType !== null && typeFrequency === null) {
-            alert('Faltan datos para generar la grafica: Tipo de Frecuencia');
-            return; // No se puede generar la grafica
+        /*
+        if (currentType !== null && currentTypeFrequency === null) {
+            alert('Faltan datos para generar la gráfica: Tipo de Frecuencia');
+            return; // No se puede generar la gráfica
         }
-        console.log('Generar Grafica: ', dataJson);
+        */
+        console.log('Generar Gráfica: ', dataJson);
+        const excelData = [
+            ['Nombre', 'Valor1', 'Valor2'],
+            ...data.map(item => [item.name, item.value1, item.value2])
+        ];
+        const excelExporter = new CreateExcelReport(excelData, 'grafica.xlsx');
+        excelExporter.exportToExcel();
     }
 
     /**  CONDICIONALES ***/
@@ -126,7 +135,7 @@ export default function ReportPage() {
                     <BarChart data={data} width={800} height={400} />
                 </div>
                 <div className='card-footer text-body-secondary'>
-                    <button type='button' className='btn btn-primary m-1' onClick={generateGraph}>Generar Grafica</button>
+                    <button type='button' className='btn btn-primary m-1' onClick={generateGraph}>Generar Gráfica</button>
                     <button type='button' className='btn btn-success m-1'>Generar Reporte</button>
                 </div>
             </section>

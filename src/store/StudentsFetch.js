@@ -1,7 +1,8 @@
 import axios from "axios";
+import { param } from "jquery";
 
 class StudentsFetcher {
-    
+
     constructor(API_BASE_URL) {
         this.API_BASE_URL = API_BASE_URL;
     }
@@ -15,15 +16,18 @@ class StudentsFetcher {
             console.error('Error fetching students:', error);
         }
     }
-    
+
     async GetAllStudentsPagination(page, perPage, filters) {
         try {
-            const response = await axios.get(`${this.API_BASE_URL}/students?page=${page}&perPage=${perPage}`, {
-                params: filters,
-            });
+            const response = await axios.get(`${this.API_BASE_URL}/students?page=${page}&perPage=${perPage}`, filters);
             const resultResponse = response.data.result;
             const students = resultResponse.data.map(student => ({ ...student, checked: false }));
-            return students;
+            console.log()
+            const result = {
+                total : response.data.result.total,
+                students : students
+            }
+            return result;
         } catch (error) {
             console.error('Error fetching students:', error);
         }
