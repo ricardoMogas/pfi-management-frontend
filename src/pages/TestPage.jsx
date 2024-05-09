@@ -1,6 +1,25 @@
+import { useEffect } from "react";
 import Loader from "../components/Loader";
 
 export default function Test() {
+  useEffect(() => {
+    fetch("http://localhost/PFI-Services-Api/SearchStudent", {
+      method: 'POST', // Especificar que la solicitud es de tipo POST
+      headers: {
+        'Content-Type': 'application/json' // Especificar el tipo de contenido del cuerpo de la solicitud
+      },
+    })
+      .then(response => response.json()) // Parsear la respuesta JSON
+      .then(data => {
+        // Manejar los datos aquí
+        console.log(data);
+      })
+      .catch(error => {
+        // Manejar cualquier error aquí
+        console.error('Error fetching data:', error);
+      });
+
+  }, []);
   return (
     <>
       <div className="container text-center">

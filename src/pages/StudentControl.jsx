@@ -2,59 +2,65 @@ import React, { useState, useEffect } from 'react';
 import Loader from '../components/Loader';
 import StudentsFetche from '../store/StudentsFetch';
 import StudentFilter from '../store/DataJson/StudentFilter.json';
-import { event } from 'jquery';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
+
 
 export default function StudentControl() {
     const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
     const [filter, setFilter] = useState({
-        registration: null,
-        name: null,
-        gender: null,
-        ethnicity: null,
-        status: null,
-        career: null
+        registration: "null",
+        name: "null",
+        gender: "null",
+        ethnicity: "null",
+        status: "null",
+        career: "null"
     });
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
 
-    const handleChangeName =(name)  => {
-        setFilter({...filter, name : name})
+    const handleChangeName = (name) => {
+        setFilter({ ...filter, name: name })
         fetchStudents();
     }
 
-    const handleEliminarAlumno = () => {
-        const nuevosAlumnos = alumnos.filter(alumno => !alumno.checked);
-        setAlumnos(nuevosAlumnos);
-    };
+    const handleChangeRegistration = (registration) => {
+        setFilter({ ...filter, registration: registration })
+        fetchStudents();
+    }
 
     const buscarPorLicenciatura = (licenciatura) => {
         setFilter({ ...filter, career: licenciatura });
-        console.log(`Buscando por licenciatura: ${licenciatura}`);
+        fetchStudents();
     };
 
     const buscarPorGenero = (genero) => {
-        setFilter({ ...filter, career: genero })
-        console.log(`Buscando por genero: ${genero}`);
+        setFilter({ ...filter, gender: genero })
+        fetchStudents();
     };
 
     const buscarPorEtnia = (etnia) => {
-        setFilter({ ...filter, career: etnia })
-        console.log(`Buscando por etnia: ${etnia}`);
+        setFilter({ ...filter, ethnicity: etnia })
+        fetchStudents();
     };
 
     const buscarPorEstado = (estado) => {
-        setFilter({ ...filter, career: estado })
-        console.log(`Buscando por estado: ${estado}`);
+        setFilter({ ...filter, status: estado })
+        fetchStudents();
     };
     const handleCheckboxChange = (index) => {
         const nuevosAlumnos = [...students];
         nuevosAlumnos[index].checked = !nuevosAlumnos[index].checked;
         setStudents(nuevosAlumnos);
     };
+
+    const handleEliminarAlumno = () => {
+        const nuevosAlumnos = alumnos.filter(alumno => !alumno.checked);
+        setAlumnos(nuevosAlumnos);
+    };
+
     const SelectAllStudents = (checked) => {
         const CheckedStudents = students.map(student => ({
             ...student,
@@ -81,12 +87,20 @@ export default function StudentControl() {
     const fetchStudents = async () => {
         setIsLoader(true);
         const result = await StudentsFetcher.GetAllStudentsPagination(page, perPage, filter);
-        setStudents(result.students)
-        setTotalPages(Math.ceil(result.total / perPage)); // Calculate the total number of pages
-        console.log(totalPages)
-        setIsLoader(false);
-    }
+        if (result.students.length > 0) {
+            setStudents(result.students)
+            setTotalPages(Math.ceil(result.total / perPage)); // Calculate the total number of pages
+            console.log(totalPages)
+            setIsLoader(false);
+            console.log(students)
+        } else {
+            setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }])
+        }
 
+    }
+    const RegisterStudent = async () => {
+        
+    }
     useEffect(() => {
         console.log(import.meta.env.VITE_REACT_APP_BASE_API);
         fetchStudents();
@@ -162,6 +176,7 @@ export default function StudentControl() {
                                             type="text"
                                             className="form-control"
                                             placeholder="Buscar Matricula"
+                                            onChange={(e) => handleChangeRegistration(e.target.value)}
                                         />
                                     </td>
                                     <td scope='col' className="align-middle">
@@ -286,7 +301,7 @@ export default function StudentControl() {
     );
 }
 
-function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', data = {} }) {
+function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', CurrentData = {} }) {
     return (
         <div
             className="modal fade"
@@ -320,46 +335,39 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', dat
                                 <label htmlFor="matricula" className="form-label">Matrícula:</label>
                                 <input type="text" className="form-control" id="matricula" name="matricula" />
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="licenciatura" className="form-label">Licenciatura:</label>
-                                <select className="form-select" id="licenciatura" name="licenciatura">
-                                    <option value="">Selecciona Licenciatura</option>
-                                    <option value="ISC">ISC</option>
-                                    <option value="ICA">ICA</option>
-                                    <option value="IE">IE</option>
-                                    <option value="IM">IM</option>
-                                    <option value="ITS">ITS</option>
-                                    <option value="IME">IME</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="genero" className="form-label">Género:</label>
-                                <select className="form-select" id="genero" name="genero">
-                                    <option value="">Selecciona Género</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Femenino</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="grupoEtnico" className="form-label">Grupo Étnico:</label>
-                                <select className="form-select" id="grupoEtnico" name="grupoEtnico">
-                                    <option value="">Selecciona Grupo Étnico</option>
-                                    <option value="Maya">Maya</option>
-                                    <option value="Otomi">Otomi</option>
-                                    <option value="Azteca">Azteca</option>
-                                    <option value="Zapoteca">Zapoteca</option>
-                                    <option value="Olmeca">Olmeca</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="estado" className="form-label">Estado:</label>
-                                <select className="form-select" id="estado" name="estado">
-                                    <option value="">Selecciona Status</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Egresado">Egresado</option>
-                                    <option value="Baja temporal">Baja temporal</option>
-                                    <option value="Baja definitiva">Baja definitiva</option>
-                                </select>
+                            <div>
+                                <div className="mb-3">
+                                    <label htmlFor="licenciatura" className="form-label">Licenciatura:</label>
+                                    <select className="form-select" id="licenciatura" name="licenciatura">
+                                        {StudentFilter.licenciatura.map(opcion => (
+                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="genero" className="form-label">Género:</label>
+                                    <select className="form-select" id="genero" name="genero">
+                                        {StudentFilter.genero.map(opcion => (
+                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="grupoEtnico" className="form-label">Grupo Étnico:</label>
+                                    <select className="form-select" id="grupoEtnico" name="grupoEtnico">
+                                        {StudentFilter.etnia.map(opcion => (
+                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="estado" className="form-label">Estado:</label>
+                                    <select className="form-select" id="estado" name="estado">
+                                        {StudentFilter.estado.map(opcion => (
+                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </form>
                     </div>

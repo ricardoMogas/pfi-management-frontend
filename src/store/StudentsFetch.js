@@ -19,7 +19,7 @@ class StudentsFetcher {
 
     async GetAllStudentsPagination(page, perPage, filters) {
         try {
-            const response = await axios.get(`${this.API_BASE_URL}/students?page=${page}&perPage=${perPage}`, filters);
+            const response = await axios.post(`${this.API_BASE_URL}/SearchStudent?page=${page}&perPage=${perPage}`, filters);
             const resultResponse = response.data.result;
             const students = resultResponse.data.map(student => ({ ...student, checked: false }));
             console.log()
@@ -35,9 +35,7 @@ class StudentsFetcher {
 
     async RegisterStudent(studentData) {
         try {
-            const response = await axios.post(`${this.API_BASE_URL}/students`, {
-                params: studentData,
-            });
+            const response = await axios.post(`${this.API_BASE_URL}/students`, studentData);
             const result = response.data.result;
             return result;
         } catch (error) {
