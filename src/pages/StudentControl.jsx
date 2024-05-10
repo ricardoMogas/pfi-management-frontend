@@ -3,10 +3,9 @@ import Loader from '../components/Loader';
 import StudentsFetche from '../store/StudentsFetch';
 import StudentFilter from '../store/DataJson/StudentFilter.json';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
-
+const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export default function StudentControl() {
-    const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
     const [filter, setFilter] = useState({
         registration: "null",
         name: "null",
@@ -98,9 +97,7 @@ export default function StudentControl() {
         }
 
     }
-    const RegisterStudent = async () => {
-        
-    }
+
     useEffect(() => {
         console.log(import.meta.env.VITE_REACT_APP_BASE_API);
         fetchStudents();
@@ -302,6 +299,28 @@ export default function StudentControl() {
 }
 
 function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', CurrentData = {} }) {
+    const [student, setStudent] = useState({
+        registration: "",
+        name: "",
+        gender: "",
+        birthday_date: "",
+        origin_place: "",
+        ethnicity: "",
+        career: "",
+        status: "",
+        origin_place: ""
+    });
+
+    const RegisterStudent = async () => {
+        const result = await StudentsFetcher.RegisterStudent(student);
+        console.log(result);
+        if (result) {
+            alert('Registro completo')
+        } else {
+            alert('Faltan campos')
+        }
+    }
+
     return (
         <div
             className="modal fade"
@@ -329,16 +348,24 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
                         <form className="modal-form">
                             <div className="mb-3">
                                 <label htmlFor="nombre" className="form-label">Nombre:</label>
-                                <input type="text" className="form-control" id="nombre" name="nombre" />
+                                <input type="text" className="form-control" name="nombre" onChange={(e) => (setStudent({ ...student, name: e.target.value }))} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="matricula" className="form-label">Matrícula:</label>
-                                <input type="text" className="form-control" id="matricula" name="matricula" />
+                                <input type="number" className="form-control" name="matricula" onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
+                            </div>
+                            <div className='mb-3'>
+                                <label htmlFor="Fecha" className='form-label'>Fecha de nacimiento</label>
+                                <input className="form-control" type="date" onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} />
+                            </div>
+                            <div className='mb-3'>
+                                <label htmlFor="Fecha" className='form-label'>Lugar de nacimientos</label>
+                                <input className="form-control" type="text" onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} />
                             </div>
                             <div>
                                 <div className="mb-3">
                                     <label htmlFor="licenciatura" className="form-label">Licenciatura:</label>
-                                    <select className="form-select" id="licenciatura" name="licenciatura">
+                                    <select className="form-select" id="licenciatura" name="licenciatura" onChange={(e) => setStudent({ ...student, career: e.target.value })}>
                                         {StudentFilter.licenciatura.map(opcion => (
                                             <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
                                         ))}
@@ -346,7 +373,7 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="genero" className="form-label">Género:</label>
-                                    <select className="form-select" id="genero" name="genero">
+                                    <select className="form-select" id="genero" name="genero" onChange={(e) => setStudent({ ...student, gender: e.target.value })}>
                                         {StudentFilter.genero.map(opcion => (
                                             <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
                                         ))}
@@ -354,7 +381,7 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="grupoEtnico" className="form-label">Grupo Étnico:</label>
-                                    <select className="form-select" id="grupoEtnico" name="grupoEtnico">
+                                    <select className="form-select" id="grupoEtnico" name="grupoEtnico" onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}>
                                         {StudentFilter.etnia.map(opcion => (
                                             <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
                                         ))}
@@ -362,7 +389,7 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="estado" className="form-label">Estado:</label>
-                                    <select className="form-select" id="estado" name="estado">
+                                    <select className="form-select" id="estado" name="estado" onChange={(e) => setStudent({ ...student, status: e.target.value })}>
                                         {StudentFilter.estado.map(opcion => (
                                             <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
                                         ))}
@@ -379,7 +406,7 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
                         >
                             Cerrar
                         </button>
-                        <button type="button" className="btn btn-primary" >
+                        <button type="button" className="btn btn-primary" onClick={RegisterStudent}>
                             Registrar
                         </button>
                     </div>
@@ -388,3 +415,4 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
         </div>
     );
 }
+
