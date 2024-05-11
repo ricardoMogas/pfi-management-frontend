@@ -307,8 +307,7 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
         origin_place: "",
         ethnicity: "",
         career: "",
-        status: "",
-        origin_place: ""
+        status: ""
     });
 
     const RegisterStudent = async () => {
