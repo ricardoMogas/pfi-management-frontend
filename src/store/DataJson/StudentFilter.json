@@ -1,0 +1,33 @@
+{
+    "licenciatura": [
+      { "label": "Buscar Licenciatura", "value": "null" },
+      { "label": "ISC", "value": "ISC" },
+      { "label": "ICA", "value": "ICA" },
+      { "label": "IE", "value": "IE" },
+      { "label": "IM", "value": "IM" },
+      { "label": "ITS", "value": "ITS" },
+      { "label": "IME", "value": "IME" }
+    ],
+    "genero": [
+      { "label": "Buscar Género", "value": "null" },
+      { "label": "Masculino", "value": "Hombre" },
+      { "label": "Femenino", "value": "Mujer" },
+        { "label": "Otro", "value": "Otro" }
+    ],
+    "etnia": [
+      { "label": "Buscar Grupo étnico", "value": "null" },
+      { "label": "Maya", "value": "Maya" },
+      { "label": "Otomi", "value": "Otomi" },
+      { "label": "Azteca", "value": "Azteca" },
+      { "label": "Zapoteca", "value": "Zapoteca" },
+      { "label": "Olmeca", "value": "Olmeca" }
+    ],
+    "estado": [
+      { "label": "Buscar Status", "value": "null" },
+      { "label": "Activo", "value": "Activo" },
+      { "label": "Egresado", "value": "Egresado" },
+      { "label": "Baja temporal", "value": "Baja temporal" },
+      { "label": "Baja definitiva", "value": "Baja definitiva" }
+    ]
+  }
+  

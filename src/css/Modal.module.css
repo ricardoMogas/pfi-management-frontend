@@ -1,0 +1,113 @@
+/* Estilos anteriores */
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+th {
+    background-color: #f2f2f2;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+tr:hover {
+    background-color: #ddd;
+}
+.button-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.button-container button,
+.select-primary {
+    margin: 0 10px;
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.button-container button:hover,
+.select-primary:hover {
+    background-color: #0056b3;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+.btn-secondary {
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    border-radius: 8px;
+    padding: 20px;
+    width: 60%;
+    max-width: 400px;
+}
+.modal-content h2 {
+    margin-top: 0;
+}
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+.form-group label {
+    margin-bottom: 5px;
+}
+.form-group input,
+.form-group select {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+.form-group select {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 10px;
+    padding-right: 10px;
+}
+.btn-submit {
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.btn-submit:hover {
+    background-color: #218838;
+}
