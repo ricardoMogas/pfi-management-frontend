@@ -1,9 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Loader from '../components/Loader';
-import StudentsFetche from '../store/StudentsFetch';
-import StudentFilter from '../store/DataJson/StudentFilter.json';
-const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
-const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
+import React from 'react';
 
 export default function StudentControl() {
     const [filter, setFilter] = useState({
