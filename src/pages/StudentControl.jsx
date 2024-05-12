@@ -29,35 +29,6 @@ export default function StudentControl() {
     const [perPage, setPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
 
-    const handleChangeName = (name) => {
-        setFilter({ ...filter, name: name })
-        fetchStudents();
-    }
-
-    const handleChangeRegistration = (registration) => {
-        setFilter({ ...filter, registration: registration })
-        fetchStudents();
-    }
-
-    const buscarPorLicenciatura = (licenciatura) => {
-        setFilter({ ...filter, career: licenciatura });
-        fetchStudents();
-    };
-
-    const buscarPorGenero = (genero) => {
-        setFilter({ ...filter, gender: genero })
-        fetchStudents();
-    };
-
-    const buscarPorEtnia = (etnia) => {
-        setFilter({ ...filter, ethnicity: etnia })
-        fetchStudents();
-    };
-
-    const buscarPorEstado = (estado) => {
-        setFilter({ ...filter, status: estado })
-        fetchStudents();
-    };
     const handleCheckboxChange = (index) => {
         const nuevosAlumnos = [...students];
         nuevosAlumnos[index].checked = !nuevosAlumnos[index].checked;
@@ -68,15 +39,6 @@ export default function StudentControl() {
         const nuevosAlumnos = alumnos.filter(alumno => !alumno.checked);
         setAlumnos(nuevosAlumnos);
     };
-
-    const SelectAllStudents = (checked) => {
-        const CheckedStudents = students.map(student => ({
-            ...student,
-            checked: checked
-        }))
-        setStudents(CheckedStudents);
-    }
-
     const NextPage = () => {
         console.log(totalPages)
         if (page !== totalPages) {
@@ -115,6 +77,7 @@ export default function StudentControl() {
     return (
         <div className="container">
             <div className='card'>
+                {/** Header de card */}
                 <div className='card-header'>
                     <div className='row text-center'>
                         <div className='col-5'>
@@ -150,6 +113,7 @@ export default function StudentControl() {
                         </div>
                     </div>
                 </div>
+                {/** tabla de card*/}
                 <div className='table-responsive-lg m-4' style={{ maxHeight: '650px', overflow: 'auto' }}>
                     {students.length === 0 ? (
                         <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
@@ -173,7 +137,13 @@ export default function StudentControl() {
                                             className="form-check-input"
                                             type="checkbox"
                                             checked={students.every(student => student.checked)}
-                                            onChange={(e) => SelectAllStudents(e.target.checked)}
+                                            onChange={(e) => {
+                                                const CheckedStudents = students.map(student => ({
+                                                    ...student,
+                                                    checked: e.target.checked
+                                                }))
+                                                setStudents(CheckedStudents);
+                                            }}
                                         />
                                     </td>
                                     <td scope='col' className="align-middle">
@@ -181,7 +151,10 @@ export default function StudentControl() {
                                             type="text"
                                             className="form-control"
                                             placeholder="Buscar Matricula"
-                                            onChange={(e) => handleChangeRegistration(e.target.value)}
+                                            onChange={(e) => {
+                                                setFilter({ ...filter, registration: e.target.value })
+                                                fetchStudents();
+                                            }}
                                         />
                                     </td>
                                     <td scope='col' className="align-middle">
@@ -189,7 +162,10 @@ export default function StudentControl() {
                                             type="text"
                                             className="form-control"
                                             placeholder="Buscar Nombre🔎"
-                                            onChange={(e) => handleChangeName(e.target.value)}
+                                            onChange={(e) => {
+                                                setFilter({ ...filter, name: e.target.value })
+                                                fetchStudents();
+                                            }}
                                         />
                                     </td>
                                     <td scope='col' className="align-middle">
@@ -205,7 +181,14 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu">
                                                 {StudentFilter.licenciatura.map((item, index) => (
                                                     <li key={index}>
-                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorLicenciatura(item.value)}>{item.label}</a>
+                                                        <a 
+                                                            className="dropdown-item" 
+                                                            href="#" 
+                                                            onClick={() => {
+                                                                setFilter({ ...filter, career: item.value });
+                                                                fetchStudents();
+                                                            }}
+                                                        >{item.label}</a>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -225,7 +208,13 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownGenero">
                                                 {StudentFilter.genero.map((item, index) => (
                                                     <li key={index}>
-                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorGenero(item.value)}>{item.label}</a>
+                                                        <a 
+                                                            className="dropdown-item" 
+                                                            href="#" 
+                                                            onClick={() => {
+                                                                console.log(item.value)
+                                                            }}
+                                                        >{item.label}</a>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -245,7 +234,13 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownEtnia">
                                                 {StudentFilter.etnia.map((item, index) => (
                                                     <li key={index}>
-                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorEtnia(item.value)}>{item.label}</a>
+                                                        <a 
+                                                            className="dropdown-item" 
+                                                            href="#" 
+                                                            onClick={() => {
+                                                                console.log(item.value)
+                                                            }}
+                                                        >{item.label}</a>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -265,7 +260,13 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownEstado">
                                                 {StudentFilter.estado.map((item, index) => (
                                                     <li key={index}>
-                                                        <a className="dropdown-item" href="#" onClick={() => buscarPorEstado(item.value)}>{item.label}</a>
+                                                        <a 
+                                                            className="dropdown-item" 
+                                                            href="#" 
+                                                            onClick={() => {
+                                                                console.log(item.value)
+                                                            }}
+                                                        >{item.label}</a>
                                                     </li>
                                                 ))}
                                             </ul>
