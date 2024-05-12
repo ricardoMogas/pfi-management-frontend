@@ -10,8 +10,8 @@
     ],
     "genero": [
       { "label": "Buscar Género", "value": "null" },
-      { "label": "Masculino", "value": "Hombre" },
-      { "label": "Femenino", "value": "Mujer" },
+      { "label": "Hombre", "value": "Hombre" },
+      { "label": "Mujer", "value": "Mujer" },
         { "label": "Otro", "value": "Otro" }
     ],
     "etnia": [
