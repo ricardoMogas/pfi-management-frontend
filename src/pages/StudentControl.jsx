@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Loader from '../components/Loader';
 import StudentsFetche from '../store/StudentsFetch';
 import StudentFilter from '../store/DataJson/StudentFilter.json';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    FormGroup,
+    ModalFooter,
+} from "reactstrap";
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
@@ -14,6 +22,7 @@ export default function StudentControl() {
         status: "null",
         career: "null"
     });
+    const [showModal, setShowModal] = useState(false);
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
@@ -123,10 +132,9 @@ export default function StudentControl() {
                                     <button
                                         className="btn m-1"
                                         style={ColorPrimary}
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#registrarModal"
+                                        onClick={() => setShowModal(true)}
                                     >Registrar</button>
-                                    <ModalStudent idModal="registrarModal" Title="Registrar Alumno" />
+                                    <ModalStudent setShowModal={setShowModal} showModal={showModal} accion={"Register"}/>
                                 </div>
                                 <div className='col p-0'>
                                     <button
@@ -298,7 +306,7 @@ export default function StudentControl() {
     );
 }
 
-function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', CurrentData = {} }) {
+function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
     const [student, setStudent] = useState({
         registration: "",
         name: "",
@@ -308,111 +316,154 @@ function ModalStudent({ idModal = 'SimpleModalName', Title = 'Simple Modal', Cur
         ethnicity: "",
         career: "",
         status: "",
-        origin_place: ""
     });
-
+    const [ titles , setTitles ] = useState({
+        title: "",
+        action: ""
+    });
     const RegisterStudent = async () => {
         const result = await StudentsFetcher.RegisterStudent(student);
         console.log(result);
         if (result) {
             alert('Registro completo')
+            setShowModal(false);
         } else {
             alert('Faltan campos')
         }
-    }
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setStudent({
+            registration: "",
+            name: "",
+            gender: "",
+            birthday_date: "",
+            origin_place: "",
+            ethnicity: "",
+            career: "",
+            status: "",
+        });
+    };
+    const ModalAccion = () => {
+        switch (accion) {
+            case 'Registrar':
+                setTitles(...titles, titles.title = "Registrar estudiante", titles.action = "Registrar" );
+                RegisterStudent();
+                break;
+            case 'Actualizar':
+                setTitles(...titles, titles.title = "Actualizar estudiante", titles.action = "Actualizar" );
+                setStudent(defaultData);
+                break;
+            default:
+                alert('No se ha seleccionado ninguna acción');
+                break;
+        }
+        console.log("Accion")
+    };
 
     return (
-        <div
-            className="modal fade"
-            id={idModal}
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabIndex={-1}
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-        >
-            <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                            {Title}
-                        </h5>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div className="modal-body">
-                        <form className="modal-form">
-                            <div className="mb-3">
-                                <label htmlFor="nombre" className="form-label">Nombre:</label>
-                                <input type="text" className="form-control" name="nombre" onChange={(e) => (setStudent({ ...student, name: e.target.value }))} />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="matricula" className="form-label">Matrícula:</label>
-                                <input type="number" className="form-control" name="matricula" onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="Fecha" className='form-label'>Fecha de nacimiento</label>
-                                <input className="form-control" type="date" onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} />
-                            </div>
-                            <div className='mb-3'>
-                                <label htmlFor="Fecha" className='form-label'>Lugar de nacimientos</label>
-                                <input className="form-control" type="text" onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} />
-                            </div>
-                            <div>
-                                <div className="mb-3">
-                                    <label htmlFor="licenciatura" className="form-label">Licenciatura:</label>
-                                    <select className="form-select" id="licenciatura" name="licenciatura" onChange={(e) => setStudent({ ...student, career: e.target.value })}>
-                                        {StudentFilter.licenciatura.map(opcion => (
-                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="genero" className="form-label">Género:</label>
-                                    <select className="form-select" id="genero" name="genero" onChange={(e) => setStudent({ ...student, gender: e.target.value })}>
-                                        {StudentFilter.genero.map(opcion => (
-                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="grupoEtnico" className="form-label">Grupo Étnico:</label>
-                                    <select className="form-select" id="grupoEtnico" name="grupoEtnico" onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}>
-                                        {StudentFilter.etnia.map(opcion => (
-                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="estado" className="form-label">Estado:</label>
-                                    <select className="form-select" id="estado" name="estado" onChange={(e) => setStudent({ ...student, status: e.target.value })}>
-                                        {StudentFilter.estado.map(opcion => (
-                                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div className="modal-footer">
-                        <button
-                            type="button"
-                            className="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            Cerrar
-                        </button>
-                        <button type="button" className="btn btn-primary" onClick={RegisterStudent}>
-                            Registrar
-                        </button>
-                    </div>
+        < Modal isOpen={showModal} >
+            <ModalHeader>
+                <div>
+                    <h3>Registrar estudiante</h3>
                 </div>
-            </div>
-        </div>
+            </ModalHeader>
+            <ModalBody>
+                <FormGroup>
+                    <label className="form-label">Nombre:</label>
+                    <input
+                        className="form-control"
+                        name="nombre"
+                        type="text"
+                        value={student.name}
+                        onChange={(e) => (setStudent({ ...student, name: e.target.value }))}
+                    />
+                </FormGroup>
+
+                <FormGroup>
+                    <label className="form-label">Matrícula:</label>
+                    <input
+                        className="form-control"
+                        type="number"
+                        name="matricula"
+                        value={student.registration}
+                        onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
+                </FormGroup>
+                <FormGroup>
+                    <label className='form-label'>Fecha de nacimiento</label>
+                    <input
+                        className="form-control"
+                        type="date"
+                        onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} /
+                    >
+                </FormGroup>
+                <FormGroup>
+                    <label className='form-label'>Lugar de nacimientos</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} /
+                    >
+                </FormGroup>
+                <FormGroup>
+                    <label className="form-label">Licenciatura:</label>
+                    <select
+                        className="form-select"
+                        name="licenciatura"
+                        value={student.career}
+                        onChange={(e) => setStudent({ ...student, career: e.target.value })}
+                    >
+                        {StudentFilter.licenciatura.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                        ))}
+                    </select>
+                </FormGroup>
+                <FormGroup>
+                    <label className="form-label">Género:</label>
+                    <select
+                        className="form-select"
+                        name="genero"
+                        onChange={(e) => setStudent({ ...student, gender: e.target.value })}
+                    >
+                        {StudentFilter.genero.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                        ))}
+                    </select>
+                </FormGroup>
+                <FormGroup>
+                    <label className="form-label">Grupo Étnico:</label>
+                    <select
+                        className="form-select"
+                        name="grupoEtnico"
+                        onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}
+                    >
+                        {StudentFilter.etnia.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                        ))}
+                    </select>
+                </FormGroup>
+                <FormGroup>
+                    <label className="form-label">Estado:</label>
+                    <select
+                        className="form-select"
+                        name="estado"
+                        onChange={(e) => setStudent({ ...student, status: e.target.value })}
+                    >
+                        {StudentFilter.estado.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                        ))}
+                    </select>
+                </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+                <Button color="danger" onClick={() => closeModal()}>
+                    Cancelar
+                </Button>
+                <Button color="primary" onClick={() => accion()}>
+                    Registrar
+                </Button>
+            </ModalFooter>
+        </Modal >
     );
 }
-
