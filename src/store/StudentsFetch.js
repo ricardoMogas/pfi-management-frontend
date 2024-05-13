@@ -42,6 +42,36 @@ class StudentsFetcher {
             console.error('Error registering student:', error);
         }
     }
+
+    async UpdateStudent(studentData) {
+        const data = {
+            registration : studentData.registration,
+            name : studentData.name,
+            gender : studentData.gender,
+            birthday_date : studentData.birthday_date,
+            ethnicity : studentData.ethnicity,
+            career : studentData.career,
+            status : studentData.status,
+            origin_place : studentData.origin_place,
+        }
+        try {
+            const response = await axios.put(`${this.API_BASE_URL}/students`, data);
+            const result = response.data.result;
+            return result;
+        } catch (error) {
+            console.error('Error updating student:', error);
+        }
+    }
+
+    async DeleteStudent(registration) {
+        try {
+            const response = await axios.post(`${this.API_BASE_URL}/DeleteStudent?registration=${registration}`);
+            const result = response.data.result;
+            return result;
+        } catch (error) {
+            console.error('Error deleting student:', error);
+        }
+    }
 }
 export default StudentsFetcher;
 

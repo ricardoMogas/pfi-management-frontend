@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
@@ -9,6 +10,7 @@ import {
 } from "react-router-dom";
 import './css/index.css'
 import routes from './routes';
+
 
 const PrincipalRouterApp = createBrowserRouter(routes);
 

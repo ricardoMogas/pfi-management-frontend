@@ -22,23 +22,24 @@ export default function StudentControl() {
         status: "null",
         career: "null"
     });
-    const [showModal, setShowModal] = useState(false);
+    const [currentStudent, setCurrentStudent] = useState({
+        registration: "",
+        name: "",
+        gender: "",
+        birthday_date: "",
+        origin_place: "",
+        ethnicity: "",
+        career: "",
+        status: "",
+    });
+    const [showModalRegister, setShowModalRegister] = useState(false);
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
 
-    const handleCheckboxChange = (index) => {
-        const nuevosAlumnos = [...students];
-        nuevosAlumnos[index].checked = !nuevosAlumnos[index].checked;
-        setStudents(nuevosAlumnos);
-    };
-
-    const handleEliminarAlumno = () => {
-        const nuevosAlumnos = alumnos.filter(alumno => !alumno.checked);
-        setAlumnos(nuevosAlumnos);
-    };
     const NextPage = () => {
         console.log(totalPages)
         if (page !== totalPages) {
@@ -66,9 +67,21 @@ export default function StudentControl() {
         } else {
             setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }])
         }
-
     }
 
+    const deleteStudent = async (registration) => {
+        const confirmation = window.confirm('¿Estás seguro de que quieres eliminar este estudiante?');
+        if (confirmation) {
+
+            const result = await StudentsFetcher.DeleteStudent(registration);
+            if (result) {
+                alert('Estudiante eliminado');
+                fetchStudents();
+            } else {
+                alert('Error al eliminar estudiante');
+            }
+        }
+    }
     useEffect(() => {
         console.log(import.meta.env.VITE_REACT_APP_BASE_API);
         fetchStudents();
@@ -95,19 +108,8 @@ export default function StudentControl() {
                                     <button
                                         className="btn m-1"
                                         style={ColorPrimary}
-                                        onClick={() => setShowModal(true)}
+                                        onClick={() => setShowModalRegister(true)}
                                     >Registrar</button>
-                                    <ModalStudent setShowModal={setShowModal} showModal={showModal} accion={"Register"}/>
-                                </div>
-                                <div className='col p-0'>
-                                    <button
-                                        className="btn m-1"
-                                        style={ColorPrimary}
-                                        onClick={() => alert('Función de actualización en desarrollo...')}
-                                    >Actualizar</button>
-                                </div>
-                                <div className='col p-0'>
-                                    <button className="btn btn-danger m-1" onClick={handleEliminarAlumno}>Eliminar</button>
                                 </div>
                             </div>
                         </div>
@@ -123,29 +125,15 @@ export default function StudentControl() {
                         <table className='table table-hover'>
                             <thead style={{ position: 'sticky', top: '0', zIndex: '1' }}>
                                 <tr>
-                                    <th scope='col'>Chk</th>
                                     <th scope='col'>Matricula</th>
                                     <th scope='col'>Nombre</th>
                                     <th scope='col'>Licenciatura</th>
                                     <th scope='col'>Genero</th>
                                     <th scope='col'>Grupo Etnico</th>
                                     <th scope='col'>Estado</th>
+                                    <th scope='col'>Acción</th>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            checked={students.every(student => student.checked)}
-                                            onChange={(e) => {
-                                                const CheckedStudents = students.map(student => ({
-                                                    ...student,
-                                                    checked: e.target.checked
-                                                }))
-                                                setStudents(CheckedStudents);
-                                            }}
-                                        />
-                                    </td>
                                     <td scope='col' className="align-middle">
                                         <input
                                             type="text"
@@ -181,9 +169,9 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu">
                                                 {StudentFilter.licenciatura.map((item, index) => (
                                                     <li key={index}>
-                                                        <a 
-                                                            className="dropdown-item" 
-                                                            href="#" 
+                                                        <a
+                                                            className="dropdown-item"
+                                                            href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, career: item.value });
                                                                 fetchStudents();
@@ -208,11 +196,12 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownGenero">
                                                 {StudentFilter.genero.map((item, index) => (
                                                     <li key={index}>
-                                                        <a 
-                                                            className="dropdown-item" 
-                                                            href="#" 
+                                                        <a
+                                                            className="dropdown-item"
+                                                            href="#"
                                                             onClick={() => {
-                                                                console.log(item.value)
+                                                                setFilter({ ...filter, gender: item.value });
+                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -234,11 +223,12 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownEtnia">
                                                 {StudentFilter.etnia.map((item, index) => (
                                                     <li key={index}>
-                                                        <a 
-                                                            className="dropdown-item" 
-                                                            href="#" 
+                                                        <a
+                                                            className="dropdown-item"
+                                                            href="#"
                                                             onClick={() => {
-                                                                console.log(item.value)
+                                                                setFilter({ ...filter, ethnicity: item.value });
+                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -246,6 +236,7 @@ export default function StudentControl() {
                                             </ul>
                                         </div>
                                     </td>
+
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
                                             <button
@@ -260,11 +251,12 @@ export default function StudentControl() {
                                             <ul className="dropdown-menu" aria-labelledby="dropdownEstado">
                                                 {StudentFilter.estado.map((item, index) => (
                                                     <li key={index}>
-                                                        <a 
-                                                            className="dropdown-item" 
-                                                            href="#" 
+                                                        <a
+                                                            className="dropdown-item"
+                                                            href="#"
                                                             onClick={() => {
-                                                                console.log(item.value)
+                                                                setFilter({ ...filter, status: item.value });
+                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -274,20 +266,30 @@ export default function StudentControl() {
                                     </td>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
                                 {students.map((student, index) => (
                                     <tr key={index}>
-                                        <td><input type="checkbox" className='form-check-input' checked={student.checked} onChange={() => handleCheckboxChange(index)} /></td>
                                         <td>{student.registration}</td>
                                         <td>{student.name}</td>
                                         <td>{student.career}</td>
                                         <td>{student.gender}</td>
                                         <td>{student.ethnicity}</td>
                                         <td>{student.status}</td>
+                                        <td className='text-center'>
+                                            <button
+                                                className="btn m-1"
+                                                style={ColorPrimary}
+                                                onClick={() => [setCurrentStudent(student), setShowModalUpdate(true), fetchStudents()]}
+                                            ><i className="bi bi-pencil fs-5"></i></button>
+                                            <button
+                                                className="btn btn-danger m-1"
+                                                onClick={() => deleteStudent(student.registration)}
+                                            ><i className="bi bi-trash fs-5"></i></button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
-                            <caption></caption>
+
                         </table>
                     )}
                 </div>
@@ -302,12 +304,28 @@ export default function StudentControl() {
                         </li>
                     </ul>
                 </div>
+                <ModalStudent
+                    setShowModalRegister={setShowModalRegister}
+                    showModalRegister={showModalRegister}
+                    currentAction={"register"}
+                    titleModal={"Registrar estudiante"}
+                    defaultData={currentStudent}
+                    event={fetchStudents}
+                />
+                <ModalStudent
+                    setShowModalRegister={setShowModalUpdate}
+                    showModalRegister={showModalUpdate}
+                    titleModal={"Actualizar estudiante"}
+                    currentAction={"update"}
+                    defaultData={currentStudent}
+                    event={fetchStudents}
+                />
             </div>
         </div>
     );
 }
 
-function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
+function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, currentAction, defaultData, event }) {
     const [student, setStudent] = useState({
         registration: "",
         name: "",
@@ -318,23 +336,32 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
         career: "",
         status: "",
     });
-    const [ titles , setTitles ] = useState({
-        title: "",
-        action: ""
-    });
     const RegisterStudent = async () => {
         const result = await StudentsFetcher.RegisterStudent(student);
         console.log(result);
         if (result) {
             alert('Registro completo')
-            setShowModal(false);
+            setShowModalRegister(false);
+            event();
         } else {
             alert('Faltan campos')
         }
     };
 
+    const UpdateStudent = async () => {
+        const result = await StudentsFetcher.UpdateStudent(student);
+        console.log(result);
+        if (result) {
+            alert('Actualización completa')
+            event();
+            setShowModalRegister(false);
+        } else {
+            alert('Faltan campos o la matricula ya se encuentra registrada')
+        }
+    };
+
     const closeModal = () => {
-        setShowModal(false);
+        setShowModalRegister(false);
         setStudent({
             registration: "",
             name: "",
@@ -346,28 +373,31 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
             status: "",
         });
     };
-    const ModalAccion = () => {
-        switch (accion) {
-            case 'Registrar':
-                setTitles(...titles, titles.title = "Registrar estudiante", titles.action = "Registrar" );
+    const ActionButton = () => {
+        switch (currentAction) {
+            case 'register':
                 RegisterStudent();
                 break;
-            case 'Actualizar':
-                setTitles(...titles, titles.title = "Actualizar estudiante", titles.action = "Actualizar" );
-                setStudent(defaultData);
+            case 'update':
+                UpdateStudent(student);
+                console.log(student)
                 break;
             default:
                 alert('No se ha seleccionado ninguna acción');
                 break;
         }
-        console.log("Accion")
     };
+    useEffect(() => {
+        if (currentAction === 'update') {
+            setStudent(defaultData);
+        }
+    }, [defaultData]);
 
     return (
-        < Modal isOpen={showModal} >
+        < Modal isOpen={showModalRegister} >
             <ModalHeader>
                 <div>
-                    <h3>Registrar estudiante</h3>
+                    <h3>{titleModal}</h3>
                 </div>
             </ModalHeader>
             <ModalBody>
@@ -388,6 +418,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                         className="form-control"
                         type="number"
                         name="matricula"
+                        disabled={currentAction === 'update'}
                         value={student.registration}
                         onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
                 </FormGroup>
@@ -396,6 +427,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                     <input
                         className="form-control"
                         type="date"
+                        value={student.birthday_date}
                         onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} /
                     >
                 </FormGroup>
@@ -404,6 +436,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                     <input
                         className="form-control"
                         type="text"
+                        value={student.origin_place}
                         onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} /
                     >
                 </FormGroup>
@@ -425,6 +458,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                     <select
                         className="form-select"
                         name="genero"
+                        value={student.gender}
                         onChange={(e) => setStudent({ ...student, gender: e.target.value })}
                     >
                         {StudentFilter.genero.map(opcion => (
@@ -437,6 +471,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                     <select
                         className="form-select"
                         name="grupoEtnico"
+                        value={student.ethnicity}
                         onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}
                     >
                         {StudentFilter.etnia.map(opcion => (
@@ -449,6 +484,7 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                     <select
                         className="form-select"
                         name="estado"
+                        value={student.status}
                         onChange={(e) => setStudent({ ...student, status: e.target.value })}
                     >
                         {StudentFilter.estado.map(opcion => (
@@ -461,8 +497,8 @@ function ModalStudent({ showModal, setShowModal, accion, defaultData }) {
                 <Button color="danger" onClick={() => closeModal()}>
                     Cancelar
                 </Button>
-                <Button color="primary" onClick={() => accion()}>
-                    Registrar
+                <Button color="primary" onClick={() => ActionButton()}>
+                    Confirmar
                 </Button>
             </ModalFooter>
         </Modal >
