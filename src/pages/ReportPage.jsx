@@ -1,46 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import BarChart from '../components/BarChart';
 import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
-
+import MiniAlert from '../components/Alert';
+import Loader from '../components/Loader';
+import ReportFetch from '../store/ReportFetch';
+import { json } from 'react-router-dom';
+const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 const data = [
-    { name: 'A', value1: 4000, value2: 2400 },
-    { name: 'B', value1: 3000, value2: 1398 },
-    { name: 'C', value1: 2000, value2: 9800 },
-    { name: 'D', value1: 2780, value2: 3908 },
-    { name: 'E', value1: 1890, value2: 4800 },
-    { name: 'F', value1: 2390, value2: 3800 },
-    { name: 'G', value1: 3490, value2: 4300 },
+    { name: 'ISC', Hombre: 11, Mujer: 1 },
+    { name: 'IM', Hombre: 0, Mujer: 0 },
+    { name: 'ICA', Hombre: 0, Mujer: 0 },
+    { name: 'IE', Hombre: 0, Mujer: 0 },
+    { name: 'IME', Hombre: 0, Mujer: 0 },
+    { name: 'ITS', Hombre: 0, Mujer: 0 }
 ];
-const types = ['Licenciatura', 'Visitas', 'Genero', 'Etnia'];
+const type = ['Licenciatura', 'Visitas', 'Genero', 'Etnia'];
 const typeFrequency = ['Todos', 'Etnia', 'Licenciatura', 'Genero'];
 
 export default function ReportPage() {
-    /*** USESTATE CONSTS ***/
-    const [startDate, setStartDate] = useState('');
+    /*** *** *** *** USESTATE CONSTS *** *** *** ***/
+    const [startDate, setStartDate] = useState(ReportObject.ActualDate());
     const [endDate, setEndDate] = useState('');
     const [currentType, setCurrentType] = useState(null);
     const [currentTypeFrequency, setcurrentTypeFrequency] = useState(null);
+    const [dataGraph, setDataGraph] = useState([]);
     const [dataJson, setDataJson] = useState({
-        types: null,
+        type: null,
         typeFrequency: null,
         startDate: null,
         endDate: null
     });
+    /*** *** *** *** USESTATE CONSTS UI *** *** *** ***/
+    const [showAlert, setShowAlert] = useState(false);
+    const [typeAlert, setTypeAlert] = useState('primary');
+    const [messageAlert, setMessageAlert] = useState('');
+    const [titleAlert, setTitleAlert] = useState('');
 
     //obtener el tipo actual 
     const gettingTypeReport = (type) => {
         setCurrentType(type);
-        setDataJson({ ...dataJson, types: type });
+        setDataJson({ ...dataJson, type: type });
     };
 
     const gettingTypeFrequency = (type) => {
         setcurrentTypeFrequency(type);
         setDataJson({ ...dataJson, typeFrequency: type });
-        console.log(type);
     }
     /*** GENERATE GRAPH OR REPORT ***/
-    const generateGraph = () => {
-        if (dataJson.types===null) {
+    const generateReport = async () => {
+        if (dataJson.type === null) {
             alert('Elige un tipo de reporte');
             return; // No se puede generar la gráfica
         }
@@ -50,20 +58,44 @@ export default function ReportPage() {
             return; // No se puede generar la gráfica
         }
         */
-        console.log('Generar Gráfica: ', dataJson);
-        const excelData = [
-            ['Nombre', 'Valor1', 'Valor2'],
-            ...data.map(item => [item.name, item.value1, item.value2])
-        ];
-        const excelExporter = new CreateExcelReport(excelData, 'grafica.xlsx');
-        excelExporter.exportToExcel();
+        const response = await ReportObject.GetReportData(dataJson);
+        if (response.status === "error") {
+            console.log(response.result);
+            return;
+        }
+
+        switch (dataJson.type) {
+            case 'Visitas':
+                const VisitasData = response.result;
+                const excelData = [
+                    ...VisitasData.map(item => Object.values(item))
+                ];
+                const excelExporter = new CreateExcelReport(excelData, `Reporte${currentType}.xlsx`, ['ID', 'Matricula', 'Hora de entrada', 'Hora de salida', 'Fecha']);
+                excelExporter.exportToExcel();
+                break;
+            case 'Licenciatura':
+            case 'Genero':
+            case 'Etnia':
+                const DataExel = response.result;
+                const sheetsData = DataExel.map(item => ({
+                    name: item.name,
+                    data: item.data
+                }));
+                const header = ['registration', 'name', 'p_last_name', 'm_last_name', 'gender', 'birthday_date', 'origin_place', 'ethnicity', 'date_of_registration', 'status'];
+                const report = new CreateExcelReport(sheetsData, `Reporte${currentType}.xlsx`, header);
+                report.exportToExcelWithSheets();
+                break;
+            default:
+                alert('Función para reporte en desarrollo');
+                break;
+        }
     }
 
     /**  CONDICIONALES ***/
     const currentActionForComponent = () => {
         switch (currentType) {
             case 'Visitas':
-                return <Dropdown currentType={currentTypeFrequency} types={typeFrequency} onTypeChange={gettingTypeFrequency} />;
+                return <Dropdown currentType={currentTypeFrequency} type={typeFrequency} onTypeChange={gettingTypeFrequency} />;
             default:
                 return null;
         }
@@ -87,6 +119,7 @@ export default function ReportPage() {
         }
         setStartDate(e.target.value);
         setDataJson({ ...dataJson, startDate: e.target.value });
+        GraphFetch();
     }
 
     const EndDateChange = (e) => {
@@ -107,16 +140,34 @@ export default function ReportPage() {
         }
         setEndDate(e.target.value);
         setDataJson({ ...dataJson, endDate: e.target.value });
+        GraphFetch();
     }
 
+    // ---------- fetching data ----------
+    const GraphFetch = async () => {
+        const response = await ReportObject.GetGraphData(dataJson);
+        if (response.status === "error") {
+            console.log(response.result);
+            return;
+        }
+        setDataGraph(response.result);
+    };
+    useEffect(() => {
+        if (dataJson.type === "Visitas") {
+            alert('Función para grafica en desarrollo');
+            dataGraph.length = 0;
+            return;
+        }
+        GraphFetch();
+    }, [dataJson]);
     return (
         <main>
             <section className="card text-center m-5">
-                <div className="card-header">Alumnos</div>
+                <div className="card-header">Generador de Reportes</div>
                 <div className="card-body">
                     <section className='row'>
                         <div className='col'>
-                            <Dropdown currentType={currentType} types={types} onTypeChange={gettingTypeReport} />
+                            <Dropdown currentType={currentType} type={type} onTypeChange={gettingTypeReport} />
                         </div>
                         <div className='col'>
                             {currentActionForComponent()}
@@ -132,18 +183,24 @@ export default function ReportPage() {
                     </section>
                 </div>
                 <div className="d-flex justify-content-center">
-                    <BarChart data={data} width={800} height={400} />
+                    {dataGraph.length > 0 ?
+                        <BarChart data={dataGraph} width={500} height={300} />
+                        :
+                        <div className='m-5'>
+                            <i className="bi bi-bar-chart-line fs-1"></i>
+                            <h5>Seleccionar datos para visualizar Grafico</h5>
+                        </div>
+                    }
                 </div>
                 <div className='card-footer text-body-secondary'>
-                    <button type='button' className='btn btn-primary m-1' onClick={generateGraph}>Generar Gráfica</button>
-                    <button type='button' className='btn btn-success m-1'>Generar Reporte</button>
+                    <button type='button' className='btn btn-success m-1' onClick={generateReport}>Generar Reporte</button>
                 </div>
             </section>
         </main>
     );
 };
 
-function Dropdown({ currentType, types, onTypeChange }) {
+function Dropdown({ currentType, type, onTypeChange }) {
     const handleTypeClick = (type) => {
         onTypeChange(type);
     };
@@ -159,7 +216,7 @@ function Dropdown({ currentType, types, onTypeChange }) {
                 Tipo {currentType}
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {types.map((type, index) => (
+                {type.map((type, index) => (
                     <li key={index}>
                         <button className="dropdown-item" onClick={() => handleTypeClick(type)}>
                             {type}
@@ -170,3 +227,5 @@ function Dropdown({ currentType, types, onTypeChange }) {
         </div>
     );
 }
+
+

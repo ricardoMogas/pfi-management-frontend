@@ -18,6 +18,24 @@ class StudentsFetcher {
     }
 
     async GetAllStudentsPagination(page, perPage, filters) {
+        if(filters.registration === "" || filters.registration === null) {
+            filters.registration = "null";
+        }
+        if(filters.name === "" || filters.name === null) {
+            filters.name = "null";
+        }
+        if(filters.gender === "" || filters == null) {
+            filters.gender = "null";
+        }
+        if(filters.ethnicity === "" || filters == null) {
+            filters.ethnicity = "null";
+        }
+        if(filters.career === "" || filters == null) {
+            filters.career = "null";
+        }
+        if(filters.status === "" || filters == null) {
+            filters.status = "null";
+        }
         try {
             const response = await axios.post(`${this.API_BASE_URL}/SearchStudent?page=${page}&perPage=${perPage}`, filters);
             const resultResponse = response.data.result;
