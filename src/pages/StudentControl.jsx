@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../components/Loader';
+import ModalExcel from '../components/ModalExcel';
 import StudentsFetche from '../store/StudentsFetch';
 import StudentFilter from '../store/DataJson/StudentFilter.json';
 import {
@@ -14,6 +15,7 @@ const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_R
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export default function StudentControl() {
+    const [showModalExcel, setShowModalExcel] = useState(false);
     const [filter, setFilter] = useState({
         registration: "null",
         name: "null",
@@ -101,7 +103,7 @@ export default function StudentControl() {
                                 <div className='col p-0'>
                                     <button
                                         className="btn btn-success m-1"
-                                        onClick={() => alert('Función de registro por Excel en desarrollo...')}
+                                        onClick={() => setShowModalExcel(!showModalExcel)}
                                     >R. Excel</button>
                                 </div>
                                 <div className='col p-0'>
@@ -119,7 +121,7 @@ export default function StudentControl() {
                 <div className='table-responsive-lg m-4' style={{ maxHeight: '650px', overflow: 'auto' }}>
                     {students.length === 0 ? (
                         <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
-                            <Loader type='spiner' />
+                            <Loader type='book' />
                         </div>
                     ) : (
                         <table className='table table-hover'>
@@ -304,6 +306,11 @@ export default function StudentControl() {
                         </li>
                     </ul>
                 </div>
+                <ModalExcel 
+                    isOpen={showModalExcel} 
+                    setIsOpen={setShowModalExcel} 
+                    data={[]} 
+                />
                 <ModalStudent
                     setShowModalRegister={setShowModalRegister}
                     showModalRegister={showModalRegister}

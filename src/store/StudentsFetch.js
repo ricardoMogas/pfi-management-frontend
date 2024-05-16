@@ -6,6 +6,16 @@ class StudentsFetcher {
     constructor(API_BASE_URL) {
         this.API_BASE_URL = API_BASE_URL;
     }
+    async GetOneStudent(registration) {
+        try {
+            const response = await axios.get(`${this.API_BASE_URL}/SearchStudent?registration=${registration}`);
+            const student = response.data;
+            return student;
+        } catch (error) {
+            console.error('Error fetching student:', error);
+        }
+    }
+
 
     async GetAllStudents() {
         try {

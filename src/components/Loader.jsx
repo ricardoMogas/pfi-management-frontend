@@ -3,7 +3,7 @@ import style from '../css/Loader.module.css';
 
 export default function Loader({ type = 'default' }) {
     switch (type) {
-        case 'default':
+        case 'book':
             return <DefaultLoader />;
         case 'spiner':
             return <SpinerLoader />;

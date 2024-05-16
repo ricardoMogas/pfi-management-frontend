@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Utils from '../store/Utils';
 const visitas = [
     { registration: 'ABC123', entry_time: '2022-10-01', exit_time: '2022-10-01', visit_date: '2022-10-01' },
     { registration: 'DEF456', entry_time: '2022-10-02', exit_time: '2022-10-01', visit_date: '2022-10-01' },
@@ -11,30 +12,17 @@ const NoRevisitas = [
 ];
 
 export default function VisitRegisterPage() {
-    const [date, setDate] = useState('');
-    const [registros, setRegistros] = useState([]);
-
+    const [date, setDate] = useState(Utils.ActualDate());
+    const [registerVisit, setRegisterVisit] = useState();
     const handleDateChange = (event) => {
         setDate(event.target.value);
     };
 
-    const handleRegistrarVisita = () => {
-        const nuevoRegistro = {
-            matricula: document.getElementById('registrados').value,
-            fecha: date,
-            horaEntrada: new Date().toLocaleTimeString(),
-            horaSalida: '',
-            NoVisitas: document.getElementById('NoVisitas') ? document.getElementById('NoVisitas').value : ''
-        };
-        setRegistros([...registros, nuevoRegistro]);
+    const VisitRegister = () => {
 
-        // Limpiar los campos después de registrar la visita
-        document.getElementById('registrados').value = '';
-        setDate('');
-        if (document.getElementById('NoVisitas')) {
-            document.getElementById('NoVisitas').value = '';
-        }
     };
+
+
 
     const handleRegistrarSalida = () => {
         const horaActual = new Date().toLocaleTimeString();
@@ -91,27 +79,36 @@ export default function VisitRegisterPage() {
                                     <div className='col'>
                                         <div className="mb-1">
                                             <label htmlFor="registrados" className="form-label">Matrícula:</label>
-                                            <input type="text" className="form-control" id="registrados" name="registrados" />
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                id="registrados" 
+                                                name="registrados" 
+                                            />
                                         </div>
                                         <div className="mb-1">
                                             <label htmlFor="date" className="form-label">Fecha:</label>
-                                            <input type="date" className="form-control" id="date" name="date" value={date} onChange={handleDateChange} />
-                                        </div>
-                                        <div className="mb-1">
-                                            <label htmlFor="NoVisitas" className="form-label">No. de Visitas:</label>
-                                            <input type="text" className="form-control" id="NoVisitas" name="NoVisitas" />
+                                            <input 
+                                                type="date" 
+                                                className="form-control" 
+                                                id="date" 
+                                                name="date" 
+                                                value={date} 
+                                                onChange={handleDateChange}
+                                            />
                                         </div>
                                     </div>
                                     <div className='col d-flex justify-content-center align-items-center'>
                                         <div className="mb-3">
                                             <div className='mb-1'>
-                                                <button className="btn btn-primary btn-block mb-2" onClick={handleRegistrarVisita}>Registrar visita</button>
+                                                <button 
+                                                    className="btn btn-primary btn-block mb-2" 
+                                                >Registrar visita</button>
                                             </div>
                                             <div className='mb-1'>
-                                                <button className="btn btn-primary mb-2" onClick={handleRegistrarSalida}>Registrar salida</button>
-                                            </div>
-                                            <div className='mb-1'>
-                                                <button className="btn btn-primary mb-2" onClick={handleRegistrarVisita}>Registrar Visitas</button>
+                                                <button 
+                                                    className="btn btn-primary mb-2" 
+                                                >Registrar salida</button>
                                             </div>
                                         </div>
                                     </div>
@@ -125,6 +122,7 @@ export default function VisitRegisterPage() {
                                             <th>Fecha</th>
                                             <th>Hora de entrada</th>
                                             <th>Hora de salida</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -134,6 +132,11 @@ export default function VisitRegisterPage() {
                                                 <td>{registro.visit_date}</td>
                                                 <td>{registro.entry_time}</td>
                                                 <td>{registro.exit_time}</td>
+                                                <td>
+                                                    <button className='btn btn-danger mb-2'>
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -159,21 +162,18 @@ export default function VisitRegisterPage() {
                                         <label htmlFor="date" className="form-label">Fecha:</label>
                                         <input type="date" className="form-control" id="date" name="date" value={date} onChange={handleDateChange} />
                                     </div>
-                                    <div className="mb-1">
-                                        <label htmlFor="NoVisitas" className="form-label">No. de Visitas:</label>
-                                        <input type="text" className="form-control" id="NoVisitas" name="NoVisitas" />
-                                    </div>
                                 </div>
                                 <div className='col d-flex justify-content-center align-items-center'>
                                     <div className="mb-3">
                                         <div className='mb-1'>
-                                            <button className="btn btn-primary btn-block mb-2" onClick={handleRegistrarVisita}>Registrar visita</button>
+                                            <button 
+                                                className="btn btn-primary btn-block mb-2" 
+                                            >Registrar visita</button>
                                         </div>
                                         <div className='mb-1'>
-                                            <button className="btn btn-primary mb-2" onClick={handleRegistrarSalida}>Registrar salida</button>
-                                        </div>
-                                        <div className='mb-1'>
-                                            <button className="btn btn-primary mb-2" onClick={handleRegistrarVisita}>Registrar Visitas</button>
+                                            <button 
+                                                className="btn btn-primary mb-2" 
+                                            >Registrar salida</button>
                                         </div>
                                     </div>
                                 </div>
@@ -187,6 +187,7 @@ export default function VisitRegisterPage() {
                                             <th>Hora de entrada</th>
                                             <th>Hora de salida</th>
                                             <th>No. de Visitas</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -197,6 +198,11 @@ export default function VisitRegisterPage() {
                                                 <td>{registro.entry_time}</td>
                                                 <td>{registro.exit_time}</td>
                                                 <td style={{ color: registro.NoVisitas >= 5 ? 'red' : 'inherit' }}>{registro.NoVisitas}</td>
+                                                <td>
+                                                    <button className='btn btn-danger mb-2'>
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -208,6 +214,5 @@ export default function VisitRegisterPage() {
             </div>
             {/* Aquí va el código de la página */}
         </div>
-
     );
 };

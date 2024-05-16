@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import BarChart from '../components/BarChart';
 import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
-import MiniAlert from '../components/Alert';
-import Loader from '../components/Loader';
 import ReportFetch from '../store/ReportFetch';
-import { json } from 'react-router-dom';
+import Utils from '../store/Utils';
 const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 const data = [
     { name: 'ISC', Hombre: 11, Mujer: 1 },
@@ -19,7 +17,7 @@ const typeFrequency = ['Todos', 'Etnia', 'Licenciatura', 'Genero'];
 
 export default function ReportPage() {
     /*** *** *** *** USESTATE CONSTS *** *** *** ***/
-    const [startDate, setStartDate] = useState(ReportObject.ActualDate());
+    const [startDate, setStartDate] = useState(Utils.ActualDate());
     const [endDate, setEndDate] = useState('');
     const [currentType, setCurrentType] = useState(null);
     const [currentTypeFrequency, setcurrentTypeFrequency] = useState(null);
