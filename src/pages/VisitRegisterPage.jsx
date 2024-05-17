@@ -200,7 +200,7 @@ export default function VisitRegisterPage() {
                                                 <td style={{ color: registro.NoVisitas >= 5 ? 'red' : 'inherit' }}>{registro.NoVisitas}</td>
                                                 <td>
                                                     <button className='btn btn-danger mb-2'>
-                                                        <i class="bi bi-trash"></i>
+                                                        <i className="bi bi-trash"></i>
                                                     </button>
                                                 </td>
                                             </tr>
