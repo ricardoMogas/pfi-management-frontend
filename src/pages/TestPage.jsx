@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
-import MiniAlert from "../components/Alert";
+import MiniAlert from "../components/MiniAlert";
 import ModalTable from "../components/ModalTable";
 export default function Test() {
   const [showAlert, setShowAlert] = useState(false);
   const [typeAlert, setTypeAlert] = useState('primary');
   const [messageAlert, setMessageAlert] = useState('HOLA');
   const [titleAlert, setTitleAlert] = useState('loremp ipsum');
-
   const [showModal, setShowModal] = useState(false);
   return (
     <>
