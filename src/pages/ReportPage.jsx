@@ -3,6 +3,7 @@ import BarChart from '../components/BarChart';
 import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
 import ReportFetch from '../store/ReportFetch';
 import Utils from '../store/Utils';
+const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 const data = [
     { name: 'ISC', Hombre: 11, Mujer: 1 },
@@ -161,7 +162,7 @@ export default function ReportPage() {
     return (
         <main>
             <section className="card text-center m-5">
-                <div className="card-header">Generador de Reportes</div>
+                <div className="card-header" style={ColorPrimary}>Generador de Reportes</div>
                 <div className="card-body">
                     <section className='row'>
                         <div className='col'>
@@ -182,7 +183,7 @@ export default function ReportPage() {
                 </div>
                 <div className="d-flex justify-content-center">
                     {dataGraph.length > 0 ?
-                        <BarChart data={dataGraph} width={500} height={300} />
+                        <BarChart data={dataGraph} width={750} height={400} />
                         :
                         <div className='m-5'>
                             <i className="bi bi-bar-chart-line fs-1"></i>
@@ -190,7 +191,7 @@ export default function ReportPage() {
                         </div>
                     }
                 </div>
-                <div className='card-footer text-body-secondary'>
+                <div className='card-footer text-body-secondary' style={ColorPrimary}>
                     <button type='button' className='btn btn-success m-1' onClick={generateReport}>Generar Reporte</button>
                 </div>
             </section>

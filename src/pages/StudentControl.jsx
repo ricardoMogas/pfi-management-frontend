@@ -93,7 +93,7 @@ export default function StudentControl() {
         <div className="container">
             <div className='card'>
                 {/** Header de card */}
-                <div className='card-header'>
+                <div className='card-header' style={ColorPrimary}>
                     <div className='row text-center'>
                         <div className='col-5'>
                             <h2>Administrar Alumnos</h2>
@@ -108,8 +108,7 @@ export default function StudentControl() {
                                 </div>
                                 <div className='col p-0'>
                                     <button
-                                        className="btn m-1"
-                                        style={ColorPrimary}
+                                        className="btn btn-info m-1"
                                         onClick={() => setShowModalRegister(true)}
                                     >Registrar</button>
                                 </div>
