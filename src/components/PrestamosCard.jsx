@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import BorrowingFetch from "../store/BorrowingFetch";
+import Utils from '../store/Utils';
+import DateTime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
+import moment from 'moment';
+
 const borrowing = new BorrowingFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const PrestamosCard = ({ color }) => {
@@ -26,6 +31,10 @@ const PrestamosCard = ({ color }) => {
         const data = await borrowing.GetBorrowingsItems(nameBorrowing);
         setBorrowingsItems(data.result);
     };
+
+    const OpenRegisterBorrowing = () => {
+        setShowModalRegister(true);
+    }
 
     useEffect(() => {
         getTypeBorrowing();
@@ -71,7 +80,7 @@ const PrestamosCard = ({ color }) => {
                                                     {item.id_borrowing === null ? (
                                                         <button
                                                             className='btn btn-primary'
-                                                            onClick={() => { console.log(item.id_borrowing) }}
+                                                            onClick={() => OpenRegisterBorrowing()}
                                                         >
                                                             Prestar
                                                         </button>
@@ -143,7 +152,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
         TypeBorrowing: "",
         item_id: "",
         registration: "",
-        date: "",
+        date: moment().format('YYYY-MM-DD HH:mm:ss'),
         return_date: ""
     });
 
@@ -160,6 +169,14 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
 
     const closeModal = () => {
         setShowModalRegister(false);
+    };
+
+    const handleDateTimeChange = (date) => {
+        setBorrowing({ ...borrowing, date: date.format('YYYY-MM-DD HH:mm:ss') });
+    };
+
+    const handleReturnDateTimeChange = (date) => {
+        setBorrowing({ ...borrowing, return_date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
 
     const actionButton = () => {
@@ -179,7 +196,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
     return (
         <Modal isOpen={showModalRegister}>
             <ModalHeader>
-                <h3>{titleModal}</h3>
+                {titleModal}
             </ModalHeader>
             <ModalBody>
                 <FormGroup className="mb-3">
@@ -193,20 +210,20 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                 </FormGroup>
                 <FormGroup className="mb-3">
                     <Label for="date">Fecha de Préstamo</Label>
-                    <Input
-                        type="date"
+                    <DateTime
                         id="date"
                         value={borrowing.date}
-                        onChange={(e) => setBorrowing({ ...borrowing, date: e.target.value })}
+                        onChange={handleDateTimeChange}
+                        inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
                 </FormGroup>
                 <FormGroup className="mb-3">
                     <Label for="return_date">Fecha de Devolución</Label>
-                    <Input
-                        type="date"
+                    <DateTime
                         id="return_date"
                         value={borrowing.return_date}
-                        onChange={(e) => setBorrowing({ ...borrowing, return_date: e.target.value })}
+                        onChange={handleReturnDateTimeChange}
+                        inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
                 </FormGroup>
             </ModalBody>
