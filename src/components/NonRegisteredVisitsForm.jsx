@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import VisitsFetch from "../store/VisitsFetch";
-
+import Utils from "../store/Utils";
 const visitsObject = new VisitsFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const NonRegisteredVisitsForm = () => {
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(Utils.ActualDate());
     const [registration, setRegistration] = useState('');
     const [nonRegisteredVisits, setNonRegisteredVisits] = useState([]);
 

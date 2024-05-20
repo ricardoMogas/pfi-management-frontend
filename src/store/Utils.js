@@ -26,3 +26,6 @@ class Utils {
 }
 
 export default new Utils();
+
+const date = new Utils().ActualDate();
+console.log(date);

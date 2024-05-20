@@ -16,14 +16,15 @@ class CopiasFetcher {
       }
     }
 
-    async RegisterCopia(registration, totalCopies, date) {
+    async RegisterCopia(registration, quantityOfPrint, date) {
       try {
-        const result= await axios.post(`${this.API_BASE_URL}/Copies?registration=${registration}&total=${totalCopies}&date=${date}`);
+        const result= await axios.post(`${this.API_BASE_URL}/Copies?registration=${registration}&total=${quantityOfPrint}&date=${date}`);
         return result.data;
       } catch (error) {
         console.error('Error registering copia:', error);
       }
     }
+
 }
 export default CopiasFetcher;
 // register copies example

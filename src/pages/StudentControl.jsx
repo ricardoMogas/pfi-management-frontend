@@ -400,7 +400,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
     }, [defaultData]);
 
     return (
-        < Modal isOpen={showModalRegister} >
+        <Modal isOpen={showModalRegister} >
             <ModalHeader>
                 <div>
                     <h3>{titleModal}</h3>
@@ -507,6 +507,6 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     Confirmar
                 </Button>
             </ModalFooter>
-        </Modal >
+        </Modal>
     );
 }

@@ -49,7 +49,7 @@ const HomePage = () => {
         </div>
       </div>
       <footer 
-        style={{ backgroundColor: '#f8f9fa', color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }} 
+        style={{ color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }} 
         className="text-dark py-4 fixed-bottom"
       >
         <div className="container" style={{color: "#fff"}}>
