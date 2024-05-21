@@ -16,7 +16,13 @@
     ],
     "etnia": [
       { "label": "Buscar Grupo étnico", "value": "null" },
+      { "label": "Otro", "value": "Otro" },
       { "label": "Maya", "value": "Maya" },
+      { "label": "Nahuatl", "value": "Nahuatl" },
+      { "label": "Mixteca", "value": "Mixteca" },
+      { "label": "Afroamericano", "value": "Afroamericano" },
+      { "label": "Chiapaneco", "value": "Chiapaneco" },
+      { "label": "Purepecha", "value": "Purepecha" },
       { "label": "Otomi", "value": "Otomi" },
       { "label": "Azteca", "value": "Azteca" },
       { "label": "Zapoteca", "value": "Zapoteca" },

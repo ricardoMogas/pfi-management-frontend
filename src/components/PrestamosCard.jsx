@@ -12,8 +12,9 @@ const PrestamosCard = ({ color }) => {
     const [showPrestamosForm, setShowPrestamosForm] = useState(false);
     const [showModalRegister, setShowModalRegister] = useState(false);
     const [typeBorrowing, setTypeBorrowing] = useState([]);
+    const [CurrentTypeBorrowing, setCurrentTypeBorrowing] = useState('');
     const [borrowingsItems, setBorrowingsItems] = useState([]);
-
+    const [CurrentItem, setCurrentItem] = useState({});
     const handlePrestamosImageClick = () => {
         setShowPrestamosForm(true);
     };
@@ -30,9 +31,29 @@ const PrestamosCard = ({ color }) => {
     const getBorrowingsItems = async (nameBorrowing) => {
         const data = await borrowing.GetBorrowingsItems(nameBorrowing);
         setBorrowingsItems(data.result);
+        setCurrentTypeBorrowing(nameBorrowing);
     };
 
-    const OpenRegisterBorrowing = () => {
+    const ReturnBorrowing = async (item) => {
+        let id = item;
+        if (CurrentTypeBorrowing === 'book') {
+            id = item.id_Book;
+        } else if (CurrentTypeBorrowing === 'computer') {
+            id = item.id;
+        } else if (CurrentTypeBorrowing === 'locker') {
+            id = item.id_locker;
+        }
+        const result = await borrowing.RetunrBorrowing(CurrentTypeBorrowing, id);
+        if (result.status === "ok") {
+            alert('Devolución completa');
+            getBorrowingsItems(CurrentTypeBorrowing);
+        } else {
+            alert(result.result);
+        }
+    };
+
+    const OpenRegisterBorrowing = (item) => {
+        setCurrentItem(item);
         setShowModalRegister(true);
     }
 
@@ -80,14 +101,14 @@ const PrestamosCard = ({ color }) => {
                                                     {item.id_borrowing === null ? (
                                                         <button
                                                             className='btn btn-primary'
-                                                            onClick={() => OpenRegisterBorrowing()}
+                                                            onClick={() => OpenRegisterBorrowing(item)}
                                                         >
                                                             Prestar
                                                         </button>
                                                     ) : (
                                                         <button
                                                             className='btn btn-danger'
-                                                            onClick={() => { console.log(item.id_borrowing) }}
+                                                            onClick={() => ReturnBorrowing(item)}
                                                         >
                                                             Devolver
                                                         </button>
@@ -136,20 +157,21 @@ const PrestamosCard = ({ color }) => {
                     <button type="submit" className="btn btn-primary">Guardar</button>
                 </div>
             )}
-            <ModalStudent
+            <ModalBorrowing
                 showModalRegister={showModalRegister}
                 setShowModalRegister={setShowModalRegister}
                 titleModal="Registrar Préstamo"
-                currentType="zzz"
-                event={getTypeBorrowing}
+                data={CurrentItem}
+                typeBorrowing={CurrentTypeBorrowing}
+                event={getBorrowingsItems}
             />
         </div>
     );
 };
 
-function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, currentType, event }) {
-    const [borrowing, setBorrowing] = useState({
-        TypeBorrowing: "",
+function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing, titleModal, data, event }) {
+    const [borrowingData, setBorrowingData] = useState({
+        TypeBorrowing: '',
         item_id: "",
         registration: "",
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -157,42 +179,52 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
     });
 
     const registerBorrowing = async () => {
-        const result = await StudentsFetcher.RegisterStudent(borrowing);
-        if (result) {
+        const result = await borrowing.NewBorrowing(borrowingData);
+        if (result.status === "ok") {
             alert('Registro completo');
             setShowModalRegister(false);
             event();
         } else {
-            alert('Faltan campos');
+            alert(result.result);
         }
     };
 
     const closeModal = () => {
+        setBorrowingData({
+            TypeBorrowing: "",
+            item_id: "",
+            registration: "",
+            date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            return_date: ""
+        });
         setShowModalRegister(false);
     };
 
     const handleDateTimeChange = (date) => {
-        setBorrowing({ ...borrowing, date: date.format('YYYY-MM-DD HH:mm:ss') });
+        setBorrowingData({ ...borrowingData, date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
 
     const handleReturnDateTimeChange = (date) => {
-        setBorrowing({ ...borrowing, return_date: date.format('YYYY-MM-DD HH:mm:ss') });
+        setBorrowingData({ ...borrowingData, return_date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
 
-    const actionButton = () => {
-        switch (currentType) {
-            case 'zzz':
-                registerBorrowing();
-                break;
-            case 'xx':
-                // Otro caso si se necesita
-                break;
-            default:
-                console.log(borrowing);
-                break;
+    useEffect(() => {
+        let id = data;
+        if (typeBorrowing === 'book') {
+            id = data.id_Book;
+        } else if (typeBorrowing === 'computer') {
+            id = data.id;
+        } else if (typeBorrowing === 'locker') {
+            id = data.id_locker;
         }
-    };
-
+        setBorrowingData({
+            TypeBorrowing: typeBorrowing,
+            item_id: id,
+            registration: "",
+            date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            return_date: ""
+        });
+    }, [data, typeBorrowing]);
     return (
         <Modal isOpen={showModalRegister}>
             <ModalHeader>
@@ -204,15 +236,15 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     <Input
                         type="text"
                         id="registration"
-                        value={borrowing.registration}
-                        onChange={(e) => setBorrowing({ ...borrowing, registration: e.target.value })}
+                        value={borrowingData.registration}
+                        onChange={(e) => setBorrowingData({ ...borrowingData, registration: e.target.value })}
                     />
                 </FormGroup>
                 <FormGroup className="mb-3">
                     <Label for="date">Fecha de Préstamo</Label>
                     <DateTime
                         id="date"
-                        value={borrowing.date}
+                        value={borrowingData.date}
                         onChange={handleDateTimeChange}
                         inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
@@ -221,7 +253,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     <Label for="return_date">Fecha de Devolución</Label>
                     <DateTime
                         id="return_date"
-                        value={borrowing.return_date}
+                        value={borrowingData.return_date}
                         onChange={handleReturnDateTimeChange}
                         inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
@@ -231,7 +263,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                 <Button color="danger" onClick={closeModal}>
                     Cancelar
                 </Button>
-                <Button color="primary" onClick={actionButton}>
+                <Button color="primary" onClick={() => registerBorrowing()}>
                     Confirmar
                 </Button>
             </ModalFooter>

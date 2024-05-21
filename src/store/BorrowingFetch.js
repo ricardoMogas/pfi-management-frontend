@@ -36,13 +36,24 @@ class BorrowingFetch {
     */
     async NewBorrowing(Borrowing) {
         try {
-            const response = await axios.post(`${this.API_BASE_URL}/Borrowing`, Borrowing);
+            const response = await axios.post(`${this.API_BASE_URL}/Service`, Borrowing);
             const resultResponse = response.data;
             return resultResponse;
         } catch (error) {
             console.error('Error fetching copias:', error);
         }
     }
+
+    async RetunrBorrowing(type, id) {
+        try {
+            const response = await axios.put(`${this.API_BASE_URL}/Service?TypeBorrowing=${type}&item_id=${id}`);
+            const resultResponse = response.data;
+            return resultResponse;
+        } catch (error) {
+            console.error('Error fetching copias:', error);
+        }
+    }
+
 }
 export default BorrowingFetch;
 

@@ -18,7 +18,7 @@ const typeFrequency = ['Todos', 'Etnia', 'Licenciatura', 'Genero'];
 
 export default function ReportPage() {
     /*** *** *** *** USESTATE CONSTS *** *** *** ***/
-    const [startDate, setStartDate] = useState(Utils.ActualDate());
+    const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState('');
     const [currentType, setCurrentType] = useState(null);
     const [currentTypeFrequency, setcurrentTypeFrequency] = useState(null);
@@ -76,6 +76,7 @@ export default function ReportPage() {
             case 'Genero':
             case 'Etnia':
                 const DataExel = response.result;
+                console.log(response.result)
                 const sheetsData = DataExel.map(item => ({
                     name: item.name,
                     data: item.data
