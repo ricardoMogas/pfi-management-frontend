@@ -8,7 +8,7 @@ const InfoPage = () => {
                     <h2>Desarrolladores</h2>
                 </div>
                 <div className='card-header'>
-                    <h3>Equipo</h3> 
+                    <h3>Equipo</h3>     
                     <p>
                         Ricardo J Moo Vargas
                         <br />

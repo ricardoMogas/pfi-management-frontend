@@ -121,7 +121,7 @@ const PrestamosCard = ({ color }) => {
                                                             :
                                                             (typeof value === 'object' ?
                                                                 <button className='btn btn-info' onClick={() => {
-                                                                    alert(JSON.stringify(value, null, 2));
+                                                                    alert("Matricula: " + value.registration + "\nFecha de Préstamo: " + value.borrowing_date + "\nFecha de Devolución: " + value.return_date);
                                                                 }}>
                                                                     <i className="bi bi-info-circle"></i>
                                                                 </button>
