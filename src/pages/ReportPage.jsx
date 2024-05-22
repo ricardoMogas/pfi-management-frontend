@@ -29,11 +29,6 @@ export default function ReportPage() {
         startDate: null,
         endDate: null
     });
-    /*** *** *** *** USESTATE CONSTS UI *** *** *** ***/
-    const [showAlert, setShowAlert] = useState(false);
-    const [typeAlert, setTypeAlert] = useState('primary');
-    const [messageAlert, setMessageAlert] = useState('');
-    const [titleAlert, setTitleAlert] = useState('');
 
     //obtener el tipo actual 
     const gettingTypeReport = (type) => {
@@ -153,11 +148,6 @@ export default function ReportPage() {
         setDataGraph(response.result);
     };
     useEffect(() => {
-        if (dataJson.type === "Visitas") {
-            alert('Función para grafica en desarrollo');
-            dataGraph.length = 0;
-            return;
-        }
         GraphFetch();
     }, [dataJson]);
     return (
@@ -169,9 +159,11 @@ export default function ReportPage() {
                         <div className='col'>
                             <Dropdown currentType={currentType} type={type} onTypeChange={gettingTypeReport} />
                         </div>
+                        {/*
                         <div className='col'>
                             {currentActionForComponent()}
                         </div>
+                        */}
                         <div className='col'>
                             <input className="form-control" type="date" value={startDate} onChange={StartDateChange} />
                             Del mes

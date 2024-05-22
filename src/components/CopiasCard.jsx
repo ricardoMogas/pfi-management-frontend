@@ -78,7 +78,7 @@ const CopiasCard = ({ color }) => {
             <div className='card-header' style={color}>
                 <h5 className="card-title text-white">Copias e Impresiones</h5>
             </div>
-            <div className="card-body">
+            <div className="card-body text-center">
                 {showCopiasForm ? (
                     <>
                         <button onClick={handleResetCopiasForm} className="btn btn-secondary mb-3">Volver</button>

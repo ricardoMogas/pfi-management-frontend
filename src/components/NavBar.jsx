@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Logo_PFI from '../assets/Logo_PFI.png';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Logo_PFI from '../assets/LogosUni.png';
 const NavBar = (routes) => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const signOut = () => {
+        // Lógica para cerrar la sesión
+        localStorage.removeItem('authToken');
+        navigate("/login");
+    }
 
     return (
-        <nav 
-            className="navbar navbar-expand-lg navbar-light fixed-top" 
+        <nav
+            className="navbar navbar-expand-lg navbar-light fixed-top"
             style={{ backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
         >
             <div className="container-fluid">
@@ -23,18 +29,20 @@ const NavBar = (routes) => {
                     {routes.routes.map((route, index) => {
                         return (
                             <li className="nav-item" key={index}>
-                                <Link 
+                                <Link
                                     className={`nav-link ${route.path === location.pathname ? 'active' : ''} ms-3`}
-                                    to={route.path} 
+                                    to={route.path}
                                     style={{ color: '#fff' }}
                                 >
-                                    {route.title} 
+                                    {route.title}
                                 </Link>
                             </li>
                         );
                     })}
-                    
                 </ul>
+                <button className="btn btn-danger" onClick={() => signOut()}>
+                    Cerrar aplicación
+                </button>
             </div>
         </nav>
     );

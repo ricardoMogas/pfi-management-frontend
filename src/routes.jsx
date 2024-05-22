@@ -1,5 +1,7 @@
 import Root from './pages/root.jsx';
 import TestPage from './pages/TestPage.jsx';
+import InfoPage from './pages/InfoPage.jsx';
+import Login from './components/Login.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ErrorPage from "./error-page.jsx";
 import StudentControl from './pages/StudentControl.jsx';
@@ -39,12 +41,23 @@ const routes = [
         element: <ReportPage />,
       },
       {
+        title: "Información",
+        path: "/Info",
+        element: <InfoPage />,
+      }
+      /*
+      {
         title: "Test",
         path: "/Test/:id",
         element: <TestPage />,
         errorElement: <ErrorPage />,
       },
+      */
     ],
+  },
+  {
+    path: "login",
+    element: <Login />,
   },
 ];
 
