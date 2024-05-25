@@ -21,8 +21,8 @@ const NavBar = (routes) => {
                         <img
                             src={Logo_PFI}
                             alt="Logo"
-                            width={30}
-                            height={30}
+                            width={40}
+                            height={40}
                             className="d-inline-block align-text-top"
                         />
                     </a>

@@ -152,11 +152,6 @@ const PrestamosCard = ({ color }) => {
                     </button>
                 )}
             </div>
-            {showPrestamosForm && (
-                <div className='card-footer'>
-                    <button type="submit" className="btn btn-primary">Guardar</button>
-                </div>
-            )}
             <ModalBorrowing
                 showModalRegister={showModalRegister}
                 setShowModalRegister={setShowModalRegister}
@@ -254,7 +249,7 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
                     <DateTime
                         id="return_date"
                         value={borrowingData.return_date}
-                        onChange={handleReturnDateTimeChange}
+                        onChange={() => handleReturnDateTimeChange()}
                         inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
                 </FormGroup>
