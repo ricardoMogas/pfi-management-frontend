@@ -121,35 +121,37 @@ const RegisteredVisitsForm = () => {
             </div>
             <div className='container'>
                 {registeredVisits.length > 0 ? (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Matrícula</th>
-                                <th>Fecha</th>
-                                <th>Hora de entrada</th>
-                                <th>Hora de salida</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {registeredVisits.map((registro, index) => (
-                                <tr key={index}>
-                                    <td>{registro.registration}</td>
-                                    <td>{registro.visit_date}</td>
-                                    <td>{registro.entry_time}</td>
-                                    <td>{registro.exit_time ? registro.exit_time : "Sin registrar"}</td>
-                                    <td>
-                                        <button
-                                            className='btn btn-danger mb-2'
-                                            onClick={() => DeleteVisit(registro.no_Visit)}
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                        </button>
-                                    </td>
+                    <div className='table-responsive-lg m-4' style={{ maxHeight: '350px', overflow: 'auto' }}>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Matrícula</th>
+                                    <th>Fecha</th>
+                                    <th>Hora de entrada</th>
+                                    <th>Hora de salida</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {registeredVisits.map((registro, index) => (
+                                    <tr key={index}>
+                                        <td>{registro.registration}</td>
+                                        <td>{registro.visit_date}</td>
+                                        <td>{registro.entry_time}</td>
+                                        <td>{registro.exit_time ? registro.exit_time : "Sin registrar"}</td>
+                                        <td>
+                                            <button
+                                                className='btn btn-danger mb-2'
+                                                onClick={() => DeleteVisit(registro.no_Visit)}
+                                            >
+                                                <i className="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 ) : (
                     <div className='container text-center m-5'>
                         <i className="bi bi-table fs-1"></i>

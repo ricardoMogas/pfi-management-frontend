@@ -20,7 +20,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: 90px;
-  background-image: url("/public/FondoDif.jpg");
+  background-image: url("/FondoDif.jpg");
   background-size: cover;
   background-position: center;
 }
