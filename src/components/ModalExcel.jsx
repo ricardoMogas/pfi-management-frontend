@@ -226,7 +226,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                             Cancel
                         </Button>
                         <Button color="primary" onClick={toggleColumnSelectionMode} disabled={!dataExcel.length > 0}>
-                            {isRowSelectedMode ? 'Regresar' : 'Seleccionar columnas'}
+                            {isRowSelectedMode ? 'Regresar' : 'Convertir Datos'}
                         </Button>{' '}
                         <Button
                             color="warning"
