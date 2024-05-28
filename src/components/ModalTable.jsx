@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const ModalTable = ({ isOpen, setIsOpen, data }) => {
+const ModalTable = ({ isOpen, setIsOpen, type, data }) => {
     if (!isOpen) {
         return null;
     }
@@ -10,24 +10,7 @@ const ModalTable = ({ isOpen, setIsOpen, data }) => {
         <Modal isOpen={isOpen} toggle={toggle} fade={true} centered>
             <ModalHeader toggle={toggle}>Modal title</ModalHeader>
             <ModalBody>
-                <table className='table table-hover'>
-                    <thead>
-                        <tr>
-                            {Object.keys(data[0]).map((key) => (
-                                <th key={key}>{key}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((item, index) => (
-                            <tr key={index}>
-                                {Object.values(item).map((value, index) => (
-                                    <td key={index}>{value}</td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <ContentTable data={data} />    
             </ModalBody>
             <ModalFooter>
                 <Button color="primary" onClick={toggle}>
@@ -42,3 +25,29 @@ const ModalTable = ({ isOpen, setIsOpen, data }) => {
 };
 
 export default ModalTable;
+
+
+const ContentTable = ({data}) => {
+    return (
+        <>
+            <table className='table table-hover'>
+                <thead>
+                    <tr>
+                        {Object.keys(data[0]).map((key) => (
+                            <th key={key}>{key}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((item, index) => (
+                        <tr key={index}>
+                            {Object.values(item).map((value, index) => (
+                                <td key={index}>{value}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </>
+    )
+}
