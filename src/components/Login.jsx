@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import sessionFetch from '../store/sessionFetch';
+import { SendMail } from '../store/SendMail';
 import { event } from 'jquery';
 const sessionObject = new sessionFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 export default function Login() {
@@ -25,9 +26,6 @@ export default function Login() {
         }
     };
 
-    useEffect(() => {
-
-    }, []);
     return (
         <>
             <style
@@ -116,7 +114,7 @@ export default function Login() {
                             Iniciar Sesión
                         </button>
                     </div>
-                    <FormRecoveryPass event={() => setMissPassword(!missPassword)}/>
+                    <FormRecoveryPass event={() => setMissPassword(!missPassword)} />
                 </>
             ) : (
                 <>
@@ -178,7 +176,7 @@ export default function Login() {
     );
 }
 
-function FormRecoveryPass({event}) {
+function FormRecoveryPass({ event }) {
     const [loading, setLoading] = useState(false);
     const [sendEmail, setSendEmail] = useState(false);
     const [correctCode, setCorrectCode] = useState(false);
@@ -212,10 +210,12 @@ function FormRecoveryPass({event}) {
         alert("Correo enviado");
         const newCode = generateRandomCode();
         setGenerateCode(newCode);
+        SendMail(email, newCode, setLoading); // funcion para enviar correo
         console.log(newCode);
         setSendEmail(true);
     };
 
+    
     return (
         <>
             <div className="login-container">
