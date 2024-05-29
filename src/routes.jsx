@@ -44,15 +44,14 @@ const routes = [
         title: "Información",
         path: "/Info",
         element: <InfoPage />,
-      }
-      /*
+      },
       {
         title: "Test",
         path: "/Test/:id",
         element: <TestPage />,
         errorElement: <ErrorPage />,
       },
-      */
+
     ],
   },
   {
