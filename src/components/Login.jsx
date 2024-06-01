@@ -26,6 +26,8 @@ export default function Login() {
         }
     };
 
+
+
     return (
         <>
             <style
@@ -215,6 +217,19 @@ function FormRecoveryPass({ event }) {
         setSendEmail(true);
     };
 
+    const handleRecovePass = async () => {
+        // Aquí deberías agregar la lógica para recuperar la contraseña
+        const result = await sessionObject.recoverPass(newPassword, email);
+        console.log(result);
+        if (result.status !== "error") {
+            event();
+            alert("Contraseña cambiada");
+        } else {
+            event();
+            alert("Error al cambiar contraseña: " + result.result);
+        }
+    }
+
     
     return (
         <>
@@ -255,7 +270,7 @@ function FormRecoveryPass({ event }) {
                             <button
                                 className="btn btn-primary btn-block"
                                 disabled={!correctCode}
-                                onClick={changePassword}
+                                onClick={handleRecovePass}
                             >
                                 Cambiar contraseña
                             </button>

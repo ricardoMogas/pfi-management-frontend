@@ -45,6 +45,11 @@ const routes = [
         path: "/Info",
         element: <InfoPage />,
       },
+      {
+        title: "Test",
+        path: "/test",
+        element: <TestPage />,
+      }
 
 
     ],

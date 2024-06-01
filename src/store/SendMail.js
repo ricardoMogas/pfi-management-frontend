@@ -20,7 +20,7 @@ export const SendMail = (toName, message, setLoading) => {
         });
 };
 
-export const SendMailEvery = (toName, emailUser, message, setLoading, ) => {
+export const SendMailEvery = (toName, emailUser, message, setLoading ) => {
     setLoading(true);
 
     const templateParams = {
@@ -34,10 +34,13 @@ export const SendMailEvery = (toName, emailUser, message, setLoading, ) => {
     emailjs.send('default_service', 'template_flrj3sm', templateParams, 'I2ZQG3GgCdtHzjMg7')
         .then((response) => {
             console.log('SUCCESS!', response.status, response.text);
+            alert('Mensaje enviado!');
             setLoading(false);
+            return true;
         }, (err) => {
             console.log('FAILED...', err);
             setLoading(false);
             alert('Failed to send message. Please try again.');
+            return false;
         });
 };

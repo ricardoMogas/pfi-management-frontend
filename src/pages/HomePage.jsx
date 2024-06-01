@@ -20,7 +20,7 @@ const HomePage = () => {
       <div className="text-center"> {/* Add text-center class to center the dropdown */}
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color='secondary'  caret>
-            Acceso direacto
+            Acceso directo
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={() => selectComponent('home')}>Home</DropdownItem>

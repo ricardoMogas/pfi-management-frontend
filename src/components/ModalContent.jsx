@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const ModalTable = ({ isOpen, setIsOpen, type, data }) => {
@@ -6,6 +6,12 @@ const ModalTable = ({ isOpen, setIsOpen, type, data }) => {
         return null;
     }
     const toggle = () => setIsOpen(!isOpen);
+
+    useEffect(() => {
+        if (type) {
+            console.log(type);
+        }
+    }, [type]);
     return (
         <Modal isOpen={isOpen} toggle={toggle} fade={true} centered>
             <ModalHeader toggle={toggle}>Modal title</ModalHeader>

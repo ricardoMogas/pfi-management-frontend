@@ -11,6 +11,7 @@ import {
     FormGroup,
     ModalFooter,
 } from "reactstrap";
+import { SendMailEvery } from '../store/SendMail';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
@@ -34,8 +35,10 @@ export default function StudentControl() {
         career: "",
         status: "",
     });
+    const [currentEmail, setCurrentEmail] = useState("")
     const [showModalRegister, setShowModalRegister] = useState(false);
     const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const [showModalEmail, setShowModalEmail] = useState(false);
     const [students, setStudents] = useState([]);
     const [isLoader, setIsLoader] = useState(true);
     const [page, setPage] = useState(1);
@@ -96,7 +99,7 @@ export default function StudentControl() {
                 <div className='card-header' style={ColorPrimary}>
                     <div className='row text-center'>
                         <div className='col-5'>
-                            <h2>Administrar Alumnos</h2>
+                            <h2>Control de alumnos</h2>
                         </div>
                         <div className='col'>
                             <div className='row'>
@@ -104,7 +107,7 @@ export default function StudentControl() {
                                     <button
                                         className="btn btn-success m-1"
                                         onClick={() => setShowModalExcel(!showModalExcel)}
-                                    >R. Excel</button>
+                                    >Ins. Excel</button>
                                 </div>
                                 <div className='col p-0'>
                                     <button
@@ -286,6 +289,11 @@ export default function StudentControl() {
                                                 className="btn btn-danger m-1"
                                                 onClick={() => deleteStudent(student.registration)}
                                             ><i className="bi bi-trash fs-5"></i></button>
+                                            <button
+                                                className="btn btn-success m-1"
+                                                onClick={() => [setCurrentStudent(student),setShowModalEmail(!showModalEmail)]}
+                                            ><i class="bi bi-envelope-plus"></i></button>
+                                            
                                         </td>
                                     </tr>
                                 ))}
@@ -305,10 +313,10 @@ export default function StudentControl() {
                         </li>
                     </ul>
                 </div>
-                <ModalExcel 
-                    isOpen={showModalExcel} 
-                    setIsOpen={setShowModalExcel} 
-                    data={[]} 
+                <ModalExcel
+                    isOpen={showModalExcel}
+                    setIsOpen={setShowModalExcel}
+                    data={[]}
                 />
                 <ModalStudent
                     setShowModalRegister={setShowModalRegister}
@@ -326,8 +334,53 @@ export default function StudentControl() {
                     defaultData={currentStudent}
                     event={fetchStudents}
                 />
+                <ModalEmail
+                    showModalEmail={showModalEmail}
+                    setShowModalEmail={setShowModalEmail}
+                    titleModal={"Enviar correo"}
+                    email={"al0"+currentStudent.registration+"@uacam.mx"}
+                    nameUser={currentStudent.name}
+                />
             </div>
         </div>
+    );
+}
+
+function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, nameUser}) {
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const sendEmail = async () => {
+        SendMailEvery(nameUser, email, message, setLoading);
+        setShowModalEmail(false);
+        setMessage("");
+    };
+
+    const closeModal = () => {
+        setShowModalEmail(false);
+        setMessage("");
+    };
+    return (
+        <Modal isOpen={showModalEmail} toggle={() => setShowModalEmail(!showModalEmail)}>
+            <ModalHeader toggle={() => setShowModalEmail(!showModalEmail)}>{titleModal}</ModalHeader>
+            <ModalBody>
+                <FormGroup>
+                    <label className="form-label">Mensaje a : {email}</label>
+                    <textarea
+                        className="form-control"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    ></textarea>
+                </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+                <Button color="danger" onClick={() => closeModal()}>
+                    Cancelar
+                </Button>
+                <Button color="primary" onClick={() => sendEmail()}  disabled={loading}>
+                    {loading ? <Loader type='spinner' /> : 'Enviar'}
+                </Button>
+            </ModalFooter>
+        </Modal>
     );
 }
 
@@ -414,7 +467,10 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                         name="nombre"
                         type="text"
                         value={student.name}
-                        onChange={(e) => (setStudent({ ...student, name: e.target.value }))}
+                        onChange={(e) => {
+                            const upperCaseName = e.target.value.toUpperCase();
+                            setStudent({ ...student, name: upperCaseName });
+                        }}
                     />
                 </FormGroup>
 
@@ -438,7 +494,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     >
                 </FormGroup>
                 <FormGroup>
-                    <label className='form-label'>Lugar de nacimientos</label>
+                    <label className='form-label'>Lugar de nacimiento</label>
                     <input
                         className="form-control"
                         type="text"
@@ -486,7 +542,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     </select>
                 </FormGroup>
                 <FormGroup>
-                    <label className="form-label">Estado:</label>
+                    <label className="form-label">Estatus:</label>
                     <select
                         className="form-select"
                         name="estado"

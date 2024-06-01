@@ -19,7 +19,7 @@ export default function VisitRegisterPage() {
                                 aria-controls="home"
                                 aria-selected="true"
                             >
-                                Registrados
+                                Inscritos
                             </button>
                         </li>
                         <li className="nav-item" role="presentation">
@@ -33,7 +33,7 @@ export default function VisitRegisterPage() {
                                 aria-controls="profile"
                                 aria-selected="false"
                             >
-                                No Registrados
+                                No inscritos
                             </button>
                         </li>
                     </ul>

@@ -5,7 +5,7 @@ import Utils from '../store/Utils';
 import DateTime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
-
+const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const borrowing = new BorrowingFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const PrestamosCard = ({ color }) => {
@@ -69,9 +69,9 @@ const PrestamosCard = ({ color }) => {
             <div className="card-body">
                 {showPrestamosForm ? (
                     <>
-                        <button onClick={handleResetPrestamosForm} className="btn btn-secondary mb-3">Volver</button>
+                        <button onClick={handleResetPrestamosForm} className="btn btn-secondary mb-2">Volver</button>
                         <Form className="mt-3">
-                            <FormGroup className="mb-3">
+                            <FormGroup className="mb-1">
                                 <Label for="tipoRecurso" className="text-white">Tipo de Recurso</Label>
                                 <Input type="select" id="tipoRecurso" onChange={(e) => getBorrowingsItems(e.target.value)}>
                                     <option value="">Tipo...</option>
@@ -80,6 +80,14 @@ const PrestamosCard = ({ color }) => {
                                     ))}
                                 </Input>
                             </FormGroup>
+
+                            {/*Array.isArray(borrowingsItems) && borrowingsItems.length > 0 ? (
+                                <button className='btn btn-success'>
+                                    <i class="bi bi-plus-square"></i>
+                                </button>
+                            ) : (
+                                null
+                            )*/}
                         </Form>
                         {Array.isArray(borrowingsItems) && borrowingsItems.length > 0 ? (
                             <div className="table-responsive">
@@ -113,6 +121,13 @@ const PrestamosCard = ({ color }) => {
                                                             Devolver
                                                         </button>
                                                     )}
+                                                    {/**   
+                                                     <button
+                                                        className="btn m-1"
+                                                        style={ColorPrimary}
+                                                        onClick={() => { }}
+                                                    ><i className="bi bi-pencil fs-5"></i></button>
+                                                     */}
                                                 </td>
                                                 {Object.values(item).map((value, i) => (
                                                     <td key={i}>
@@ -267,3 +282,5 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
 }
 
 export default PrestamosCard;
+
+

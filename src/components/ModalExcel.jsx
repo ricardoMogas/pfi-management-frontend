@@ -160,7 +160,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                 <ModalBody>
                     {log.length > 0 ? (
                         <>
-                            <h5>Historial de registro de alumnos</h5>
+                            <h5>Historial de inscripción de alumnos</h5>
                             <div className='table-responsive-md' style={{ maxHeight: '400px', overflow: 'auto' }}>
                                 <table className='table table-hover'>
                                     <thead>
@@ -174,7 +174,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                                         {log.map((item, index) => (
                                             <tr key={index}>
                                                 {Object.values(item).map((value, index) => (
-                                                    <td key={index}>{value === true ? "REGISTRADO" : value}</td>
+                                                    <td key={index}>{value === true ? "INSCRITO" : value}</td>
                                                 ))}
                                             </tr>
                                         ))}
@@ -185,7 +185,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                     ) : (
                         <>
                             <h5>Intrucciones</h5>
-                            <p>Por favor verifique los datos convertido y de a registrar</p>
+                            <p>Por favor verifique los datos convertidos</p>
                             <div className='table-responsive-md' style={{ maxHeight: '400px', overflow: 'auto' }}>
                                 <table className="table">
                                     <thead>

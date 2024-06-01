@@ -20,6 +20,7 @@ export default function ReportPage() {
     /*** *** *** *** USESTATE CONSTS *** *** *** ***/
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState('');
+    const [addFilter, setAddFIlter] = useState(false)
     const [currentType, setCurrentType] = useState(null);
     const [currentTypeFrequency, setcurrentTypeFrequency] = useState(null);
     const [dataGraph, setDataGraph] = useState([]);
@@ -86,16 +87,6 @@ export default function ReportPage() {
         }
     }
 
-    /**  CONDICIONALES ***/
-    const currentActionForComponent = () => {
-        switch (currentType) {
-            case 'Visitas':
-                return <Dropdown currentType={currentTypeFrequency} type={typeFrequency} onTypeChange={gettingTypeFrequency} />;
-            default:
-                return null;
-        }
-    }
-
     const StartDateChange = (e) => {
         const selectedStartDate = new Date(e.target.value);
         const selectedEndDate = new Date(endDate);
@@ -159,11 +150,15 @@ export default function ReportPage() {
                         <div className='col'>
                             <Dropdown currentType={currentType} type={type} onTypeChange={gettingTypeReport} />
                         </div>
-                        {/*
                         <div className='col'>
-                            {currentActionForComponent()}
+                            {/**
+                            <Dropdown
+                                currentType={currentTypeFrequency}
+                                type={typeFrequency}
+                                onTypeChange={gettingTypeF requency}
+                            />
+                             */}
                         </div>
-                        */}
                         <div className='col'>
                             <input className="form-control" type="date" value={startDate} onChange={StartDateChange} />
                             Del mes

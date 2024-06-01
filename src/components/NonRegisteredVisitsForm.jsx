@@ -39,18 +39,30 @@ const NonRegisteredVisitsForm = () => {
         }
     };
 
-    const RegisterVisitExitNon = async () => {
-        if (registration === "") {
-            alert("No has ingresado la matrícula");
+    const RegisterVisitExitNon = async (data) => {
+        const resultRegister = await visitsObject.NonRegisterExitVisit(data);
+        if (resultRegister) {
+            GetVisitsNonObject();
+            return true;
         } else {
-            const resultRegister = await visitsObject.NonRegisterExitVisit(registration);
-            if (resultRegister) {
-                alert("Registro de salida exitoso ✔");
-                GetVisitsNonObject();
-                setRegistration("");
-            } else {
-                alert("El usuario no existe o ya se registró salida");
-            }
+            return false;
+        }
+    };
+
+    const RegisterExitForAllNonUsers = async () => {
+        const exitPromises = nonRegisteredVisits.map(async (visit) => {
+            const success = await RegisterVisitExitNon(visit.registration);
+            return success ? visit.registration : null;
+        });
+
+        const results = await Promise.all(exitPromises);
+
+        const successfulExits = results.filter(result => result !== null);
+        if (successfulExits.length > 0) {
+            alert(`Registro de salida exitoso para: ${successfulExits.join(', ')} ✔`);
+            GetVisitsNonObject();
+        } else {
+            alert("No se pudo registrar la salida de ningún usuario");
         }
     };
 
@@ -106,9 +118,9 @@ const NonRegisteredVisitsForm = () => {
                         </div>
                         <div className='mb-1'>
                             <button
-                                className="btn btn-success mb-2"
-                                onClick={RegisterVisitExitNon}
-                            >Registrar salida</button>
+                                className="btn btn-warning mb-2"
+                                onClick={RegisterExitForAllNonUsers}
+                            >Registrar todas la salidas</button>
                         </div>
                     </div>
                 </div>
@@ -138,6 +150,12 @@ const NonRegisteredVisitsForm = () => {
                                         <td>
                                             <button className='btn btn-danger mb-2' onClick={() => DeleteVisit(registro.no_Visit)}>
                                                 <i className="bi bi-trash"></i>
+                                            </button>
+                                            <button
+                                                className="btn btn-success mb-2"
+                                                onClick={() => RegisterVisitExitNon(registro.registration)}
+                                            >
+                                                <i className="bi bi-box-arrow-right"></i>
                                             </button>
                                         </td>
                                     </tr>
