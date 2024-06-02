@@ -18,7 +18,7 @@ const InfoPage = () => {
     };
     return (
         <>
-            <div className="card m-5">
+            <div className="card">
                 <div className='card-header' style={ColorPrimary}>
                     <h2>Desarrolladores</h2>
                 </div>

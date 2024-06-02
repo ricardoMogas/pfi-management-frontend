@@ -18,40 +18,45 @@ const routes = [
       {
         title: "Principal",
         path: "/home",
+        iconClass: "bi bi-house",
         element: <HomePage />,
       },
       {
         title: "Control de alumnos",
         path: "/StudentControl",
+        iconClass: "bi bi-person",
         element: <StudentControl />,
       },
       {
         title: "Registro de visitas",
         path: "/VisitRegisterPage",
+        iconClass: "bi bi-person-plus",
         element: <VisitRegisterPage />,
       },
       {
         title: "Servicios",
         path: "/ServicePage",
+        iconClass: "bi bi-gear",
         element: <ServicePage />,
       },
       {
         title: "Reportes",
         path: "/ReportPage",
+        iconClass: "bi bi-file-earmark-bar-graph",
         element: <ReportPage />,
       },
       {
         title: "Información",
         path: "/Info",
+        iconClass: "bi bi-info-circle",
         element: <InfoPage />,
       },
       {
         title: "Test",
         path: "/test",
+        iconClass: "bi bi-info-circle",
         element: <TestPage />,
       }
-
-
     ],
   },
   {

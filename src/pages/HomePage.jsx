@@ -43,6 +43,7 @@ const HomePage = () => {
           <VisitsComponent />
         </div>
       }
+      {/* 
       <footer
         style={{ color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
         className="text-dark py-4 fixed-bottom"
@@ -58,6 +59,7 @@ const HomePage = () => {
           </div>
         </div>
       </footer>
+      */}
     </div>
   );
   {/* Probando*/ }

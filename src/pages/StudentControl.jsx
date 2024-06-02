@@ -12,7 +12,7 @@ import {
     ModalFooter,
 } from "reactstrap";
 import { SendMailEvery } from '../store/SendMail';
-const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
+const ColorPrimary = { color: "#fff", backgroundColor: "var(--primary)" };
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export default function StudentControl() {
