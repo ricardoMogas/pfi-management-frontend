@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Util } from 'reacts
 import Loader from '../components/Loader';
 import Utils from '../store/Utils';
 import * as XLSX from 'xlsx';
-import StudentsFetcher from '../store/StudentsFetch';
+import StudentsFetcher from '../store/Requests/StudentsFetch';
 const StudentsObject = new StudentsFetcher(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const ModalExcel = ({ isOpen, setIsOpen, data }) => {
