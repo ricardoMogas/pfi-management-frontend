@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../components/Loader';
 import ModalExcel from '../components/ModalExcel';
-import StudentsFetche from '../store/StudentsFetch';
+import StudentsFetche from '../store/Requests/StudentsFetch';
 import StudentFilter from '../store/DataJson/StudentFilter.json';
 import {
     Button,

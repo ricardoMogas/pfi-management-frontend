@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import VisitsFetch from "../store/VisitsFetch";
+import VisitsFetch from "../store/Requests/VisitsFetch";
 import Utils from "../store/Utils";
 const visitsObject = new VisitsFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 

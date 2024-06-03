@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Utils from '../store/Utils';
 import MiniAlert from '../components/MiniAlert';
-import CopiasFetcher from '../store/CopiasFetch';
+import CopiasFetcher from '../store/Requests/CopiasFetch';
 let copias = new CopiasFetcher(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const CopiasCard = ({ color }) => {

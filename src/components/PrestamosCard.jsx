@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import BorrowingFetch from "../store/BorrowingFetch";
-import Utils from '../store/Utils';
+import BorrowingFetch from "../store/Requests/BorrowingFetch";
 import DateTime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';

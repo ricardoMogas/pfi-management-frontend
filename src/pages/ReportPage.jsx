@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BarChart from '../components/BarChart';
 import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
-import ReportFetch from '../store/ReportFetch';
+import ReportFetch from '../store/Requests/ReportFetch';
 import Utils from '../store/Utils';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);

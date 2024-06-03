@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import sessionFetch from '../store/sessionFetch';
+import sessionFetch from '../store/Requests/sessionFetch';
 import { SendMail } from '../store/SendMail';
 import { event } from 'jquery';
 const sessionObject = new sessionFetch(import.meta.env.VITE_REACT_APP_BASE_API);
