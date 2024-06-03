@@ -12,6 +12,7 @@ import {
     ModalFooter,
 } from "reactstrap";
 import { SendMailEvery } from '../store/SendMail';
+import SimpleAlert from "../store/SimpleAlert"
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
@@ -75,15 +76,14 @@ export default function StudentControl() {
     }
 
     const deleteStudent = async (registration) => {
-        const confirmation = window.confirm('¿Estás seguro de que quieres eliminar este estudiante?');
+        const confirmation = await SimpleAlert('warning', '¿Estás seguro de que quieres eliminar este estudiante?');
         if (confirmation) {
-
             const result = await StudentsFetcher.DeleteStudent(registration);
             if (result) {
-                alert('Estudiante eliminado');
+                SimpleAlert("info",'Estudiante eliminado');
                 fetchStudents();
             } else {
-                alert('Error al eliminar estudiante');
+                SimpleAlert("error",'Error al eliminar estudiante');
             }
         }
     }
@@ -350,7 +350,7 @@ function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, name
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const sendEmail = async () => {
-        SendMailEvery(nameUser, email, message, setLoading);
+        const status = SendMailEvery(nameUser, email, message, setLoading);
         setShowModalEmail(false);
         setMessage("");
     };
@@ -399,11 +399,11 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
         const result = await StudentsFetcher.RegisterStudent(student);
         console.log(result);
         if (result) {
-            alert('Registro completo')
+            SimpleAlert('success', 'Registro completo')
             setShowModalRegister(false);
             event();
         } else {
-            alert('Faltan campos')
+            SimpleAlert('error','Faltan campos')
         }
     };
 
@@ -411,11 +411,11 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
         const result = await StudentsFetcher.UpdateStudent(student);
         console.log(result);
         if (result) {
-            alert('Actualización completa')
+            SimpleAlert('success','Actualización completa')
             event();
             setShowModalRegister(false);
         } else {
-            alert('Faltan campos o la matricula ya se encuentra registrada')
+            SimpleAlert('error' ,'Faltan campos o la matricula ya se encuentra registrada')
         }
     };
 
@@ -442,7 +442,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                 console.log(student)
                 break;
             default:
-                alert('No se ha seleccionado ninguna acción');
+                SimpleAlert('error','No se ha seleccionado ninguna acción');
                 break;
         }
     };

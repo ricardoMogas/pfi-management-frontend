@@ -102,7 +102,6 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
         jsonData.forEach(student => {
             StudentsObject.RegisterStudent(student).then((res) => {
                 setLog(prevLog => [...prevLog, { Matricula: student.registration, status: res }]);
-                console.log(res);
             });
         });
     };

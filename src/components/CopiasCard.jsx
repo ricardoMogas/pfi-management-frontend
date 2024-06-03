@@ -3,6 +3,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Utils from '../store/Utils';
 import MiniAlert from '../components/MiniAlert';
 import CopiasFetcher from '../store/Requests/CopiasFetch';
+import SimpleAlert from "../store/SimpleAlert";
 let copias = new CopiasFetcher(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const CopiasCard = ({ color }) => {
@@ -55,7 +56,7 @@ const CopiasCard = ({ color }) => {
         const data = await copias.RegisterCopia(registration, quantityOfPrint, date);
         if (data.result === true) {
             const result = await copias.GetTotalCopies(registration, date);
-            alert('Registro exitoso ✔ : Total de copias ->' + result );
+            SimpleAlert('success', 'Registro exitoso ✔ : Total de copias ->' + result );
             setShowAlert(false);
             setTotalCopies(null);
             setRegistration('');
@@ -64,12 +65,12 @@ const CopiasCard = ({ color }) => {
         }
         if (typeof data.result === 'string' || typeof data.result !== 'boolean') {
             alert(data.result);
+            SimpleAlert('error', data.result);
             setShowAlert(false);
             setTotalCopies(null);
             setRegistration('');
             setDate(Utils.ActualDate());
             setquantityOfPrint(0);
-
         }
     };
 
