@@ -5,7 +5,7 @@ import MiniAlert from "../components/MiniAlert";
 import ModalTable from "../components/ModalContent";
 import Swal from "sweetalert2";
 import { narrate } from "../store/Narrate";
-
+import Switch from "../../ui_components/Switch";
 export default function Test() {
   const showModalAlert = async () => {
     const status = await SimpleAlert("warning", "hola")
@@ -16,7 +16,7 @@ export default function Test() {
   const [messageAlert, setMessageAlert] = useState('HOLA');
   const [titleAlert, setTitleAlert] = useState('loremp ipsum');
   const [showModal, setShowModal] = useState(false);
-
+  const [isChecked, setIsChecked] = useState(false);
   const [text, setText] = useState('');
 
   const handleChangeText = (e) => {
@@ -43,6 +43,7 @@ export default function Test() {
             data={[{ name: "hola", edad: 20 }, { name: "hola", edad: 20 }]}
           />
           <MiniAlert title={titleAlert} message={messageAlert} type={typeAlert} showAlert={showAlert} setShowAlert={setShowAlert} />
+          <Switch isChecked={isChecked} setIsChecked={setIsChecked} />
         </div>
       </div>
     </>

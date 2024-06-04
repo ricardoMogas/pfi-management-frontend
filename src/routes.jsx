@@ -30,13 +30,13 @@ const routes = [
       {
         title: "Registro de visitas",
         path: "/VisitRegisterPage",
-        iconClass: "bi bi-person-plus",
+        iconClass: "bi bi-file-earmark-person-fill",
         element: <VisitRegisterPage />,
       },
       {
         title: "Servicios",
         path: "/ServicePage",
-        iconClass: "bi bi-gear",
+        iconClass: "bi bi-pc-display-horizontal",
         element: <ServicePage />,
       },
       {
@@ -54,7 +54,7 @@ const routes = [
       {
         title: "Test",
         path: "/test",
-        iconClass: "bi bi-info-circle",
+        iconClass: "bi bi-code-slash",
         element: <TestPage />,
       }
     ],
