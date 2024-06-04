@@ -108,13 +108,13 @@ export default function StudentControl() {
                                     <button
                                         className="btn btn-success m-1"
                                         onClick={() => setShowModalExcel(!showModalExcel)}
-                                    >Ins. Excel</button>
+                                    ><i className="bi bi-file-spreadsheet"></i>Ins. Excel</button>
                                 </div>
                                 <div className='col p-0'>
                                     <button
                                         className="btn btn-info m-1"
                                         onClick={() => setShowModalRegister(true)}
-                                    >Registrar</button>
+                                    ><i className="bi bi-person-add"></i>Registrar</button>
                                 </div>
                             </div>
                         </div>

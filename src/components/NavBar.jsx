@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Switch from '../../ui_components/Switch';
 import Logo_PFI from '../assets/Logo_PFI.png';
+
 const NavBar = ({ routes, hideEvent }) => {
     const [hide, setHide] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -15,9 +17,7 @@ const NavBar = ({ routes, hideEvent }) => {
         setHide(!hide);
         hideEvent(hide);
     }
-    const handleModeChange = () => {
-        setIsDarkMode(!isDarkMode);
-    };
+
     useEffect(() => {
         if (isDarkMode) {
             document.body.classList.add('dark');
@@ -40,15 +40,13 @@ const NavBar = ({ routes, hideEvent }) => {
                         */}
                     </div>
                 </form>
-                <input
-                    type="checkbox"
-                    id="switch-mode" hidden=""
-                    checked={isDarkMode}
-                    onChange={handleModeChange}
-                />
+                <Switch isChecked={isDarkMode} setIsChecked={setIsDarkMode} />
                 <label htmlFor="switch-mode" className="switch-mode" />
                 <a href="#" className="profile">
-                    <div>Bienvenido: {localStorage.getItem('name')}</div>
+                    <div>
+                    Bienvenido: {localStorage.getItem('name')}
+                    <i className="bi bi-person-circle m-1"></i>
+                    </div>
                 </a>
             </nav>
             {/*
