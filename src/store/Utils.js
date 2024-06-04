@@ -19,14 +19,14 @@ class Utils {
         return `${anio}-${mes}-${dia} ${hora}:${minutos}:${segundos}.${milisegundos}`;
     };
 
-    truncateText(text, maxLength){
+    truncateText(text, maxLength) {
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + '...';
         }
         return text;
     };
 
-    correctKeys(data){
+    correctKeys(data) {
         return data.map(item => {
             return Object.keys(item).reduce((acc, key) => {
                 const newKey = key.replace(/\s+/g, '_'); // Reemplazar espacios por guiones bajos
@@ -34,6 +34,12 @@ class Utils {
                 return acc;
             }, {});
         });
+    };
+
+    excelDateToJSDate(serial) {
+        const serialNumber = parseFloat(serial);
+        const date = new Date(Math.floor((serialNumber - 25569) * 86400 * 1000));
+        return date;
     };
 }
 

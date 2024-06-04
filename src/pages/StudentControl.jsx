@@ -35,6 +35,7 @@ export default function StudentControl() {
         ethnicity: "",
         career: "",
         status: "",
+        date_of_registration: "",
     });
     const [currentEmail, setCurrentEmail] = useState("")
     const [showModalRegister, setShowModalRegister] = useState(false);
@@ -80,10 +81,10 @@ export default function StudentControl() {
         if (confirmation) {
             const result = await StudentsFetcher.DeleteStudent(registration);
             if (result) {
-                SimpleAlert("info",'Estudiante eliminado');
+                SimpleAlert("info", 'Estudiante eliminado');
                 fetchStudents();
             } else {
-                SimpleAlert("error",'Error al eliminar estudiante');
+                SimpleAlert("error", 'Error al eliminar estudiante');
             }
         }
     }
@@ -291,9 +292,9 @@ export default function StudentControl() {
                                             ><i className="bi bi-trash fs-5"></i></button>
                                             <button
                                                 className="btn btn-success m-1"
-                                                onClick={() => [setCurrentStudent(student),setShowModalEmail(!showModalEmail)]}
+                                                onClick={() => [setCurrentStudent(student), setShowModalEmail(!showModalEmail)]}
                                             ><i class="bi bi-envelope-plus"></i></button>
-                                            
+
                                         </td>
                                     </tr>
                                 ))}
@@ -338,7 +339,7 @@ export default function StudentControl() {
                     showModalEmail={showModalEmail}
                     setShowModalEmail={setShowModalEmail}
                     titleModal={"Enviar correo"}
-                    email={"al0"+currentStudent.registration+"@uacam.mx"}
+                    email={"al0" + currentStudent.registration + "@uacam.mx"}
                     nameUser={currentStudent.name}
                 />
             </div>
@@ -346,7 +347,7 @@ export default function StudentControl() {
     );
 }
 
-function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, nameUser}) {
+function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, nameUser }) {
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const sendEmail = async () => {
@@ -376,7 +377,7 @@ function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, name
                 <Button color="danger" onClick={() => closeModal()}>
                     Cancelar
                 </Button>
-                <Button color="primary" onClick={() => sendEmail()}  disabled={loading}>
+                <Button color="primary" onClick={() => sendEmail()} disabled={loading}>
                     {loading ? <Loader type='spinner' /> : 'Enviar'}
                 </Button>
             </ModalFooter>
@@ -394,6 +395,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
         ethnicity: "",
         career: "",
         status: "",
+        date_of_registration: "",
     });
     const RegisterStudent = async () => {
         const result = await StudentsFetcher.RegisterStudent(student);
@@ -403,7 +405,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
             setShowModalRegister(false);
             event();
         } else {
-            SimpleAlert('error','Faltan campos')
+            SimpleAlert('error', 'Faltan campos')
         }
     };
 
@@ -411,11 +413,11 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
         const result = await StudentsFetcher.UpdateStudent(student);
         console.log(result);
         if (result) {
-            SimpleAlert('success','Actualización completa')
+            SimpleAlert('success', 'Actualización completa')
             event();
             setShowModalRegister(false);
         } else {
-            SimpleAlert('error' ,'Faltan campos o la matricula ya se encuentra registrada')
+            SimpleAlert('error', 'Faltan campos o la matricula ya se encuentra registrada')
         }
     };
 
@@ -438,11 +440,10 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                 RegisterStudent();
                 break;
             case 'update':
-                UpdateStudent(student);
-                console.log(student)
+                UpdateStudent();
                 break;
             default:
-                SimpleAlert('error','No se ha seleccionado ninguna acción');
+                SimpleAlert('error', 'No se ha seleccionado ninguna acción');
                 break;
         }
     };
@@ -459,101 +460,121 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                     <h3>{titleModal}</h3>
                 </div>
             </ModalHeader>
-            <ModalBody>
-                <FormGroup>
-                    <label className="form-label">Nombre:</label>
-                    <input
-                        className="form-control"
-                        name="nombre"
-                        type="text"
-                        value={student.name}
-                        onChange={(e) => {
-                            const upperCaseName = e.target.value.toUpperCase();
-                            setStudent({ ...student, name: upperCaseName });
-                        }}
-                    />
-                </FormGroup>
+            <ModalBody className='row'>
+                <div className='col'>
+                    <FormGroup>
+                        <label className="form-label">Nombre:</label>
+                        <input
+                            className="form-control"
+                            name="nombre"
+                            type="text"
+                            value={student.name}
+                            onChange={(e) => {
+                                const upperCaseName = e.target.value.toUpperCase();
+                                setStudent({ ...student, name: upperCaseName });
+                            }}
+                        />
+                    </FormGroup>
 
-                <FormGroup>
-                    <label className="form-label">Matrícula:</label>
-                    <input
-                        className="form-control"
-                        type="number"
-                        name="matricula"
-                        disabled={currentAction === 'update'}
-                        value={student.registration}
-                        onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
-                </FormGroup>
-                <FormGroup>
-                    <label className='form-label'>Fecha de nacimiento</label>
-                    <input
-                        className="form-control"
-                        type="date"
-                        value={student.birthday_date}
-                        onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} /
-                    >
-                </FormGroup>
-                <FormGroup>
-                    <label className='form-label'>Lugar de nacimiento</label>
-                    <input
-                        className="form-control"
-                        type="text"
-                        value={student.origin_place}
-                        onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} /
-                    >
-                </FormGroup>
-                <FormGroup>
-                    <label className="form-label">Licenciatura:</label>
-                    <select
-                        className="form-select"
-                        name="licenciatura"
-                        value={student.career}
-                        onChange={(e) => setStudent({ ...student, career: e.target.value })}
-                    >
-                        {StudentFilter.licenciatura.map(opcion => (
-                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                        ))}
-                    </select>
-                </FormGroup>
-                <FormGroup>
-                    <label className="form-label">Género:</label>
-                    <select
-                        className="form-select"
-                        name="genero"
-                        value={student.gender}
-                        onChange={(e) => setStudent({ ...student, gender: e.target.value })}
-                    >
-                        {StudentFilter.genero.map(opcion => (
-                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                        ))}
-                    </select>
-                </FormGroup>
-                <FormGroup>
-                    <label className="form-label">Grupo Étnico:</label>
-                    <select
-                        className="form-select"
-                        name="grupoEtnico"
-                        value={student.ethnicity}
-                        onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}
-                    >
-                        {StudentFilter.etnia.map(opcion => (
-                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                        ))}
-                    </select>
-                </FormGroup>
-                <FormGroup>
-                    <label className="form-label">Estatus:</label>
-                    <select
-                        className="form-select"
-                        name="estado"
-                        value={student.status}
-                        onChange={(e) => setStudent({ ...student, status: e.target.value })}
-                    >
-                        {StudentFilter.estado.map(opcion => (
-                            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-                        ))}
-                    </select>
-                </FormGroup>
+                    <FormGroup>
+                        <label className="form-label">Matrícula:</label>
+                        <input
+                            className="form-control"
+                            type="number"
+                            name="matricula"
+                            disabled={currentAction === 'update'}
+                            value={student.registration}
+                            onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className='form-label'>Fecha de nacimiento</label>
+                        <input
+                            className="form-control"
+                            type="date"
+                            value={student.birthday_date}
+                            onChange={(e) => (setStudent({ ...student, birthday_date: e.target.value }))} /
+                        >
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className='form-label'>Lugar de nacimiento</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            value={student.origin_place}
+                            onChange={(e) => (setStudent({ ...student, origin_place: e.target.value }))} /
+                        >
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className="form-label">Licenciatura:</label>
+                        <select
+                            className="form-select"
+                            name="licenciatura"
+                            value={student.career}
+                            onChange={(e) => setStudent({ ...student, career: e.target.value })}
+                        >
+                            {StudentFilter.licenciatura.map(opcion => (
+                                <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+                </div>
+
+                <div className='col'>
+                    <FormGroup>
+                        <label className="form-label">Género:</label>
+                        <select
+                            className="form-select"
+                            name="genero"
+                            value={student.gender}
+                            onChange={(e) => setStudent({ ...student, gender: e.target.value })}
+                        >
+                            {StudentFilter.genero.map(opcion => (
+                                <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className="form-label">Grupo Étnico:</label>
+                        <select
+                            className="form-select"
+                            name="grupoEtnico"
+                            value={student.ethnicity}
+                            onChange={(e) => setStudent({ ...student, ethnicity: e.target.value })}
+                        >
+                            {StudentFilter.etnia.map(opcion => (
+                                <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className="form-label">Estatus:</label>
+                        <select
+                            className="form-select"
+                            name="estado"
+                            value={student.status}
+                            onChange={(e) => setStudent({ ...student, status: e.target.value })}
+                        >
+                            {StudentFilter.estado.map(opcion => (
+                                <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+                            ))}
+                        </select>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <label className='form-label'>Fecha de inscripción</label>
+                        <input
+                            className="form-control"
+                            type="date"
+                            value={student.date_of_registration}
+                            onChange={(e) => (setStudent({ ...student, date_of_registration: e.target.value }))} /
+                        >
+                    </FormGroup>
+                </div>
             </ModalBody>
             <ModalFooter>
                 <Button color="danger" onClick={() => closeModal()}>

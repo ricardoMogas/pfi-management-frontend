@@ -36,9 +36,10 @@ html {
 }
 
 body.dark {
-  --light: #0C0C1E;
-  --grey: #060714;
+  --light: #1B365D;
+  --grey: #000435;
   --dark: #FBFBFB;
+  --blue: #FFCE26;
 }
 
 body {
@@ -53,6 +54,12 @@ body {
   background-position: center;
 }
 
+hr {
+  border: 0;
+  border-top: 10px solid var(--blue);
+  border-radius: 18px;
+}
+
 /* SIDEBAR */
 #sidebar {
   position: fixed;
@@ -62,7 +69,6 @@ body {
   /* Ajustar el ancho aquí */
   height: 100%;
   background: var(--light);
-  z-index: 2000;
   font-family: var(--lato);
   transition: .3s ease;
   overflow-x: hidden;
