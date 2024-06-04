@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import BarChart from '../components/BarChart';
 import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
-import ReportFetch from '../store/ReportFetch';
+import ReportFetch from '../store/Requests/ReportFetch';
 import Utils from '../store/Utils';
+import SimpleAlert from "../store/SimpleAlert";
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 const data = [
@@ -44,7 +45,7 @@ export default function ReportPage() {
     /*** GENERATE GRAPH OR REPORT ***/
     const generateReport = async () => {
         if (dataJson.type === null) {
-            alert('Elige un tipo de reporte');
+            SimpleAlert('error', 'Elige un tipo de reporte');
             return; // No se puede generar la gráfica
         }
         /*
@@ -82,7 +83,7 @@ export default function ReportPage() {
                 report.exportToExcelWithSheets();
                 break;
             default:
-                alert('Función para reporte en desarrollo');
+                SimpleAlert('info', 'Función para reporte en desarrollo');
                 break;
         }
     }
@@ -93,14 +94,14 @@ export default function ReportPage() {
 
         // Validar que la fecha de inicio no sea mayor que la fecha de fin
         if (selectedEndDate < selectedStartDate) {
-            alert('La fecha de inicio no puede ser mayor que la fecha de fin');
+            SimpleAlert('error', 'La fecha de inicio no puede ser mayor que la fecha de fin');
             return;
         }
         // Validar que el rango de fechas no sea mayor a 1 año
         const oneYearFromStartDate = new Date(selectedStartDate);
         oneYearFromStartDate.setFullYear(oneYearFromStartDate.getFullYear() + 1);
         if (oneYearFromStartDate < selectedEndDate) {
-            alert('El rango de fechas no puede ser mayor a 1 año');
+            SimpleAlert('error', 'El rango de fechas no puede ser mayor a 1 año');
             return;
         }
         setStartDate(e.target.value);
@@ -114,14 +115,14 @@ export default function ReportPage() {
 
         // Validar que la fecha de fin no sea menor que la fecha de inicio
         if (selectedEndDate < selectedStartDate) {
-            alert('La fecha de fin no puede ser menor que la fecha de inicio');
+            SimpleAlert('error', 'La fecha de fin no puede ser menor que la fecha de inicio');
             return;
         }
         // Validar que el rango de fechas no sea mayor a 1 año
         const oneYearFromStartDate = new Date(selectedStartDate);
         oneYearFromStartDate.setFullYear(oneYearFromStartDate.getFullYear() + 1);
         if (oneYearFromStartDate < selectedEndDate) {
-            alert('El rango de fechas no puede ser mayor a 1 año');
+            SimpleAlert('error', 'El rango de fechas no puede ser mayor a 1 año');
             return;
         }
         setEndDate(e.target.value);

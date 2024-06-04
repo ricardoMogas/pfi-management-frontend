@@ -1,5 +1,5 @@
 import emailjs from '@emailjs/browser';
-
+import showAlert from './SimpleAlert';
 export const SendMail = (toName, message, setLoading) => {
     setLoading(true);
 
@@ -12,11 +12,12 @@ export const SendMail = (toName, message, setLoading) => {
     emailjs.send('default_service', 'template_bbwaz6a', templateParams, 'I2ZQG3GgCdtHzjMg7')
         .then((response) => {
             console.log('SUCCESS!', response.status, response.text);
+            showAlert('success', 'El correo ha sido enviado correctamente.');
             setLoading(false);
         }, (err) => {
             console.log('FAILED...', err);
+            showAlert('error', 'Ocurrió un problema al enviar el correo.');
             setLoading(false);
-            alert('Failed to send message. Please try again.');
         });
 };
 
@@ -34,13 +35,13 @@ export const SendMailEvery = (toName, emailUser, message, setLoading ) => {
     emailjs.send('default_service', 'template_flrj3sm', templateParams, 'I2ZQG3GgCdtHzjMg7')
         .then((response) => {
             console.log('SUCCESS!', response.status, response.text);
-            alert('Mensaje enviado!');
+            showAlert('success', 'El correo ha sido enviado correctamente.');
             setLoading(false);
             return true;
         }, (err) => {
             console.log('FAILED...', err);
+            showAlert('error', 'Ocurrió un problema al enviar el correo.');
             setLoading(false);
-            alert('Failed to send message. Please try again.');
             return false;
         });
 };

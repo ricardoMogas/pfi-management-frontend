@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import BorrowingFetch from "../store/BorrowingFetch";
-import Utils from '../store/Utils';
+import BorrowingFetch from "../store/Requests/BorrowingFetch";
 import DateTime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
+import SimpleAlert from "../store/SimpleAlert";
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const borrowing = new BorrowingFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
@@ -35,6 +35,10 @@ const PrestamosCard = ({ color }) => {
     };
 
     const ReturnBorrowing = async (item) => {
+        const Status = await SimpleAlert('warning', '¿Estas seguro de devolver?')
+        if (!Status) {
+            return;
+        }
         let id = item;
         if (CurrentTypeBorrowing === 'book') {
             id = item.id_Book;
@@ -45,10 +49,10 @@ const PrestamosCard = ({ color }) => {
         }
         const result = await borrowing.RetunrBorrowing(CurrentTypeBorrowing, id);
         if (result.status === "ok") {
-            alert('Devolución completa');
+            SimpleAlert('success', 'Devolución completa');
             getBorrowingsItems(CurrentTypeBorrowing);
         } else {
-            alert(result.result);
+            SimpleAlert('error', result.result);
         }
     };
 
@@ -136,7 +140,7 @@ const PrestamosCard = ({ color }) => {
                                                             :
                                                             (typeof value === 'object' ?
                                                                 <button className='btn btn-info' onClick={() => {
-                                                                    alert("Matricula: " + value.registration + "\nFecha de Préstamo: " + value.borrowing_date + "\nFecha de Devolución: " + value.return_date);
+                                                                    SimpleAlert('success', "Matricula: " + value.registration + "\nFecha de Préstamo: " + value.borrowing_date + "\nFecha de Devolución: " + value.return_date);
                                                                 }}>
                                                                     <i className="bi bi-info-circle"></i>
                                                                 </button>
@@ -179,33 +183,42 @@ const PrestamosCard = ({ color }) => {
     );
 };
 
+
 function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing, titleModal, data, event }) {
     const [borrowingData, setBorrowingData] = useState({
         TypeBorrowing: '',
-        item_id: "",
-        registration: "",
+        item_id: '',
+        registration: '',
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
-        return_date: ""
+        return_date: ''
     });
 
     const registerBorrowing = async () => {
+        const borrowDate = moment(borrowingData.date, 'YYYY-MM-DD HH:mm:ss');
+        const returnDate = moment(borrowingData.return_date, 'YYYY-MM-DD HH:mm:ss');
+        
+        if (returnDate.isBefore(borrowDate)) {
+            SimpleAlert('error', 'La fecha de devolución no puede ser anterior a la fecha de préstamo');
+            return;
+        }
+        
         const result = await borrowing.NewBorrowing(borrowingData);
-        if (result.status === "ok") {
-            alert('Registro completo');
+        if (result.status === 'ok') {
+            SimpleAlert('success', 'Registro completo');
             setShowModalRegister(false);
             event();
         } else {
-            alert(result.result);
+            SimpleAlert('error', result.result);
         }
     };
 
     const closeModal = () => {
         setBorrowingData({
-            TypeBorrowing: "",
-            item_id: "",
-            registration: "",
+            TypeBorrowing: '',
+            item_id: '',
+            registration: '',
             date: moment().format('YYYY-MM-DD HH:mm:ss'),
-            return_date: ""
+            return_date: ''
         });
         setShowModalRegister(false);
     };
@@ -230,16 +243,15 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
         setBorrowingData({
             TypeBorrowing: typeBorrowing,
             item_id: id,
-            registration: "",
+            registration: '',
             date: moment().format('YYYY-MM-DD HH:mm:ss'),
-            return_date: ""
+            return_date: ''
         });
     }, [data, typeBorrowing]);
+
     return (
         <Modal isOpen={showModalRegister}>
-            <ModalHeader>
-                {titleModal}
-            </ModalHeader>
+            <ModalHeader>{titleModal}</ModalHeader>
             <ModalBody>
                 <FormGroup className="mb-3">
                     <Label for="registration">Matrícula</Label>
@@ -254,7 +266,7 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
                     <Label for="date">Fecha de Préstamo</Label>
                     <DateTime
                         id="date"
-                        value={borrowingData.date}
+                        value={moment(borrowingData.date)}
                         onChange={handleDateTimeChange}
                         inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
@@ -263,8 +275,8 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
                     <Label for="return_date">Fecha de Devolución</Label>
                     <DateTime
                         id="return_date"
-                        value={borrowingData.return_date}
-                        onChange={() => handleReturnDateTimeChange()}
+                        value={borrowingData.return_date ? moment(borrowingData.return_date) : ''}
+                        onChange={handleReturnDateTimeChange}
                         inputProps={{ placeholder: 'Selecciona fecha y hora' }}
                     />
                 </FormGroup>
@@ -273,13 +285,14 @@ function ModalBorrowing({ showModalRegister, setShowModalRegister, typeBorrowing
                 <Button color="danger" onClick={closeModal}>
                     Cancelar
                 </Button>
-                <Button color="primary" onClick={() => registerBorrowing()}>
+                <Button color="primary" onClick={registerBorrowing}>
                     Confirmar
                 </Button>
             </ModalFooter>
         </Modal>
     );
 }
+
 
 export default PrestamosCard;
 

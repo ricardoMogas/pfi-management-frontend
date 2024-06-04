@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import sessionFetch from '../store/sessionFetch';
+import sessionFetch from '../store/Requests/sessionFetch';
 import { SendMail } from '../store/SendMail';
 import { event } from 'jquery';
+import SimpleAlert from "../store/SimpleAlert";
 const sessionObject = new sessionFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 export default function Login() {
     const [missPassword, setMissPassword] = useState(false);
@@ -24,7 +25,7 @@ export default function Login() {
             localStorage.setItem("authToken", "token");
             navigate("/home");
         } else {
-            alert("Credenciales incorrectas");
+            SimpleAlert('error', 'Credenciales incorrectas');
         }
     };
 
@@ -206,12 +207,12 @@ function FormRecoveryPass({ event }) {
     const changePassword = () => {
         // Aquí deberías agregar la lógica para cambiar la contraseña
         event();
-        alert("Contraseña cambiada");
+        SimpleAlert('success', 'Contraseña cambiada');
     };
 
     const handleSendEmail = () => {
         // Aquí deberías agregar la lógica para enviar el correo de recuperación
-        alert("Correo enviado");
+        SimpleAlert('success', 'Correo enviado');
         const newCode = generateRandomCode();
         setGenerateCode(newCode);
         SendMail(email, newCode, setLoading); // funcion para enviar correo
@@ -225,10 +226,10 @@ function FormRecoveryPass({ event }) {
         console.log(result);
         if (result.status !== "error") {
             event();
-            alert("Contraseña cambiada");
+            SimpleAlert('success', 'Contraseña cambiada');
         } else {
             event();
-            alert("Error al cambiar contraseña: " + result.result);
+            SimpleAlert('error', "Error al cambiar contraseña: " + result.result);
         }
     }
 
