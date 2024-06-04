@@ -18,7 +18,7 @@ export default function Root() {
     useEffect(() => {
         console.log("Existe token: " + isAuthenticated());
         if (!isAuthenticated()) {
-            navigate("/home");
+            navigate("/login");
         } else if (location.pathname === "/") {
             navigate("/home");
         }
