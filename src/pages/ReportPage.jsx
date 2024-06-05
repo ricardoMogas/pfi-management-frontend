@@ -112,12 +112,20 @@ export default function ReportPage() {
     const EndDateChange = (e) => {
         const selectedEndDate = new Date(e.target.value);
         const selectedStartDate = new Date(startDate);
-
+        const today = new Date();
+    
+        // Validar que la fecha de fin no sea mayor que el día de hoy
+        if (selectedEndDate > today) {
+            SimpleAlert('error', 'La fecha de fin no puede ser mayor que el día de hoy');
+            return;
+        }
+    
         // Validar que la fecha de fin no sea menor que la fecha de inicio
         if (selectedEndDate < selectedStartDate) {
             SimpleAlert('error', 'La fecha de fin no puede ser menor que la fecha de inicio');
             return;
         }
+    
         // Validar que el rango de fechas no sea mayor a 1 año
         const oneYearFromStartDate = new Date(selectedStartDate);
         oneYearFromStartDate.setFullYear(oneYearFromStartDate.getFullYear() + 1);
@@ -125,6 +133,7 @@ export default function ReportPage() {
             SimpleAlert('error', 'El rango de fechas no puede ser mayor a 1 año');
             return;
         }
+    
         setEndDate(e.target.value);
         setDataJson({ ...dataJson, endDate: e.target.value });
         GraphFetch();

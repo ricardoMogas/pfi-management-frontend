@@ -35,16 +35,16 @@ const RegisteredVisitsForm = () => {
     const RegisterVisit = async () => {
         // si en la matricula en registeredVisits tiene el valor exit_time null se registra su salida
         const user = (registeredVisits.length > 0) ?
-            registeredVisits.find(visit => visit.registration === parseInt(registration)) : undefined;
+            registeredVisits.find(visit => visit.registration === parseInt(registration) && visit.exit_time === null) : undefined;
         if (user) {
             if (user.exit_time === null) {
+                console.log(user);
                 const status = await RegisterVisitExit(user.registration);
                 if (status) {
                     narrate(`Salida registrada para ${user.registration}`);
                     SimpleAlert('success', `Salida registrada para ${user.registration} ✔`);
                     GetVisitsObject();
-                } else {
-                    SimpleAlert('error', "Error al registrar la salida");
+                    setRegistration("");
                 }
             } else {
                 SimpleAlert('error', `El usuario ${user.registration} ya se registro su visita hoy 📅`)
@@ -59,7 +59,7 @@ const RegisteredVisitsForm = () => {
             const resultRegister = await visitsObject.RegisterEntranceVisit(registration);
             if (resultRegister) {
                 SimpleAlert('success', "Registro exitoso ✔");
-                narrate(`Registro de salida exitoso para ${registration}`);
+                narrate(`Registro de entrada exitoso para ${registration}`);
                 GetVisitsObject();
                 setRegistration("");
             } else {

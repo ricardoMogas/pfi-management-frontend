@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Logo_FDI from '../assets/Logo_FDI.png';
+import Logo_UACAM from '../assets/UCAM_LOGO.png';
 import Logo_PFI from '../assets/LogosUni.png';
 const SideBar = ({ routes, hide }) => {
     const location = useLocation();
@@ -23,7 +25,7 @@ const SideBar = ({ routes, hide }) => {
                 <ul className="side-menu top">
                     {routes.map((route, index) => (
                         <li key={index} className={route.path === location.pathname ? 'active' : ''}>
-                            <Link 
+                            <Link
                                 to={route.path}
                             >
                                 <i className={`bx ${route.iconClass}`}></i>
@@ -34,19 +36,29 @@ const SideBar = ({ routes, hide }) => {
                 </ul>
 
                 <ul className="side-menu">
+                    {/*
                     <li>
                         <a href="#">
                             <i className="bx bi bi-gear"></i>
                             <span className="text">Settings</span>
                         </a>
                     </li>
+                    */}
                     <li>
                         <a href="#" className="logout" onClick={signOut}>
                             <i className="bx bi bi-box-arrow-left"></i>
-                            <span className="text">Logout</span>
+                            <span className="text">Cerrar Sesión</span>
                         </a>
                     </li>
                 </ul>
+                <div className='text-center'>
+                    <div className='m-2'>
+                        <img src={Logo_FDI} alt="" style={{ width: '60px', height: '60px' }} />
+                    </div>
+                    <div lassName='m-1'>
+                        <img src={Logo_UACAM} alt="" style={{ width: '60px', height: '60px' }} />
+                    </div>
+                </div>
             </section>
 
         </>
