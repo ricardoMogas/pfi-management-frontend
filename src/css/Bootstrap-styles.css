@@ -1,0 +1,46 @@
+/* BOTONES */
+.btn-primary {
+    background-color: var(--primary);
+    border: none;
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary);
+    border: none;
+    filter: brightness(95%);
+}
+
+.btn-warning {
+    background-color: var(--secondary);
+    border: none;
+    border-color: var(--secondary);
+}
+
+.btn-warning:hover {
+    background-color: var(--secondary);
+    border: none;
+    filter: brightness(95%);
+}
+
+
+
+/* CARDS */
+.card {
+    background-color: var(--light);
+    color: var(--blue);
+}
+
+.card .card-header {
+    color: var(--dark);
+}
+
+.nav-pills .nav-link {
+    color: var(--blue);
+}
+
+.nav-pills .nav-link.active {
+    color: var(--light);
+    background-color: var(--blue);
+}
+

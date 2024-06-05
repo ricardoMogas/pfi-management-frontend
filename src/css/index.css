@@ -1,22 +1,12 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-a {
-  text-decoration: none;
-}
-
-li {
-  list-style: none;
-}
+@import 'Bootstrap-styles.css';
 
 :root {
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
 
-  --primary: #1B365D;
+  --primary: rgb(27, 54, 93);
+  --secondary: rgb(255, 206, 38);
 
   --light: #F9F9F9;
   --blue: #1B365D;
@@ -31,6 +21,15 @@ li {
   --light-orange: #FFE0D3;
 }
 
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+
 html {
   overflow-x: hidden;
 }
@@ -40,6 +39,7 @@ body.dark {
   --grey: #000435;
   --dark: #FBFBFB;
   --blue: #FFCE26;
+  --primary: #000435;
 }
 
 body {
@@ -59,6 +59,8 @@ hr {
   border-top: 10px solid var(--blue);
   border-radius: 18px;
 }
+
+
 
 /* SIDEBAR */
 #sidebar {

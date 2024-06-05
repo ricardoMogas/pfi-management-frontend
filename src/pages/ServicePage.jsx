@@ -7,8 +7,8 @@ export default function ServicePage() {
     return (
         <div className="text-center">
             <div className="card-group d-flex justify-content-center">
-                <CopiasCard color={ColorPrimary} />
-                <PrestamosCard color={ColorPrimary} />
+                <CopiasCard />
+                <PrestamosCard />
             </div>
         </div>
     );

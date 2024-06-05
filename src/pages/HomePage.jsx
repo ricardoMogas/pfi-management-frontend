@@ -45,7 +45,7 @@ const HomePage = () => {
   ];
   return (
     <>
-      <h1 style={{ color: "var(--blue)" }}>Bienvenido {localStorage.getItem('name')}</h1>
+      <h1 style={{ color: "var(--blue)" }}>Estadisticas Generales</h1>
       <hr />
       <div className='row'>
         <div className='col-md-6'>

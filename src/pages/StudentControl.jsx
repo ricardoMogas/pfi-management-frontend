@@ -12,8 +12,7 @@ import {
     ModalFooter,
 } from "reactstrap";
 import { SendMailEvery } from '../store/SendMail';
-import SimpleAlert from "../store/SimpleAlert"
-const ColorPrimary = { color: "#fff", backgroundColor: "var(--primary)" };
+import SimpleAlert from "../store/SimpleAlert"; 
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export default function StudentControl() {
@@ -97,7 +96,7 @@ export default function StudentControl() {
         <div className="container">
             <div className='card'>
                 {/** Header de card */}
-                <div className='card-header' style={ColorPrimary}>
+                <div className='card-header's>
                     <div className='row text-center'>
                         <div className='col-5'>
                             <h2>Control de alumnos</h2>
@@ -108,13 +107,13 @@ export default function StudentControl() {
                                     <button
                                         className="btn btn-success m-1"
                                         onClick={() => setShowModalExcel(!showModalExcel)}
-                                    ><i className="bi bi-file-spreadsheet"></i>Ins. Excel</button>
+                                    ><i className="bi bi-file-spreadsheet"></i> Ins. Excel</button>
                                 </div>
                                 <div className='col p-0'>
                                     <button
                                         className="btn btn-info m-1"
                                         onClick={() => setShowModalRegister(true)}
-                                    ><i className="bi bi-person-add"></i>Registrar</button>
+                                    ><i className="bi bi-person-add"></i> Registrar</button>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +282,6 @@ export default function StudentControl() {
                                         <td className='text-center'>
                                             <button
                                                 className="btn m-1"
-                                                style={ColorPrimary}
                                                 onClick={() => [setCurrentStudent(student), setShowModalUpdate(true), fetchStudents()]}
                                             ><i className="bi bi-pencil fs-5"></i></button>
                                             <button

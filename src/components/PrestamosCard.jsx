@@ -5,10 +5,9 @@ import DateTime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import SimpleAlert from "../store/SimpleAlert";
-const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const borrowing = new BorrowingFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
-const PrestamosCard = ({ color }) => {
+const PrestamosCard = () => {
     const [showPrestamosForm, setShowPrestamosForm] = useState(false);
     const [showModalRegister, setShowModalRegister] = useState(false);
     const [typeBorrowing, setTypeBorrowing] = useState([]);
@@ -67,8 +66,8 @@ const PrestamosCard = ({ color }) => {
 
     return (
         <div className="card m-2">
-            <div className='card-header' style={color}>
-                <h5 className="card-title text-white">Préstamos</h5>
+            <div className='card-header'>
+                <h5 className="card-title">Préstamos</h5>
             </div>
             <div className="card-body">
                 {showPrestamosForm ? (
@@ -166,7 +165,7 @@ const PrestamosCard = ({ color }) => {
                     <button onClick={handlePrestamosImageClick} className="btn">
                         <i
                             className="bi bi-laptop"
-                            style={{ fontSize: "15rem", color: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
+                            style={{ fontSize: "15rem", color: 'var(--blue)' }}
                         ></i>
                     </button>
                 )}
