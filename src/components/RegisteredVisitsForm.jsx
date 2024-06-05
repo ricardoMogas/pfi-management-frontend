@@ -20,12 +20,12 @@ const RegisteredVisitsForm = () => {
 
     const handleRegistration = (e) => {
         const value = e.target.value;
-        if (/^\d*$/.test(value)) {
+        if (/^\d*$/.test(value) && value.length <= 5) {
             setRegistration(value);
             if (value.length === 5) {
                 console.log('El valor tiene exactamente 5 caracteres');
                 narrate(value)
-            } else if (value < 1) {
+            } else if (value.length < 1) {
                 console.log('El valor es menor a 0');
                 narrate("vacío")
             }

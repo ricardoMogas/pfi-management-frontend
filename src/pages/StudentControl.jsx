@@ -12,18 +12,18 @@ import {
     ModalFooter,
 } from "reactstrap";
 import { SendMailEvery } from '../store/SendMail';
-import SimpleAlert from "../store/SimpleAlert"; 
+import SimpleAlert from "../store/SimpleAlert";
 const StudentsFetcher = new StudentsFetche(import.meta.env.VITE_REACT_APP_BASE_API);
 
 export default function StudentControl() {
     const [showModalExcel, setShowModalExcel] = useState(false);
     const [filter, setFilter] = useState({
-        registration: "null",
-        name: "null",
-        gender: "null",
-        ethnicity: "null",
-        status: "null",
-        career: "null"
+        registration: "",
+        name: "",
+        gender: "",
+        ethnicity: "",
+        status: "",
+        career: ""
     });
     const [currentStudent, setCurrentStudent] = useState({
         registration: "",
@@ -96,7 +96,7 @@ export default function StudentControl() {
         <div className="container">
             <div className='card'>
                 {/** Header de card */}
-                <div className='card-header's>
+                <div className='card-header' s>
                     <div className='row text-center'>
                         <div className='col-5'>
                             <h2>Control de alumnos</h2>
@@ -144,8 +144,12 @@ export default function StudentControl() {
                                             className="form-control"
                                             placeholder="Buscar Matricula"
                                             onChange={(e) => {
-                                                setFilter({ ...filter, registration: e.target.value })
-                                                fetchStudents();
+                                                const value = e.target.value;
+                                                if (value.length <= 5) {
+                                                    console.log(value.length)
+                                                    setFilter({ ...filter, registration: e.target.value });
+                                                    fetchStudents();
+                                                }
                                             }}
                                         />
                                     </td>
@@ -483,7 +487,11 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
                             name="matricula"
                             disabled={currentAction === 'update'}
                             value={student.registration}
-                            onChange={(e) => (setStudent({ ...student, registration: e.target.value }))} />
+                            onChange={(e) => {
+                                if (e.target.value.length <= 5) {
+                                    setStudent({ ...student, registration: e.target.value });
+                                }
+                            }} />
                     </FormGroup>
 
                     <FormGroup>

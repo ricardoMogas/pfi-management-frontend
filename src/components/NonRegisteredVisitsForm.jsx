@@ -19,7 +19,7 @@ const NonRegisteredVisitsForm = () => {
 
     const handleRegistration = (e) => {
         const value = e.target.value;
-        if (/^\d*$/.test(value)) {
+        if (/^\d*$/.test(value) && value.length <= 5) {
             setRegistration(value);
         }
     };
