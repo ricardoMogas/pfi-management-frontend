@@ -41,6 +41,10 @@ class Utils {
         const date = new Date(Math.floor((serialNumber - 25569) * 86400 * 1000));
         return date;
     };
+
+    RandomColor() {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    };
 }
 
 export default new Utils();

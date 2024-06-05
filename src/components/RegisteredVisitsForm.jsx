@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import VisitsFetch from "../store/Requests/VisitsFetch";
 import Utils from "../store/Utils";
 import SimpleAlert from "../store/SimpleAlert";
+import { narrate } from "../store/Narrate";
 const visitsObject = new VisitsFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const RegisteredVisitsForm = () => {
@@ -21,17 +22,25 @@ const RegisteredVisitsForm = () => {
         const value = e.target.value;
         if (/^\d*$/.test(value)) {
             setRegistration(value);
+            if (value.length === 5) {
+                console.log('El valor tiene exactamente 5 caracteres');
+                narrate(value)
+            } else if (value < 1) {
+                console.log('El valor es menor a 0');
+                narrate("vacío")
+            }
         }
     };
 
     const RegisterVisit = async () => {
         // si en la matricula en registeredVisits tiene el valor exit_time null se registra su salida
-        const user = (registeredVisits.length > 0) ? 
+        const user = (registeredVisits.length > 0) ?
             registeredVisits.find(visit => visit.registration === parseInt(registration)) : undefined;
         if (user) {
             if (user.exit_time === null) {
                 const status = await RegisterVisitExit(user.registration);
                 if (status) {
+                    narrate(`Salida registrada para ${user.registration}`);
                     SimpleAlert('success', `Salida registrada para ${user.registration} ✔`);
                     GetVisitsObject();
                 } else {
@@ -50,6 +59,7 @@ const RegisteredVisitsForm = () => {
             const resultRegister = await visitsObject.RegisterEntranceVisit(registration);
             if (resultRegister) {
                 SimpleAlert('success', "Registro exitoso ✔");
+                narrate(`Registro de salida exitoso para ${registration}`);
                 GetVisitsObject();
                 setRegistration("");
             } else {

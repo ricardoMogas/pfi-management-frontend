@@ -4,8 +4,8 @@ import CopieasComponent from '../components/CopiasCard';
 import VisitsComponent from '../components/RegisteredVisitsForm';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, Button, CardTitle, CardText, CardBody } from 'reactstrap';
 import Divider from '../../ui_components/Divider';
-import { AreaChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Area  } from 'recharts';
-const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
+import { AreaChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Area, Cell, Legend } from 'recharts';
+import Utils from '../store/Utils';
 
 const HomePage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,35 +17,87 @@ const HomePage = () => {
     setSelectedComponent(component);
   };
 
-  const data01 = [
-    {
-      "name": "Group A",
-      "value": 400
-    },
-    {
-      "name": "Group B",
-      "value": 300
-    },
+  const data = [
+    { name: 'ISC', value: 41 },
+    { name: 'IE', value: 23 },
+    { name: 'IM', value: 23 },
+    { name: 'ICA', value: 13 },
   ];
   const data02 = [
     {
-      "name": "ISC",
-      "value": 2400,
-      "uv": 3000,
-      "pv": 1398,
-      "amt": 2210
+      "name": "19-01-2021",
+      "Masculino": 4,
+      "Femenino": 10,
     },
     {
-      "name": "IE",
-      "value": 4567,
-      "uv": 3000,
-      "pv": 1398,
-      "amt": 2210
+      "name": "20-01-2021",
+      "Masculino": 8,
+      "Femenino": 4,
     },
+    {
+      "name": "21-01-2021",
+      "Masculino": 23,
+      "Femenino": 0,
+    },
+    {
+      "name": "22-01-2021",
+      "Masculino": 5,
+      "Femenino": 2,
+    },
+    {
+      "name": "23-01-2021",
+      "Masculino": 5,
+      "Femenino": 2,
+    },
+    {
+      "name": "24-01-2021",
+      "Masculino": 7,
+      "Femenino": 2,
+    },
+    {
+      "name": "25-01-2021",
+      "Masculino": 7,
+      "Femenino": 1,
+    },
+    {
+      "name": "26-01-2021",
+      "Masculino": 2,
+      "Femenino": 2,
+    },
+    {
+      "name": "27-01-2021",
+      "Masculino": 3,
+      "Femenino": 1,
+    },
+    {
+      "name": "28-01-2021",
+      "Masculino": 5,
+      "Femenino": 1,
+    },
+    {
+      "name": "29-01-2021",
+      "Masculino": 3,
+      "Femenino": 1,
+    },
+
   ];
+
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   return (
     <>
-      <h1 style={{ color: "var(--blue)" }}>Estadisticas Generales</h1>
+      <h1 style={{ color: "var(--blue)" }}>Estadísticas Generales</h1>
       <hr />
       <div className='row'>
         <div className='col-md-6'>
@@ -71,9 +123,8 @@ const HomePage = () => {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Area type="monotone" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                  <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                  <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                  <Area type="monotone" dataKey="Masculino" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                  <Area type="monotone" dataKey="Femenino" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardBody>
@@ -84,16 +135,32 @@ const HomePage = () => {
             <CardTitle tag="h5">
               Alumnos Inscritos
             </CardTitle>
-            <CardText>
+            <CardBody> {/* Replace CardText with CardBody */}
               <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie data={data01} dataKey="value" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label />
+                <PieChart width={400} height={400}>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={Utils.RandomColor()} />
+                    ))}
+                  </Pie>
+                  <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
-            </CardText>
+            </CardBody> {/* Close CardBody */}
           </Card>
         </div>
       </div>
+      <h1 style={{ color: "var(--blue)" }}>Funciones más usadas</h1>
+      <hr />
       <div className='row my-4'>
         <div className='card'>
           <div className='card-header'>
@@ -112,7 +179,7 @@ const HomePage = () => {
               <p>¡Gracias por visitar el PFI! Esperamos que disfrutes de tu estancia.</p>
             </div>
             <div className="col-md-6 text-md-right">
-              <p>Este software ha sido desarrollado únicamente con fines académicos. No está destinado para uso comercial ni profesional. Los autores no se responsabilizan de cualquier uso indebido del mismo.</p>
+              <p>Este software ha sido desarrollado únicamente con fines académicos. No está destinado para uso comercial ni profesional. Los autores no se responsabilizan por cualquier uso indebido del mismo.</p>
             </div>
           </div>
         </div>

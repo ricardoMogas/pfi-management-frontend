@@ -268,6 +268,7 @@ export default function StudentControl() {
                                             </ul>
                                         </div>
                                     </td>
+                                    <td scope='col' className="align-middle"></td>
                                 </tr>
                             </thead>
                             <tbody >
@@ -281,7 +282,7 @@ export default function StudentControl() {
                                         <td>{student.status}</td>
                                         <td className='text-center'>
                                             <button
-                                                className="btn m-1"
+                                                className="btn btn-primary m-1"
                                                 onClick={() => [setCurrentStudent(student), setShowModalUpdate(true), fetchStudents()]}
                                             ><i className="bi bi-pencil fs-5"></i></button>
                                             <button

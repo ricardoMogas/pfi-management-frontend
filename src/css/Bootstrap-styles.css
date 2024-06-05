@@ -44,3 +44,14 @@
     background-color: var(--blue);
 }
 
+/* TABLES */
+/* PAGINATION */
+.page-item:first-child .page-link, .page-item:last-child .page-link {
+    background-color: var(--light);
+    color: var(--blue);
+}
+
+.active > .page-link, .page-link.active {
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
