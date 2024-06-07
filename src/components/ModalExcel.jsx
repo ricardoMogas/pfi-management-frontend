@@ -22,9 +22,19 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
         }
     }, [isOpen, data]);
 
+    const excelDateToJSDate = (serial) => {
+        if (serial === "null") {
+            return ""; // o cualquier valor por defecto que quieras usar para las fechas nulas
+        }
+        const serialNumber = parseFloat(serial);
+        const date = new Date(Math.floor((serialNumber - 25569) * 86400 * 1000));
+        return date.toISOString().split('T')[0]; // Convierte la fecha a una cadena de texto en formato ISO
+    };
+
     const toggleColumnSelectionMode = () => {
         setIsRowSelectedMode(!isRowSelectedMode)
         if (selectedRows.length === 0) {
+            console.log("No hay datos seleccionados");
             const newData = dataExcel.map(item => ({
                 registration: item["Matrícula."], // Asegúrate de que las claves coincidan con las de tus datos
                 name: item["Nombre completo."],
@@ -34,6 +44,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                 career: item["Carrera"],
                 status: "Activo",
                 origin_place: item["Lugar de origen"],
+                date_of_registration: excelDateToJSDate(item["Fecha de inscripción."]), // Convierte la fecha de Excel a JS
             }));
             setJsonData(newData);
         } else {
@@ -46,8 +57,10 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
                 career: item["Carrera"],
                 status: "Activo",
                 origin_place: item["Lugar de origen"],
+                date_of_registration: excelDateToJSDate(item["Fecha de inscripción."]), // Convierte la fecha de Excel a JS
             }));
             setJsonData(newData);
+            console.log(newData);
         }
     };
 
@@ -70,6 +83,7 @@ const ModalExcel = ({ isOpen, setIsOpen, data }) => {
         newData.map(item => item.checked = false);
         setDataExcel(newData);
     };
+
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file) {

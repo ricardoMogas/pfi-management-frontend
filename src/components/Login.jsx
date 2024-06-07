@@ -20,6 +20,8 @@ export default function Login() {
         const data = await sessionObject.login(username, password);
         setLoading(false);
         if (data.result) {
+            console.log(data.result);
+            localStorage.setItem("name", username);
             localStorage.setItem("authToken", "token");
             navigate("/home");
         } else {

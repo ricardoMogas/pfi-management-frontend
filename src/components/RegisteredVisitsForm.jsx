@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import VisitsFetch from "../store/Requests/VisitsFetch";
 import Utils from "../store/Utils";
 import SimpleAlert from "../store/SimpleAlert";
+import { narrate } from "../store/Narrate";
 const visitsObject = new VisitsFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const RegisteredVisitsForm = () => {
@@ -19,23 +20,31 @@ const RegisteredVisitsForm = () => {
 
     const handleRegistration = (e) => {
         const value = e.target.value;
-        if (/^\d*$/.test(value)) {
+        if (/^\d*$/.test(value) && value.length <= 5) {
             setRegistration(value);
+            if (value.length === 5) {
+                console.log('El valor tiene exactamente 5 caracteres');
+                narrate(value)
+            } else if (value.length < 1) {
+                console.log('El valor es menor a 0');
+                narrate("vacío")
+            }
         }
     };
 
     const RegisterVisit = async () => {
         // si en la matricula en registeredVisits tiene el valor exit_time null se registra su salida
-        const user = (registeredVisits.length > 0) ? 
-            registeredVisits.find(visit => visit.registration === parseInt(registration)) : undefined;
+        const user = (registeredVisits.length > 0) ?
+            registeredVisits.find(visit => visit.registration === parseInt(registration) && visit.exit_time === null) : undefined;
         if (user) {
             if (user.exit_time === null) {
+                console.log(user);
                 const status = await RegisterVisitExit(user.registration);
                 if (status) {
+                    narrate(`Salida registrada para ${user.registration}`);
                     SimpleAlert('success', `Salida registrada para ${user.registration} ✔`);
                     GetVisitsObject();
-                } else {
-                    SimpleAlert('error', "Error al registrar la salida");
+                    setRegistration("");
                 }
             } else {
                 SimpleAlert('error', `El usuario ${user.registration} ya se registro su visita hoy 📅`)
@@ -50,6 +59,7 @@ const RegisteredVisitsForm = () => {
             const resultRegister = await visitsObject.RegisterEntranceVisit(registration);
             if (resultRegister) {
                 SimpleAlert('success', "Registro exitoso ✔");
+                narrate(`Registro de entrada exitoso para ${registration}`);
                 GetVisitsObject();
                 setRegistration("");
             } else {

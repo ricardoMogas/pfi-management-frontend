@@ -76,8 +76,8 @@ const CopiasCard = ({ color }) => {
 
     return (
         <div className="card m-2">
-            <div className='card-header' style={color}>
-                <h5 className="card-title text-white">Copias e Impresiones</h5>
+            <div className='card-header'>
+                <h5 className="card-title">Copias e Impresiones</h5>
             </div>
             <div className="card-body text-center">
                 {showCopiasForm ? (
@@ -124,7 +124,7 @@ const CopiasCard = ({ color }) => {
                     <button className="btn" onClick={handleCopiasImageClick}>
                         <i
                             className="bi bi-printer"
-                            style={{ fontSize: "15rem", color: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
+                            style={{ fontSize: "15rem", color: `var(--blue)` }}
                         ></i>
                     </button>
                 )}

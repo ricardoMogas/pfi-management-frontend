@@ -5,10 +5,10 @@ const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_R
 
 export default function ServicePage() {
     return (
-        <div className="container text-center">
+        <div className="text-center">
             <div className="card-group d-flex justify-content-center">
-                <CopiasCard color={ColorPrimary} />
-                <PrestamosCard color={ColorPrimary} />
+                <CopiasCard />
+                <PrestamosCard />
             </div>
         </div>
     );

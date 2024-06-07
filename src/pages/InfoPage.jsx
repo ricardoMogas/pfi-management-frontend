@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { SendMailEvery } from '../store/SendMail';
+import Welcome from '../components/Welcome';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const InfoPage = () => {
     const handleDownload = () => {
@@ -18,7 +19,8 @@ const InfoPage = () => {
     };
     return (
         <>
-            <div className="card m-5">
+            <Welcome />
+            <div className="card">
                 <div className='card-header' style={ColorPrimary}>
                     <h2>Desarrolladores</h2>
                 </div>
