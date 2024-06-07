@@ -171,21 +171,7 @@ const HomePage = () => {
         </div>
         <CopiasCard />
 
-        <footer
-          style={{ color: "#fff", height: "20px", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` }}
-          className="text-dark py-4 fixed-bottom"
-        >
-          <div className="container" style={{ color: "#fff" }}>
-            <div className="row">
-              <div className="col-md-6">
-                <p>¡Gracias por visitar el PFI! Esperamos que disfrutes de tu estancia.</p>
-              </div>
-              <div className="col-md-6 text-md-right">
-                <p>Este software ha sido desarrollado únicamente con fines académicos. No está destinado para uso comercial ni profesional. Los autores no se responsabilizan por cualquier uso indebido del mismo.</p>
-              </div>
-            </div>
-          </div>
-        </footer>
+       
       </div>
     </>
   );
