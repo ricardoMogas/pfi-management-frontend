@@ -403,12 +403,14 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
     const RegisterStudent = async () => {
         const result = await StudentsFetcher.RegisterStudent(student);
         console.log(result);
-        if (result) {
-            SimpleAlert('success', 'Registro completo')
+        if (result === true) {
+            SimpleAlert('success', 'Registro completo');
             setShowModalRegister(false);
             event();
-        } else {
-            SimpleAlert('error', 'Faltan campos')
+        } else if (result !== true) {
+            SimpleAlert('error', result);
+        }else {
+            SimpleAlert('error', 'Faltan campos');
         }
     };
 
