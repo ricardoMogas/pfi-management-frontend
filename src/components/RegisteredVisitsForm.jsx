@@ -3,6 +3,7 @@ import VisitsFetch from "../store/Requests/VisitsFetch";
 import Utils from "../store/Utils";
 import SimpleAlert from "../store/SimpleAlert";
 import { narrate } from "../store/Narrate";
+
 const visitsObject = new VisitsFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const RegisteredVisitsForm = () => {
@@ -15,7 +16,12 @@ const RegisteredVisitsForm = () => {
     }, []);
 
     const handleDateChange = (event) => {
-        setDate(event.target.value);
+        const selectedDate = event.target.value;
+        setDate(selectedDate); // Almacenar la fecha como cadena directamente
+
+        // Convertir la fecha seleccionada en el formato necesario para GetVisitsObject
+        const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+        GetVisitsObject(formattedDate); // Llamar a GetVisitsObject con la fecha formateada
     };
 
     const handleRegistration = (e) => {
@@ -24,21 +30,18 @@ const RegisteredVisitsForm = () => {
             setRegistration(value);
             if (value.length === 5) {
                 console.log('El valor tiene exactamente 5 caracteres');
-                narrate(value)
+                narrate(value);
             } else if (value.length < 1) {
                 console.log('El valor es menor a 0');
-                narrate("vacío")
+                narrate("vacío");
             }
         }
     };
 
     const RegisterVisit = async () => {
-        // si en la matricula en registeredVisits tiene el valor exit_time null se registra su salida
-        const user = (registeredVisits.length > 0) ?
-            registeredVisits.find(visit => visit.registration === parseInt(registration) && visit.exit_time === null) : undefined;
+        const user = registeredVisits.find(visit => visit.registration === parseInt(registration) && visit.exit_time === null);
         if (user) {
             if (user.exit_time === null) {
-                console.log(user);
                 const status = await RegisterVisitExit(user.registration);
                 if (status) {
                     narrate(`Salida registrada para ${user.registration}`);
@@ -47,30 +50,28 @@ const RegisteredVisitsForm = () => {
                     setRegistration("");
                 }
             } else {
-                SimpleAlert('error', `El usuario ${user.registration} ya se registro su visita hoy 📅`)
+                SimpleAlert('error', `El usuario ${user.registration} ya se registró su visita hoy 📅`);
             }
             return;
         }
 
-
         if (registration === "" || registration.length < 5) {
-            SimpleAlert('error', "No has ingresado la matrícula o se ingreso un formato de matricula de menos 5 digitos 🚫");
+            SimpleAlert('error', "No has ingresado la matrícula o el formato es incorrecto (menos de 5 dígitos) 🚫");
         } else {
-            const resultRegister = await visitsObject.RegisterEntranceVisit(registration);
+            const resultRegister = await visitsObject.RegisterEntranceVisit(registration, date);
             if (resultRegister) {
                 SimpleAlert('success', "Registro exitoso ✔");
                 narrate(`Registro de entrada exitoso para ${registration}`);
                 GetVisitsObject();
                 setRegistration("");
             } else {
-                SimpleAlert('error', "El usuario no existe o ya se registro su vista hoy 📅");
+                SimpleAlert('error', "El usuario no existe o ya se registró su visita hoy 📅");
             }
         }
     };
 
-    const RegisterVisitExit = async (data) => {
-        const resultRegister = await visitsObject.RegisterExitVisit(data);
-        console.log(resultRegister);
+    const RegisterVisitExit = async (registration) => {
+        const resultRegister = await visitsObject.RegisterExitVisit(registration, date);
         return resultRegister;
     };
 
@@ -81,8 +82,8 @@ const RegisteredVisitsForm = () => {
         });
 
         const results = await Promise.all(exitPromises);
-
         const successfulExits = results.filter(result => result !== null);
+
         if (successfulExits.length > 0) {
             SimpleAlert('success', `Registro de salida exitoso para: ${successfulExits.join(', ')} ✔`);
             GetVisitsObject();
@@ -91,8 +92,9 @@ const RegisteredVisitsForm = () => {
         }
     };
 
-    const GetVisitsObject = async () => {
-        const visits = await visitsObject.GetVisitsRegistered();
+    const GetVisitsObject = async (selectedDate) => {
+        console.log(selectedDate);
+        const visits = await visitsObject.GetVisitsRegistered(selectedDate || date);
         if (visits.status === "ok") {
             setRegisteredVisits(visits.result);
         } else {
@@ -106,10 +108,10 @@ const RegisteredVisitsForm = () => {
             const deleteResult = await visitsObject.DeleteVisits(id);
             if (deleteResult) {
                 SimpleAlert('success', "Eliminación correcta ✔");
+                GetVisitsObject();
             } else {
                 SimpleAlert('error', "Error al eliminar la visita");
             }
-            GetVisitsObject();
         }
     };
 
@@ -157,16 +159,16 @@ const RegisteredVisitsForm = () => {
                             <button
                                 className="btn btn-warning mb-2"
                                 onClick={RegisterExitForAllUsers}
-                            >Registrar todas la salidas</button>
+                            >Registrar todas las salidas</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='container'>
                 {registeredVisits.length > 0 ? (
-                    <div className='table-responsive-lg m-4' style={{ maxHeight: '350px', overflow: 'auto' }}>
+                    <div className='table-responsive-lg m-4' style={{ maxHeight: '400px', overflow: 'auto' }}>
                         <table className="table">
-                            <thead>
+                            <thead style={{ position: 'sticky', top: '0', zIndex: '1' }}>
                                 <tr>
                                     <th>Matrícula</th>
                                     <th>Fecha</th>
@@ -192,7 +194,7 @@ const RegisteredVisitsForm = () => {
                                             <button
                                                 className='btn btn-success mb-2'
                                                 onClick={async () => {
-                                                    const status = await RegisterVisitExit(registro.registration)
+                                                    const status = await RegisterVisitExit(registro.registration);
                                                     if (status) {
                                                         SimpleAlert('success', `Salida registrada para ${registro.registration} ✔`);
                                                         GetVisitsObject();

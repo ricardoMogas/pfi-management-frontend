@@ -6,6 +6,9 @@ import ModalTable from "../components/ModalContent";
 import Swal from "sweetalert2";
 import { narrate } from "../store/Narrate";
 import Switch from "../../ui_components/Switch";
+import AdvancedSearch from "../components/AdvancedSearch";
+
+
 export default function Test() {
   const showModalAlert = async () => {
     const status = await SimpleAlert("warning", "hola")
@@ -45,6 +48,7 @@ export default function Test() {
           <MiniAlert title={titleAlert} message={messageAlert} type={typeAlert} showAlert={showAlert} setShowAlert={setShowAlert} />
           <Switch isChecked={isChecked} setIsChecked={setIsChecked} />
         </div>
+        <AdvancedSearch data={[]} />
       </div>
     </>
   );

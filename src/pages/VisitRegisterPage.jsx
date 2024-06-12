@@ -4,7 +4,9 @@ import NonRegisteredVisitsForm from '../components/NonRegisteredVisitsForm';
 
 export default function VisitRegisterPage() {
     return (
-        <div className="container">
+        <>
+            <h1 style={{ color: "var(--blue)" }}>Reportes</h1>
+            <hr />
             <div className='card'>
                 <div className='card-header'>
                     <ul className="nav nav-pills card-header-pills">
@@ -57,6 +59,6 @@ export default function VisitRegisterPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -1,88 +1,26 @@
-import React, { useState } from 'react';
-import Welcome from '../components/Welcome';
-import CopieasComponent from '../components/CopiasCard';
+import React, { useEffect, useState } from 'react';
 import VisitsComponent from '../components/RegisteredVisitsForm';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, Button, CardTitle, CardText, CardBody } from 'reactstrap';
-import Divider from '../../ui_components/Divider';
+import { Card, CardTitle, CardBody } from 'reactstrap';
 import { AreaChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Area, Cell, Legend } from 'recharts';
 import Utils from '../store/Utils';
 import CopiasCard from '../components/CopiasCard';
+import GraphFetch from '../store/Requests/GraphFetch';
+import ReportFetch from '../store/Requests/ReportFetch';
+import { generatePath } from 'react-router-dom';
+const graphObject = new GraphFetch(import.meta.env.VITE_REACT_APP_BASE_API);
+const reportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 
 const HomePage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState('home');
-
+  const [vistGraph, setVistGraph] = useState([]);
+  const [genderGraph, setGenderGraph] = useState([]);
+  const [totalStudents, setTotalStudents] = useState(0);
   const toggle = () => setDropdownOpen(prevState => !prevState);
 
   const selectComponent = (component) => {
     setSelectedComponent(component);
   };
-
-  const data = [
-    { name: 'ISC', value: 41 },
-    { name: 'IE', value: 23 },
-    { name: 'IM', value: 23 },
-    { name: 'ICA', value: 13 },
-  ];
-  const data02 = [
-    {
-      "name": "19-01-2021",
-      "Masculino": 4,
-      "Femenino": 10,
-    },
-    {
-      "name": "20-01-2021",
-      "Masculino": 8,
-      "Femenino": 4,
-    },
-    {
-      "name": "21-01-2021",
-      "Masculino": 23,
-      "Femenino": 0,
-    },
-    {
-      "name": "22-01-2021",
-      "Masculino": 5,
-      "Femenino": 2,
-    },
-    {
-      "name": "23-01-2021",
-      "Masculino": 5,
-      "Femenino": 2,
-    },
-    {
-      "name": "24-01-2021",
-      "Masculino": 7,
-      "Femenino": 2,
-    },
-    {
-      "name": "25-01-2021",
-      "Masculino": 7,
-      "Femenino": 1,
-    },
-    {
-      "name": "26-01-2021",
-      "Masculino": 2,
-      "Femenino": 2,
-    },
-    {
-      "name": "27-01-2021",
-      "Masculino": 3,
-      "Femenino": 1,
-    },
-    {
-      "name": "28-01-2021",
-      "Masculino": 5,
-      "Femenino": 1,
-    },
-    {
-      "name": "29-01-2021",
-      "Masculino": 3,
-      "Femenino": 1,
-    },
-
-  ];
-
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -96,8 +34,30 @@ const HomePage = () => {
     );
   };
 
+  useEffect(() => {
+    graphObject.GetVisitsPerDay("VisitasPorDia")
+      .then(response => {
+        setVistGraph(response.result);
+      }).catch(error => {
+        console.error(error);
+      })
+
+    reportObject.GetGraphData({
+      type: 'Genero',
+      typeFrequency: null,
+      startDate: null,
+      endDate: null
+    }).then(response => {
+      setGenderGraph(response.result);
+      const total = response.result.reduce((sum, student) => sum + student.Total, 0);
+      setTotalStudents(total);
+    }).catch(error => {
+      console.error(error);
+    });
+  }, []);
   return (
     <>
+      {/* ******************** ESTADISTICS ******************** */}
       <h1 style={{ color: "var(--blue)" }}>Estadísticas Generales</h1>
       <hr />
       <div className='row'>
@@ -107,12 +67,11 @@ const HomePage = () => {
               Visitas del mes
             </CardTitle>
             <CardBody className='text-center'>
-
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart
                   width={500}
                   height={400}
-                  data={data02}
+                  data={vistGraph}
                   margin={{
                     top: 10,
                     right: 30,
@@ -121,11 +80,10 @@ const HomePage = () => {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
-                  <Area type="monotone" dataKey="Masculino" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                  <Area type="monotone" dataKey="Femenino" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                  <Area type="monotone" dataKey="total" stackId="1" stroke="#8884d8" fill="#8884d8" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardBody>
@@ -134,22 +92,22 @@ const HomePage = () => {
         <div className='col-md-6'>
           <Card body>
             <CardTitle tag="h5">
-              Alumnos Inscritos
+              Alumnos Inscritos : {totalStudents}
             </CardTitle>
             <CardBody> {/* Replace CardText with CardBody */}
               <ResponsiveContainer width="100%" height={300}>
-                <PieChart width={400} height={400}>
+                <PieChart width={500} height={500}>
                   <Pie
-                    data={data}
+                    data={genderGraph}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={80}
                     fill="#8884d8"
-                    dataKey="value"
+                    dataKey="Total"
                   >
-                    {data.map((entry, index) => (
+                    {genderGraph.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={Utils.RandomColor()} />
                     ))}
                   </Pie>
@@ -160,6 +118,7 @@ const HomePage = () => {
           </Card>
         </div>
       </div>
+      {/* ******************** MORE USE OPCIONS ******************** */}
       <h1 style={{ color: "var(--blue)" }}>Funciones más usadas</h1>
       <hr />
       <div className='row my-4'>
@@ -170,8 +129,6 @@ const HomePage = () => {
           <VisitsComponent />
         </div>
         <CopiasCard />
-
-       
       </div>
     </>
   );

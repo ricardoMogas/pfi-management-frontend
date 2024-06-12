@@ -36,7 +36,7 @@ export default function StudentControl() {
         status: "",
         date_of_registration: "",
     });
-    const [currentEmail, setCurrentEmail] = useState("")
+    const [currentEmail, setCurrentEmail] = useState("");
     const [showModalRegister, setShowModalRegister] = useState(false);
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [showModalEmail, setShowModalEmail] = useState(false);
@@ -47,7 +47,6 @@ export default function StudentControl() {
     const [totalPages, setTotalPages] = useState(0);
 
     const NextPage = () => {
-        console.log(totalPages)
         if (page !== totalPages) {
             setPage(page + 1);
             fetchStudents();
@@ -65,15 +64,14 @@ export default function StudentControl() {
         setIsLoader(true);
         const result = await StudentsFetcher.GetAllStudentsPagination(page, perPage, filter);
         if (result.students.length > 0) {
-            setStudents(result.students)
-            setTotalPages(Math.ceil(result.total / perPage)); // Calculate the total number of pages
-            console.log(totalPages)
+            setStudents(result.students);
+            setTotalPages(Math.ceil(result.total / perPage));
             setIsLoader(false);
-            console.log(students)
         } else {
-            setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }])
+            setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }]);
+            setIsLoader(false);
         }
-    }
+    };
 
     const deleteStudent = async (registration) => {
         const confirmation = await SimpleAlert('warning', '¿Estás seguro de que quieres eliminar este estudiante?');
@@ -86,17 +84,19 @@ export default function StudentControl() {
                 SimpleAlert("error", 'Error al eliminar estudiante');
             }
         }
-    }
+    };
+
     useEffect(() => {
-        console.log(import.meta.env.VITE_REACT_APP_BASE_API);
         fetchStudents();
-    }, [page, totalPages, filter]);
+    }, [page, filter]);
 
     return (
-        <div className="container">
+        <>
+            <h1 style={{ color: "var(--blue)" }}>Control de alumnos</h1>
+            <hr />
             <div className='card'>
                 {/** Header de card */}
-                <div className='card-header' s>
+                <div className='card-header'>
                     <div className='row text-center'>
                         <div className='col-5'>
                             <h2>Control de alumnos</h2>
@@ -121,7 +121,7 @@ export default function StudentControl() {
                 </div>
                 {/** tabla de card*/}
                 <div className='table-responsive-lg m-4' style={{ maxHeight: '650px', overflow: 'auto' }}>
-                    {students.length === 0 ? (
+                    {isLoader ? (
                         <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Loader type='book' />
                         </div>
@@ -145,11 +145,7 @@ export default function StudentControl() {
                                             placeholder="Buscar Matricula"
                                             onChange={(e) => {
                                                 const value = e.target.value;
-                                                if (value.length <= 5) {
-                                                    console.log(value.length)
-                                                    setFilter({ ...filter, registration: e.target.value });
-                                                    fetchStudents();
-                                                }
+                                                setFilter({ ...filter, registration: value });
                                             }}
                                         />
                                     </td>
@@ -159,8 +155,7 @@ export default function StudentControl() {
                                             className="form-control"
                                             placeholder="Buscar Nombre🔎"
                                             onChange={(e) => {
-                                                setFilter({ ...filter, name: e.target.value })
-                                                fetchStudents();
+                                                setFilter({ ...filter, name: e.target.value });
                                             }}
                                         />
                                     </td>
@@ -182,7 +177,6 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, career: item.value });
-                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -209,7 +203,6 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, gender: item.value });
-                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -236,7 +229,6 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, ethnicity: item.value });
-                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -244,7 +236,6 @@ export default function StudentControl() {
                                             </ul>
                                         </div>
                                     </td>
-
                                     <td scope='col' className="align-middle">
                                         <div className="dropdown">
                                             <button
@@ -264,7 +255,6 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, status: item.value });
-                                                                fetchStudents();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -275,7 +265,7 @@ export default function StudentControl() {
                                     <td scope='col' className="align-middle"></td>
                                 </tr>
                             </thead>
-                            <tbody >
+                            <tbody>
                                 {students.map((student, index) => (
                                     <tr key={index}>
                                         <td>{student.registration}</td>
@@ -287,7 +277,10 @@ export default function StudentControl() {
                                         <td className='text-center'>
                                             <button
                                                 className="btn btn-primary m-1"
-                                                onClick={() => [setCurrentStudent(student), setShowModalUpdate(true), fetchStudents()]}
+                                                onClick={() => {
+                                                    setCurrentStudent(student);
+                                                    setShowModalUpdate(true);
+                                                }}
                                             ><i className="bi bi-pencil fs-5"></i></button>
                                             <button
                                                 className="btn btn-danger m-1"
@@ -295,24 +288,25 @@ export default function StudentControl() {
                                             ><i className="bi bi-trash fs-5"></i></button>
                                             <button
                                                 className="btn btn-success m-1"
-                                                onClick={() => [setCurrentStudent(student), setShowModalEmail(!showModalEmail)]}
-                                            ><i class="bi bi-envelope-plus"></i></button>
-
+                                                onClick={() => {
+                                                    setCurrentStudent(student);
+                                                    setShowModalEmail(!showModalEmail);
+                                                }}
+                                            ><i className="bi bi-envelope-plus"></i></button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
-
                         </table>
                     )}
                 </div>
                 <div>
                     <ul className="pagination justify-content-center">
-                        <li className={`page-item ${page === 1 ? `disabled` : ''}`}>
+                        <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
                             <button className="page-link" onClick={PreviousPage}>Previous</button>
                         </li>
-                        <li className="page-item"><a className="page-link active" >{page}</a></li>
-                        <li className={`page-item ${page === totalPages ? `disabled` : ''}`}>
+                        <li className="page-item"><a className="page-link active">{page}</a></li>
+                        <li className={`page-item ${page === totalPages ? 'disabled' : ''}`}>
                             <button className="page-link" onClick={NextPage}>Next</button>
                         </li>
                     </ul>
@@ -346,7 +340,8 @@ export default function StudentControl() {
                     nameUser={currentStudent.name}
                 />
             </div>
-        </div>
+        </>
+
     );
 }
 
@@ -409,7 +404,7 @@ function ModalStudent({ showModalRegister, setShowModalRegister, titleModal, cur
             event();
         } else if (result !== true) {
             SimpleAlert('error', result);
-        }else {
+        } else {
             SimpleAlert('error', 'Faltan campos');
         }
     };

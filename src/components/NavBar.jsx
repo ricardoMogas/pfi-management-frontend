@@ -28,7 +28,9 @@ const NavBar = ({ routes, hideEvent }) => {
     return (
         <>
             <nav>
-                <i className="bx bx-menu bi bi-three-dots-vertical" onClick={() => hideSidebar()}></i>
+                <button className='btn' onClick={() => hideSidebar()}>
+                    <i className="bx bx-menu bi bi-three-dots-vertical" ></i>
+                </button>
 
                 <form action="#">
                     <div className="form-input">

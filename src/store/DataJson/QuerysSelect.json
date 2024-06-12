@@ -1,0 +1,7 @@
+[
+    { "value": 1, "label": "Estudiantes/Col distinta", "query": "SELECT * FROM students WHERE gender NOT IN ('Masculino', 'Femenino')" },
+    { "value": 2, "label": "Prestamos", "query": "SELECT * FROM `borrowing`" },
+    { "value": 3, "label": "Visitas de no inscritos", "query": "SELECT * FROM `unregistered_visits`" },
+    { "value": 4, "label": "Visitas de inscritos", "query": "SELECT * FROM `registered_visits`" },
+    { "value": 5, "label": "Copias", "query": "SELECT * FROM `copies`" }
+]

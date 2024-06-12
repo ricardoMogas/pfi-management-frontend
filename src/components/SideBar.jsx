@@ -11,10 +11,6 @@ const SideBar = ({ routes, hide }) => {
         localStorage.removeItem('authToken');
         navigate("/login");
     }
-    useEffect(() => {
-        console.log("Ubicación: " + location.pathname);
-        console.log(routes);
-    }, [location.pathname]);
     return (
         <>
             <section id="sidebar" className={hide ? "hide" : ""}>
@@ -52,15 +48,14 @@ const SideBar = ({ routes, hide }) => {
                     </li>
                 </ul>
                 <div className='text-center'>
-                    <div className='m-2'>
-                        <img src={Logo_FDI} alt="" style={{ width: '60px', height: '60px' }} />
+                    <div className='m-1'>
+                        <img src={Logo_FDI} alt="" style={{ width: '55px', height: '55px' }} />
                     </div>
-                    <div lassName='m-1'>
-                        <img src={Logo_UACAM} alt="" style={{ width: '60px', height: '60px' }} />
+                    <div className='m-1'>
+                        <img src={Logo_UACAM} alt="" style={{ width: '55px', height: '55px' }} />
                     </div>
                 </div>
             </section>
-
         </>
     );
 };

@@ -4,6 +4,7 @@ import CreateExcelReport from '../store/CreateExcel/CreateExcelReport';
 import ReportFetch from '../store/Requests/ReportFetch';
 import Utils from '../store/Utils';
 import SimpleAlert from "../store/SimpleAlert";
+import AdvancedSearch from "../components/AdvancedSearch";
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const ReportObject = new ReportFetch(import.meta.env.VITE_REACT_APP_BASE_API);
 const data = [
@@ -153,8 +154,12 @@ export default function ReportPage() {
     }, [dataJson]);
     return (
         <main>
-            <section className="card text-center m-5">
-                <div className="card-header" style={ColorPrimary}>Generador de Reportes</div>
+            <h1 style={{ color: "var(--blue)" }}>Reportes</h1>
+            <hr />
+            <section className="card text-center">
+                <div className="card-header" style={ColorPrimary}>
+                    <h4>Generador de Reportes</h4>
+                </div>
                 <div className="card-body">
                     <section className='row'>
                         <div className='col'>
@@ -192,6 +197,11 @@ export default function ReportPage() {
                 <div className='card-footer text-body-secondary' style={ColorPrimary}>
                     <button type='button' className='btn btn-success m-1' onClick={generateReport}>Generar Reporte</button>
                 </div>
+            </section>
+            <h1 style={{ color: "var(--blue)" }}>Más opciones</h1>
+            <hr />
+            <section className='card text-center'>
+                <AdvancedSearch />
             </section>
         </main>
     );
