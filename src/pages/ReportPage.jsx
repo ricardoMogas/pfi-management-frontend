@@ -57,7 +57,7 @@ export default function ReportPage() {
         */
         const response = await ReportObject.GetReportData(dataJson);
         if (response.status === "error") {
-            console.log(response.result);
+            // console.log(response.result);
             return;
         }
 
@@ -74,7 +74,7 @@ export default function ReportPage() {
             case 'Genero':
             case 'Etnia':
                 const DataExel = response.result;
-                console.log(response.result)
+                // console.log(response.result)
                 const sheetsData = DataExel.map(item => ({
                     name: item.name,
                     data: item.data
@@ -144,7 +144,7 @@ export default function ReportPage() {
     const GraphFetch = async () => {
         const response = await ReportObject.GetGraphData(dataJson);
         if (response.status === "error") {
-            console.log(response.result);
+            // console.log(response.result);
             return;
         }
         setDataGraph(response.result);

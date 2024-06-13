@@ -8,6 +8,7 @@ import StudentControl from './pages/StudentControl.jsx';
 import VisitRegisterPage from './pages/VisitRegisterPage.jsx';
 import ServicePage from './pages/ServicePage.jsx';
 import ReportPage from './pages/ReportPage.jsx';
+import SocialServicePage from './pages/SocialServicePage.jsx';
 
 const routes = [
   {
@@ -44,6 +45,12 @@ const routes = [
         path: "/ReportPage",
         iconClass: "bi bi-file-earmark-bar-graph",
         element: <ReportPage />,
+      },
+      {
+        title: "Sercicio Social",
+        path: "/socialService",
+        iconClass: "bi bi-person-vcard",
+        element: <SocialServicePage />,
       },
       {
         title: "Información",

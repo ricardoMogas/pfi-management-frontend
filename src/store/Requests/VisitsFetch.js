@@ -7,7 +7,7 @@ export default class VisitsFetch {
 
     async GetVisitsRegistered(date = null) {
         const url = `${this.API_BASE_URL}/visits?todayNotExit=${date}`;
-        console.log(url)
+        // console.log(url)
         try {
             const response = await axios.get(url);
             const student = response.data;

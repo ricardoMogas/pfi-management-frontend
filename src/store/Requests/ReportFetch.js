@@ -6,7 +6,6 @@ export default class ReportFetcher {
     }
 
     async GetGraphData(filters) {
-        console.log(filters);
         const dataJson = {
             type : filters.type,
             typeFrequency : filters.typeFrequency,

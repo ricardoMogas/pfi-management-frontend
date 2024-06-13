@@ -29,10 +29,10 @@ const RegisteredVisitsForm = () => {
         if (/^\d*$/.test(value) && value.length <= 5) {
             setRegistration(value);
             if (value.length === 5) {
-                console.log('El valor tiene exactamente 5 caracteres');
+                // console.log('El valor tiene exactamente 5 caracteres');
                 narrate(value);
             } else if (value.length < 1) {
-                console.log('El valor es menor a 0');
+                // console.log('El valor es menor a 0');
                 narrate("vacío");
             }
         }
@@ -93,7 +93,7 @@ const RegisteredVisitsForm = () => {
     };
 
     const GetVisitsObject = async (selectedDate) => {
-        console.log(selectedDate);
+        // console.log(selectedDate);
         const visits = await visitsObject.GetVisitsRegistered(selectedDate || date);
         if (visits.status === "ok") {
             setRegisteredVisits(visits.result);

@@ -16,11 +16,9 @@ export default function Root() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Existe token: " + isAuthenticated());
+        // console.log("Existe token: " + isAuthenticated());
         if (!isAuthenticated()) {
-            navigate("/");
-        } else if (location.pathname === "/") {
-            navigate("/home");
+            navigate("/login");
         }
     }, [location.pathname, navigate]);
 

@@ -379,7 +379,6 @@ function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, name
         setMessage("");
     };
     useEffect(() => {
-        console.log(email, nameUser);
     })
     return (
         <Modal isOpen={showModalEmail} toggle={() => setShowModalEmail(!showModalEmail)}>
