@@ -13,7 +13,7 @@ const SideBar = ({ routes, hide }) => {
     }
     return (
         <>
-            <section id="sidebar" className={hide ? "hide" : ""}>
+            <section id="sidebar" className={hide ? "" : "hide"}>
                 <a href="#" className="brand">
                     <img className='bx' src="Logo_PFI.png" alt="Logo pfi" />
                     <span className="text">MASO</span>

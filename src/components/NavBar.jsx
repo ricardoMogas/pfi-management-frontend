@@ -4,7 +4,7 @@ import Switch from '../../ui_components/Switch';
 import Logo_PFI from '../assets/Logo_PFI.png';
 
 const NavBar = ({ routes, hideEvent }) => {
-    const [hide, setHide] = useState(false);
+    const [hide, setHide] = useState(true);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();

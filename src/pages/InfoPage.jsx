@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { SendMailEvery } from '../store/SendMail';
 import Welcome from '../components/Welcome';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import img from "../assets/Contacto_rich.jpg"
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
 const InfoPage = () => {
+    const [isOpen, setIsOpen] = useState(false)
+    const toggle = () => setIsOpen(!isOpen);
     const handleDownload = () => {
         const link = document.createElement('a');
         link.href = 'Manual_de_usuario_(Software PFI).pdf';
@@ -42,7 +46,7 @@ const InfoPage = () => {
                 <div className='card-header'>
                     <h3>Equipo</h3>
                     <p>
-                         <strong>Lider de proyecto</strong> : Ricardo J Moo Vargas
+                        <strong>Lider de proyecto</strong> : <a href="#" onClick={toggle}>Ricardo J Moo Vargas</a>
                         <br />
                         <strong> Documentación : </strong> Angel G Manrero Hidalgo
                         <br />
@@ -77,12 +81,19 @@ const InfoPage = () => {
                         <br />
                         <i className="bi bi-arrow-down-circle"></i>
                     </button>
-                    <h2>Modificación del proyecto :  </h2>
-                    <strong>Subir cambios: </strong>
                 </div>
-
-
             </div>
+            <Modal isOpen={isOpen} toggle={toggle} fade={true} centered>
+                <img 
+                src={img} 
+                alt="Contacto desarrollador" 
+                style={{
+                    maxHeight: "100%", 
+                    maxWidth: "100%", 
+                    height: "auto", 
+                    width: "auto"
+                }} />
+            </Modal>
         </>
     );
 };
