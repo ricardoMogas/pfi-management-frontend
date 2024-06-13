@@ -51,12 +51,14 @@ const routes = [
         iconClass: "bi bi-info-circle",
         element: <InfoPage />,
       },
+      /*
       {
         title: "Test",
         path: "/test",
         iconClass: "bi bi-code-slash",
         element: <TestPage />,
       }
+      */
     ],
   },
   {

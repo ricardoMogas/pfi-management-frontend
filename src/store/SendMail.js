@@ -9,7 +9,7 @@ export const SendMail = (toName, message, setLoading) => {
         message: message,
     };
 
-    emailjs.send('default_service', 'template_bbwaz6a', templateParams, 'I2ZQG3GgCdtHzjMg7')
+    emailjs.send('service_1stk3bi', 'template_r6762on', templateParams, 'KLyjHkAjTrQx_XHBc')
         .then((response) => {
             console.log('SUCCESS!', response.status, response.text);
             showAlert('success', 'El correo ha sido enviado correctamente.');
@@ -32,7 +32,7 @@ export const SendMailEvery = (toName, emailUser, message, setLoading ) => {
         message: message,
     };
 
-    emailjs.send('default_service', 'template_flrj3sm', templateParams, 'I2ZQG3GgCdtHzjMg7')
+    emailjs.send('service_1stk3bi', 'template_ldgf3hj', templateParams, "KLyjHkAjTrQx_XHBc")
         .then((response) => {
             console.log('SUCCESS!', response.status, response.text);
             showAlert('success', 'El correo ha sido enviado correctamente.');

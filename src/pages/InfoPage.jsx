@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { SendMailEvery } from '../store/SendMail';
 import Welcome from '../components/Welcome';
 const ColorPrimary = { color: "#fff", backgroundColor: `${import.meta.env.VITE_REACT_COLOR_PRIMARY}` };
@@ -19,20 +19,36 @@ const InfoPage = () => {
     };
     return (
         <>
-            <Welcome />
-            <div className="card">
+            <div className="card my-5">
+                <div className='card-header' style={ColorPrimary}>
+                    <h2>Links externos</h2>
+                </div>
+                <div className='card-body'>
+                    <p><strong>Control de BD</strong> <a href="http://localhost/phpmyadmin/index.php?route=/database/structure&db=pfiv3" target='_blank'>phpmyadmin</a></p>
+                    <p>Usuarion : root </p>
+                    <p> contraseña : </p>
+                    <br />
+                    <p><strong>Control de Emails</strong> <a href="https://dashboard.emailjs.com/admin" target='_blank'>Emailjs</a></p>
+                    <p> Usuario : pfi-ingenieria@uacam.mx </p>
+                    <p> contraseña : 7r$@CVuVmW6!Ds5 </p>
+                    <p><strong>Github : </strong></p>
+                </div>
+            </div>
+
+            <div className="card my-5">
                 <div className='card-header' style={ColorPrimary}>
                     <h2>Desarrolladores</h2>
                 </div>
                 <div className='card-header'>
                     <h3>Equipo</h3>
                     <p>
-                        Ricardo J Moo Vargas
+                         <strong>Lider de proyecto</strong> : Ricardo J Moo Vargas
                         <br />
-                        Angel G Manrero Hidalgo
+                        <strong> Documentación : </strong> Angel G Manrero Hidalgo
                         <br />
-                        Jorge F Dzul Cobos
+                        <strong> Documentación : </strong> Jorge F Dzul Cobos
                         <br />
+                        <strong>Equipo de desarrollo:</strong><br />
                         Arturo A Zavala Morales
                         <br />
                         Axel A Chavez Moreno
@@ -46,12 +62,12 @@ const InfoPage = () => {
                 </div>
             </div>
 
-            <div className="card m-5">
+            <div className="card my-5">
                 <div className='card-header' style={ColorPrimary}>
                     <h2>Documentación</h2>
                 </div>
                 <div className='card-body'>
-                    <p>Nombre de repositorio: PFI MASO</p>
+                    <h2>Informacion de repositorio:  </h2>
                     <p>Repository API: <a href="https://github.com/ricardoMogas/PFI-Services-Api" target='_blank'>PFI-Services-Api</a></p>
                     <br />
                     <p>Repository Frontend: <a href="https://github.com/ricardoMogas/pfi-management-frontend" target='_blank'>pfi-management-frontend</a></p>
@@ -61,7 +77,10 @@ const InfoPage = () => {
                         <br />
                         <i className="bi bi-arrow-down-circle"></i>
                     </button>
+                    <h2>Modificación del proyecto :  </h2>
+                    <strong>Subir cambios: </strong>
                 </div>
+
 
             </div>
         </>

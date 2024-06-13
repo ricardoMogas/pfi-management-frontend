@@ -61,8 +61,8 @@ export default function StudentControl() {
     };
 
     const fetchStudents = async () => {
-        setIsLoader(true);
         const result = await StudentsFetcher.GetAllStudentsPagination(page, perPage, filter);
+        setIsLoader(true)
         if (result.students.length > 0) {
             setStudents(result.students);
             setTotalPages(Math.ceil(result.total / perPage));
@@ -70,6 +70,16 @@ export default function StudentControl() {
         } else {
             setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }]);
             setIsLoader(false);
+        }
+    };
+
+    const fetchStudentsFilter = async () => {
+        const result = await StudentsFetcher.GetAllStudentsPagination(page, perPage, filter);
+        if (result.students.length > 0) {
+            setStudents(result.students);
+            setTotalPages(Math.ceil(result.total / perPage));
+        } else {
+            setStudents([{ registration: "---", name: "---", career: "---", gender: "---", ethnicity: "---", status: "---" }]);
         }
     };
 
@@ -88,7 +98,7 @@ export default function StudentControl() {
 
     useEffect(() => {
         fetchStudents();
-    }, [page, filter]);
+    }, [page]);
 
     return (
         <>
@@ -146,6 +156,7 @@ export default function StudentControl() {
                                             onChange={(e) => {
                                                 const value = e.target.value;
                                                 setFilter({ ...filter, registration: value });
+                                                fetchStudentsFilter()
                                             }}
                                         />
                                     </td>
@@ -156,6 +167,7 @@ export default function StudentControl() {
                                             placeholder="Buscar Nombre🔎"
                                             onChange={(e) => {
                                                 setFilter({ ...filter, name: e.target.value });
+                                                fetchStudentsFilter()
                                             }}
                                         />
                                     </td>
@@ -177,6 +189,7 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, career: item.value });
+                                                                fetchStudentsFilter()
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -203,6 +216,7 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, gender: item.value });
+                                                                fetchStudentsFilter();
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -229,6 +243,7 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, ethnicity: item.value });
+                                                                fetchStudentsFilter()
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -255,6 +270,7 @@ export default function StudentControl() {
                                                             href="#"
                                                             onClick={() => {
                                                                 setFilter({ ...filter, status: item.value });
+                                                                fetchStudentsFilter()
                                                             }}
                                                         >{item.label}</a>
                                                     </li>
@@ -262,7 +278,11 @@ export default function StudentControl() {
                                             </ul>
                                         </div>
                                     </td>
-                                    <td scope='col' className="align-middle"></td>
+                                    <td scope='col' className="align-middle">
+                                        <button className='btn btn-info' onClick={() => fetchStudents()}>
+                                            <i className="bi bi-arrow-clockwise"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -358,6 +378,9 @@ function ModalEmail({ showModalEmail, setShowModalEmail, titleModal, email, name
         setShowModalEmail(false);
         setMessage("");
     };
+    useEffect(() => {
+        console.log(email, nameUser);
+    })
     return (
         <Modal isOpen={showModalEmail} toggle={() => setShowModalEmail(!showModalEmail)}>
             <ModalHeader toggle={() => setShowModalEmail(!showModalEmail)}>{titleModal}</ModalHeader>
